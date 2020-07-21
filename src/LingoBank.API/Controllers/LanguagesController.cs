@@ -5,7 +5,6 @@ using LingoBank.Core;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 namespace LingoBank.API.Controllers
 {

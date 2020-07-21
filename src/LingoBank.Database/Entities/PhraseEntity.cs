@@ -10,6 +10,9 @@ namespace LingoBank.Database.Entities
         [Key]
         public string Id { get; set; }
         
+        [ForeignKey("Languages")]
+        public string LanguageId { get; set; }
+        
         [Required]
         public string SourceLanguage { get; set; }
         

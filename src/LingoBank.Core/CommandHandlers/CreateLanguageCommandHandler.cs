@@ -17,7 +17,7 @@ namespace LingoBank.Core.CommandHandlers
             await _lingoContext.Languages.AddAsync(new LanguageEntity
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = command.LanguageDto.Name,
+                Name = command.Language.Name,
                 Phrases = null
             });
             await _lingoContext.SaveChangesAsync();

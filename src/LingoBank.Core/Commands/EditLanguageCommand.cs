@@ -2,7 +2,7 @@ using LingoBank.Core.Dtos;
 
 namespace LingoBank.Core.Commands
 {
-    public sealed class CreateLanguageCommand : IRuntimeCommand
+    public sealed class EditLanguageCommand : IRuntimeCommand
     {
         public LanguageDto Language { get; set; }
 

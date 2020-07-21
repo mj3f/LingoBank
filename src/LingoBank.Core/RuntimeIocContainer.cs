@@ -25,7 +25,9 @@ namespace LingoBank.Core
 
             #region Commands
             services.AddTransient<IRuntimeCommandHandler<CreateLanguageCommand>, CreateLanguageCommandHandler>();
-            
+            services.AddTransient<IRuntimeCommandHandler<EditLanguageCommand>, EditLanguageCommandHandler>();
+            services.AddTransient<IRuntimeCommandHandler<CreatePhraseCommand>, CreatePhraseCommandHandler>();
+            services.AddTransient<IRuntimeCommandHandler<EditPhraseCommand>, EditPhraseCommandHandler>();
             #endregion
         }
     }
