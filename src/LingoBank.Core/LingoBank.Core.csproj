@@ -10,11 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Queries" />
-      <Folder Include="QueryHandlers" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\LingoBank.Database\LingoBank.Database.csproj" />
     </ItemGroup>
 

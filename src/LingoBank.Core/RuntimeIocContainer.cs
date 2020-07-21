@@ -1,5 +1,9 @@
+using System.Collections.Generic;
 using LingoBank.Core.CommandHandlers;
 using LingoBank.Core.Commands;
+using LingoBank.Core.Dtos;
+using LingoBank.Core.Queries;
+using LingoBank.Core.QueryHandlers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LingoBank.Core
@@ -19,7 +23,13 @@ namespace LingoBank.Core
             services.AddScoped<IRuntime, Runtime>();
             
             #region Queries
-            
+
+            services
+                .AddTransient<IRuntimeQueryHandler<GetLanguagesQuery, List<LanguageDto>>, GetLanguagesQueryHandler>();
+            services
+                .AddTransient<IRuntimeQueryHandler<GetLanguageByIdQuery, LanguageDto>, GetLanguageByIdQueryHandler>();
+            services
+                .AddTransient<IRuntimeQueryHandler<GetPhrasesQuery, List<PhraseDto>>, GetPhrasesQueryHandler>();
             
             #endregion
 
