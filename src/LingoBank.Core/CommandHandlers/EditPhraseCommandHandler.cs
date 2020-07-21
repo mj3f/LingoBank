@@ -15,7 +15,7 @@ namespace LingoBank.Core.CommandHandlers
         public async Task<RuntimeCommandResult> ExecuteAsync(EditPhraseCommand command)
         {
             var phrase = await _lingoContext.Phrases
-                .FirstOrDefaultAsync(x => x.Id == command.Phrase.Id);
+                .FirstOrDefaultAsync(x => x.Id == command.Id);
 
             if (phrase == null)
             {

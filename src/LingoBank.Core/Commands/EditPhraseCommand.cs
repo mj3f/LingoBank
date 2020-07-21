@@ -4,10 +4,16 @@ namespace LingoBank.Core.Commands
 {
     public sealed class EditPhraseCommand : IRuntimeCommand
     {
+        public string Id { get; set; }
         public PhraseDto Phrase { get; set; }
 
         public bool Validate()
         {
+            if (string.IsNullOrEmpty(Id))
+            {
+                return false;
+            }
+            
             if (string.IsNullOrEmpty(Phrase?.LanguageId) ||
                 string.IsNullOrEmpty(Phrase.SourceLanguage) ||
                 string.IsNullOrEmpty(Phrase.TargetLanguage) ||

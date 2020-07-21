@@ -14,7 +14,7 @@ namespace LingoBank.Core.CommandHandlers
         public async Task<RuntimeCommandResult> ExecuteAsync(EditLanguageCommand command)
         {
             var language = await _lingoContext.Languages
-                .FirstOrDefaultAsync(x => x.Id == command.Language.Id);
+                .FirstOrDefaultAsync(x => x.Id == command.Id);
 
             if (language == null)
             {
