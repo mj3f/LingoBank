@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using NSwag;
-using NSwag.Generation.Processors.Security;
 using Serilog;
 
 namespace LingoBank.API
@@ -29,6 +28,7 @@ namespace LingoBank.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSpaStaticFiles(x => x.RootPath = "wwwroot");
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
@@ -58,8 +58,8 @@ namespace LingoBank.API
                     };
                     document.Info.License = new OpenApiLicense
                     {
-                        Name = "Unlicense",
-                        Url = "https://unlicense.org/"
+                        Name = "MIT",
+                        Url = "https://mit-license.org/"
                     };
                     document.Info.Title = Assembly.GetEntryAssembly().GetName().Name;
                     document.Info.Description = "LingoBank Public API Specification";
@@ -96,16 +96,26 @@ namespace LingoBank.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseStatusCodePages();
             }
 
             // app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
-            // app.UseHealthChecks();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => 
+            { 
+                endpoints.MapControllers(); 
+                endpoints.MapHealthChecks("/health");
+            });
+
+            app.MapWhen(x => !x.Request.Path.Value.StartsWith("/swagger"), builder =>
+            {
+                builder.UseSpa(spa => spa.Options.DefaultPage = "/index.html");
+            });
         }
     }
 }

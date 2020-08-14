@@ -14,8 +14,23 @@ RUN dotnet restore "src/LingoBank.API/LingoBank.API.csproj"
 FROM build AS publish
 RUN dotnet publish "src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
 
+FROM node:12 AS webbuild
+WORKDIR /src
+COPY --from=build /src .
+RUN mkdir -p wwwroot
+
+WORKDIR /src/src/LingoBank.WebApp
+RUN npm run build
+
+RUN cp -R dist/* /src/wwwroot
+
+WORKDIR /src
+RUN ls -l
+
 FROM base AS final
 WORKDIR /app
+COPY --from=webbuild /src/wwwroot ./wwwroot
 COPY --from=publish /app .
+RUN ls -l
 
 ENTRYPOINT ["dotnet", "LingoBank.API.dll"]
