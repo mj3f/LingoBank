@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using NSwag;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
 
 namespace LingoBank.API
@@ -71,10 +72,16 @@ namespace LingoBank.API
             });
             
             services.AddCors();
-            
+
             services.AddDbContext<LingoContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-            
+                options.UseMySql(
+                        Configuration.GetConnectionString("DbConnection"),
+                        ServerVersion.FromString("10.4.18-mariadb"),
+                        mySqlOptions => mySqlOptions
+                            .CharSetBehavior(CharSetBehavior.NeverAppend))
+                    .EnableSensitiveDataLogging()
+                    .EnableDetailedErrors());
+
             services.AddHealthChecks();
             RuntimeIocContainer.ConfigureServicesForRuntime(services);
         }
