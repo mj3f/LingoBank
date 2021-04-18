@@ -71,7 +71,16 @@ namespace LingoBank.API
                 config.DocumentName = "OpenAPI";
             });
             
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "AllowOrigin",
+                    builder =>{
+                        builder.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
 
             services.AddDbContext<LingoContext>(options =>
                 options.UseMySql(
@@ -107,6 +116,8 @@ namespace LingoBank.API
             }
 
             // app.UseHttpsRedirection();
+
+            app.UseCors("AllowOrigin");
 
             app.UseRouting();
             app.UseStaticFiles();
