@@ -17,9 +17,9 @@
         </div>
         <div class="row">
             <div class="col">
-                <ul *ngFor="let language of languages">
-                    <li>{{ language.name }}</li>
-                </ul>
+                <div *ngFor="let language of languages">
+                    <a (click)="goToLanguageView(language.id)" class="language-link">{{ language.name }}</a>
+                </div>
 
             </div>
         </div>
