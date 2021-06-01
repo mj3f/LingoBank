@@ -1,0 +1,28 @@
+<div class="row p-2">
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <h1>Welcome</h1>
+            </div>
+        </div>
+        <div class="row pt-5">
+            <div class="col">
+                <button class="btn btn-primary">Add New Language</button>
+            </div>
+        </div>
+        <div class="row pt-2">
+            <div class="col">
+                <h3>Your Languages</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <ul *ngFor="let language of languages">
+                    <li>{{ language.name }}</li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
