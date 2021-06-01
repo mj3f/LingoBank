@@ -100,7 +100,7 @@ namespace LingoBank.API
         {
             try
             {
-                lingoContext.Database.EnsureDeleted();
+                // lingoContext.Database.EnsureDeleted();
                 lingoContext.Database.EnsureCreated();
             }
             catch (Exception ex)
@@ -121,6 +121,8 @@ namespace LingoBank.API
 
             app.UseRouting();
             app.UseStaticFiles();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseAuthorization();
 
