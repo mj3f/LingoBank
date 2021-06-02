@@ -20,6 +20,11 @@ namespace LingoBank.Core.Dtos
         public string EmailAddress { get; set; }
         
         /// <summary>
+        /// The users system role.
+        /// </summary>
+        public string Role { get; set; }
+        
+        /// <summary>
         /// The users list of created languages.
         /// </summary>
         public List<LanguageDto> Languages { get; set; }

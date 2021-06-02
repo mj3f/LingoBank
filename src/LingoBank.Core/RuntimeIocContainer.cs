@@ -24,12 +24,11 @@ namespace LingoBank.Core
             
             #region Queries
 
-            services
-                .AddTransient<IRuntimeQueryHandler<GetLanguagesQuery, List<LanguageDto>>, GetLanguagesQueryHandler>();
-            services
-                .AddTransient<IRuntimeQueryHandler<GetLanguageByIdQuery, LanguageDto>, GetLanguageByIdQueryHandler>();
-            services
-                .AddTransient<IRuntimeQueryHandler<GetPhrasesQuery, List<PhraseDto>>, GetPhrasesQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetLanguagesQuery, List<LanguageDto>>, GetLanguagesQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetLanguageByIdQuery, LanguageDto>, GetLanguageByIdQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetPhrasesQuery, List<PhraseDto>>, GetPhrasesQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetUsersQuery, List<UserDto>>, GetUsersQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetUserByIdQuery, UserDto>, GetUserByIdQueryHandler>();
             
             #endregion
 
@@ -38,6 +37,9 @@ namespace LingoBank.Core
             services.AddTransient<IRuntimeCommandHandler<EditLanguageCommand>, EditLanguageCommandHandler>();
             services.AddTransient<IRuntimeCommandHandler<CreatePhraseCommand>, CreatePhraseCommandHandler>();
             services.AddTransient<IRuntimeCommandHandler<EditPhraseCommand>, EditPhraseCommandHandler>();
+            services.AddTransient<IRuntimeCommandHandler<CreateUserCommand>, CreateUserCommandHandler>();
+            services.AddTransient<IRuntimeCommandHandler<EditUserCommand>, EditUserCommandHandler>();
+            services.AddTransient<IRuntimeCommandHandler<DeleteUserCommand>, DeleteUserCommandHandler>();
             #endregion
         }
     }
