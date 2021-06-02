@@ -3,14 +3,16 @@ using System;
 using LingoBank.Database.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LingoBank.Database.Migrations
 {
     [DbContext(typeof(LingoContext))]
-    partial class LingoContextModelSnapshot : ModelSnapshot
+    [Migration("20210602120928_AddAspNetCoreIdentityEntities")]
+    partial class AddAspNetCoreIdentityEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

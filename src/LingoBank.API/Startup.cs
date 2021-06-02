@@ -2,8 +2,10 @@ using System;
 using System.Reflection;
 using LingoBank.Core;
 using LingoBank.Database.Contexts;
+using LingoBank.Database.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -91,7 +93,29 @@ namespace LingoBank.API
                     .EnableSensitiveDataLogging()
                     .EnableDetailedErrors());
 
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequiredUniqueChars = 0;
+
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+                    options.Lockout.AllowedForNewUsers = true;
+
+                    options.User.AllowedUserNameCharacters =
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    options.User.RequireUniqueEmail = false;
+                })
+                .AddRoles<IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<LingoContext>();
+
             services.AddHealthChecks();
+            services.AddAuthorization();
+            services.AddAuthentication();
             RuntimeIocContainer.ConfigureServicesForRuntime(services);
         }
 
@@ -100,7 +124,7 @@ namespace LingoBank.API
         {
             try
             {
-                // lingoContext.Database.EnsureDeleted();
+                lingoContext.Database.EnsureDeleted();
                 lingoContext.Database.EnsureCreated();
             }
             catch (Exception ex)
@@ -125,6 +149,7 @@ namespace LingoBank.API
             app.UseSwaggerUi3();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints => 
             { 

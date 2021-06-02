@@ -14,6 +14,9 @@ namespace LingoBank.Database.Entities
         [Required]
         public string Name { get; set; }
         
+        [ForeignKey("Users")]
+        public string UserId { get; set; }
+        
         public ICollection<PhraseEntity> Phrases { get; set; }
     }
 }
