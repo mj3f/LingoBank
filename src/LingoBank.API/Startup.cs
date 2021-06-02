@@ -124,7 +124,7 @@ namespace LingoBank.API
         {
             try
             {
-                lingoContext.Database.EnsureDeleted();
+                // lingoContext.Database.EnsureDeleted();
                 lingoContext.Database.EnsureCreated();
             }
             catch (Exception ex)

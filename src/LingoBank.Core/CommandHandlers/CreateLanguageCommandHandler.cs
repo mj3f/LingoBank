@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
 using LingoBank.Database.Contexts;
@@ -19,6 +20,7 @@ namespace LingoBank.Core.CommandHandlers
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = command.Language.Name,
+                UserId = command.Language.UserId,
                 Phrases = new List<PhraseEntity>()
             });
             await _lingoContext.SaveChangesAsync();

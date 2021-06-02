@@ -17,22 +17,24 @@ namespace LingoBank.Core.QueryHandlers
 
         public async Task<UserDto> ExecuteAsync(GetUserByIdQuery query)
         {
-            var appUser = await _context.Users.Include(u => u.Languages).FirstOrDefaultAsync(u => u.Id == query.Id);
+            var appUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == query.Id);
 
             if (appUser == null)
             {
                 return null;
             }
 
+            var languageEntities = _context.Languages.Where(l => l.UserId == query.Id).ToList();
+
             var languages = new List<LanguageDto>();
-            foreach (var language in appUser.Languages) // Checks if at least one language is in list.
+            foreach (var language in languageEntities) // Checks if at least one language is in list.
             {
                 languages.Add(new LanguageDto
                 {
                     Id = language.Id,
                     Name = language.Name,
                     UserId = language.UserId,
-                    Phrases = language.Phrases.Select(p => new PhraseDto
+                    Phrases = language.Phrases?.Select(p => new PhraseDto
                     {
                         Id = p.Id,
                         LanguageId = p.LanguageId,

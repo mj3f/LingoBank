@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using LingoBank.Core;
+using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
+using LingoBank.Core.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LingoBank.API.Controllers
@@ -27,7 +29,8 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                return Ok();
+                var users = await _runtime.ExecuteQueryAsync(new GetUsersQuery());
+                return Ok(users);
             }
             catch (Exception ex)
             {
@@ -45,7 +48,8 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                return Ok();
+                var user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery { Id = id });
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -63,7 +67,8 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                return Ok();
+                await _runtime.ExecuteCommandAsync(new CreateUserCommand { User = user });
+                return Ok("User created.");
             }
             catch (Exception ex)
             {
@@ -81,7 +86,8 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                return Ok();
+                await _runtime.ExecuteCommandAsync(new EditUserCommand { User = user });
+                return Ok("User updated.");
             }
             catch (Exception ex)
             {
@@ -99,7 +105,8 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                return Ok();
+                await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
+                return Ok("User deleted.");
             }
             catch (Exception ex)
             {

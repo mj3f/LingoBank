@@ -24,6 +24,7 @@ namespace LingoBank.Core.QueryHandlers
                 {
                     Id = language.Id,
                     Name = language.Name,
+                    UserId = language.UserId
                 };
                 languages.Add(l);
             }
