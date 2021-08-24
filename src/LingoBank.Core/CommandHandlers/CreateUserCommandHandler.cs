@@ -13,7 +13,7 @@ namespace LingoBank.Core.CommandHandlers
         public CreateUserCommandHandler(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
 
-        public async Task<RuntimeCommandResult> ExecuteAsync(CreateUserCommand command)
+        public async Task ExecuteAsync(CreateUserCommand command)
         {
             var appUser = new ApplicationUser
             {
@@ -23,12 +23,6 @@ namespace LingoBank.Core.CommandHandlers
                 Role = command.User.Role ?? "User"
             };
             IdentityResult result = await _userManager.CreateAsync(appUser, command.User.Password);
-
-            return new RuntimeCommandResult
-            {
-                IsError = result.Succeeded,
-                Message = result.Succeeded ? "User Created." : "Database error occurred whilst creating user."
-            };
         }
     }
 }

@@ -1,5 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using LingoBank.Core.CommandHandlers;
+using LingoBank.Core.Commands;
+using LingoBank.Core.Queries;
+using LingoBank.Core.QueryHandlers;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -67,7 +71,7 @@ namespace LingoBank.Core
         /// <typeparam name="TCommand"></typeparam>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task ExecuteCommandAsync<TCommand>(TCommand command, Action<RuntimeCommandResult> withMetadataCallback = null) where TCommand : class, IRuntimeCommand
+        public async Task ExecuteCommandAsync<TCommand>(TCommand command) where TCommand : class, IRuntimeCommand
         {
             // Check if query has been provided.
             _ = command ?? throw new ArgumentNullException(nameof(command));
@@ -90,9 +94,6 @@ namespace LingoBank.Core
             {
                 IRuntimeCommandHandler<TCommand> handler = ServiceProvider.GetRequiredService(handlerType) as IRuntimeCommandHandler<TCommand>;
                 _logger.Information("[Runtime] Handler is {handler}", handler);
-                
-                RuntimeCommandResult commandResultMetadata = await handler?.ExecuteAsync(command);
-                withMetadataCallback?.Invoke(commandResultMetadata); // Some commands need to return metadata after execution.
 
                 command.HasExecuted = true;
             }

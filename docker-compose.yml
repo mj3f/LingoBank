@@ -1,0 +1,17 @@
+services:
+    web:
+        build: .
+        ports: "80:80"
+        depends_on:
+            - database
+    database:
+        image: mariadb
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: GetToTheRootOfIt123
+            MYSQL_DATABASE: lingo
+            MYSQL_USER: dev
+            MYSQL_PASSWORD: dev_password
+
+# Untested
+# docker run -p 3306:3306 --name lingo -e MARIADB_ROOT_PASSWORD=GetToTheRootOfIt!123! -d mariadb

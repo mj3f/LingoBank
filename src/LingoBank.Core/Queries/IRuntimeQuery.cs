@@ -1,4 +1,4 @@
-namespace LingoBank.Core
+namespace LingoBank.Core.Queries
 {
     public interface IRuntimeQuery<TResult>
     {

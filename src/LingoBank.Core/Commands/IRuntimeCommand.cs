@@ -1,4 +1,4 @@
-namespace LingoBank.Core
+namespace LingoBank.Core.Commands
 {
     public interface IRuntimeCommand
     {

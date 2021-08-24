@@ -13,28 +13,15 @@ namespace LingoBank.Core.CommandHandlers
         public EditUserCommandHandler(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
 
-        public async Task<RuntimeCommandResult> ExecuteAsync(EditUserCommand command)
+        public async Task ExecuteAsync(EditUserCommand command)
         {
             var appUser = await _userManager.FindByIdAsync(command.User.Id);
-            if (appUser == null)
-            {
-                return new RuntimeCommandResult
-                {
-                    IsError = true,
-                    Message = $"User with {command.User.Id} does not exist!"
-                };
-            }
-
+           
             appUser.Email = command.User.EmailAddress;
             appUser.UserName = command.User.UserName;
 
             IdentityResult result = await _userManager.UpdateAsync(appUser);
-
-            return new RuntimeCommandResult
-            {
-                IsError = result.Succeeded,
-                Message = result.Succeeded ? "User Updated." : "Database error occurred whilst updating user."
-            };
+            
         }
     }
 }

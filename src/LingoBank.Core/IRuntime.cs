@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using LingoBank.Core.Commands;
+using LingoBank.Core.Queries;
 
 namespace LingoBank.Core
 {
@@ -7,6 +9,6 @@ namespace LingoBank.Core
     {
         Task<TResult> ExecuteQueryAsync<TResult>(IRuntimeQuery<TResult> runtimeQuery);
         
-        Task ExecuteCommandAsync<TCommand>(TCommand command, Action<RuntimeCommandResult> withMetadataCallback = null) where TCommand : class, IRuntimeCommand;
+        Task ExecuteCommandAsync<TCommand>(TCommand command) where TCommand : class, IRuntimeCommand;
     }
 }

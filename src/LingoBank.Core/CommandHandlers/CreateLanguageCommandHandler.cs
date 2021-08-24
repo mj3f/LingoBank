@@ -14,7 +14,7 @@ namespace LingoBank.Core.CommandHandlers
 
         public CreateLanguageCommandHandler(LingoContext context) => _lingoContext = context;
 
-        public async Task<RuntimeCommandResult> ExecuteAsync(CreateLanguageCommand command)
+        public async Task ExecuteAsync(CreateLanguageCommand command)
         {
             await _lingoContext.Languages.AddAsync(new LanguageEntity
             {
@@ -23,9 +23,9 @@ namespace LingoBank.Core.CommandHandlers
                 UserId = command.Language.UserId,
                 Phrases = new List<PhraseEntity>()
             });
+            
             await _lingoContext.SaveChangesAsync();
-
-            return new RuntimeCommandResult {Message = "Language created"};
+            
         }
     }
 }
