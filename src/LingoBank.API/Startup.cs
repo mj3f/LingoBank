@@ -1,16 +1,21 @@
 using System;
 using System.Reflection;
+using System.Text;
+using LingoBank.API.Services;
 using LingoBank.Core;
 using LingoBank.Database.Contexts;
 using LingoBank.Database.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NSwag;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
@@ -113,9 +118,24 @@ namespace LingoBank.API
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<LingoContext>();
 
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             services.AddHealthChecks();
             services.AddAuthorization();
-            services.AddAuthentication();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
+            });
             RuntimeIocContainer.ConfigureServicesForRuntime(services);
         }
 
@@ -142,6 +162,19 @@ namespace LingoBank.API
             // app.UseHttpsRedirection();
 
             app.UseCors("AllowOrigin");
+
+            // Leverage session state and add the jwt token to the auth header if applicable.
+            app.UseSession();
+            app.Use(async (context, next) =>
+            {
+                var token = context.Session.GetString("Token");
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Request.Headers.Add("Authorization", "Bearer " + token);
+                }
+                
+                await next();
+            });
 
             app.UseRouting();
             app.UseStaticFiles();

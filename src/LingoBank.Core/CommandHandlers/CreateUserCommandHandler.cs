@@ -18,11 +18,11 @@ namespace LingoBank.Core.CommandHandlers
             var appUser = new ApplicationUser
             {
                 Id = Guid.NewGuid().ToString(),
-                UserName = command.User.UserName,
-                Email = command.User.EmailAddress,
-                Role = command.User.Role ?? "User"
+                UserName = command.UserWithPassword.UserName,
+                Email = command.UserWithPassword.EmailAddress,
+                Role = command.UserWithPassword.Role ?? "User"
             };
-            IdentityResult result = await _userManager.CreateAsync(appUser, command.User.Password);
+            IdentityResult result = await _userManager.CreateAsync(appUser, command.UserWithPassword.Password);
         }
     }
 }

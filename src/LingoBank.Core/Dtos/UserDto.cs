@@ -30,7 +30,7 @@ namespace LingoBank.Core.Dtos
         public List<LanguageDto> Languages { get; set; }
     }
 
-    public sealed class CreateUserDto : UserDto
+    public sealed class UserWithPasswordDto : UserDto
     {
         /// <summary>
         /// The users defined password when signing up to the service.

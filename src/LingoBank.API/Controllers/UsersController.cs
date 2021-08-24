@@ -63,11 +63,11 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Description("Creates a new user.")]
-        public async Task<IActionResult> Create(CreateUserDto user)
+        public async Task<IActionResult> Create(UserWithPasswordDto userWithPassword)
         {
             try
             {
-                await _runtime.ExecuteCommandAsync(new CreateUserCommand { User = user });
+                await _runtime.ExecuteCommandAsync(new CreateUserCommand { UserWithPassword = userWithPassword });
                 return Ok("User created.");
             }
             catch (Exception ex)
