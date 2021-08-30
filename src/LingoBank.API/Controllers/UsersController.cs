@@ -6,6 +6,7 @@ using LingoBank.Core;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LingoBank.API.Controllers
@@ -13,6 +14,7 @@ namespace LingoBank.API.Controllers
     [ApiController]
     [Produces("application/json")]
     [Route("api/v0/users")]
+    [Authorize]
     public sealed class UsersController : ControllerBase
     {
         private readonly IRuntime _runtime;

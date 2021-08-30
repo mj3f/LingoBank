@@ -7,6 +7,7 @@ using LingoBank.Core;
 using LingoBank.Database.Contexts;
 using LingoBank.Database.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -122,19 +123,28 @@ namespace LingoBank.API
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddHealthChecks();
-            services.AddAuthorization();
+            
+            services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build());
+            
             services.AddScoped<ITokenService, TokenService>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    // ValidateIssuer = true,
+                    // ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
 
@@ -159,25 +169,15 @@ namespace LingoBank.API
 
             // Leverage session state and add the jwt token to the auth header if applicable.
             app.UseSession();
-            app.Use(async (context, next) =>
-            {
-                var token = context.Session.GetString("Token");
-                if (!string.IsNullOrEmpty(token))
-                {
-                    context.Request.Headers.Add("Authorization", "Bearer " + token);
-                }
-                
-                await next();
-            });
 
             app.UseRouting();
             app.UseStaticFiles();
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
-            app.UseAuthorization();
             app.UseAuthentication();
-
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints => 
             { 
                 endpoints.MapControllers(); 

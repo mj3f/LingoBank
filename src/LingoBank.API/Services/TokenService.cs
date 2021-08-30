@@ -29,7 +29,7 @@ namespace LingoBank.API.Services
             _runtime = runtime;
         }
 
-        public async Task<string> BuildToken(string userName)
+        public async Task<string> BuildToken(string email)
         {
             if (string.IsNullOrEmpty(_key) || string.IsNullOrEmpty(_audience) || string.IsNullOrEmpty(_issuer))
             {
@@ -38,11 +38,11 @@ namespace LingoBank.API.Services
             }
 
             UserDto userDto = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
-                { Username = userName, IncludeLanguages = false });
+                { EmailAddress = email, IncludeLanguages = false });
 
             if (userDto is null)
             {
-                _logger.Error("[TOKEN SERVICE] Could not find a user with username " + userName);
+                _logger.Error("[TOKEN SERVICE] Could not find a user with username " + email);
                 return string.Empty;
             }
             

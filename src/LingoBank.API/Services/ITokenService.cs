@@ -5,7 +5,7 @@ namespace LingoBank.API.Services
 {
     public interface ITokenService
     {
-        Task<string> BuildToken(string userName);
+        Task<string> BuildToken(string email);
         bool ValidateToken(string token);
     }
 }

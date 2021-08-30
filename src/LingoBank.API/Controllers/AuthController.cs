@@ -27,14 +27,14 @@ namespace LingoBank.API.Controllers
         [Description("Returns a jwt token if the user exists.")]
         public async Task<IActionResult> Login([FromBody] UserWithPasswordDto user)
         {
-            string token = await _tokenService.BuildToken(user.UserName);
+            string token = await _tokenService.BuildToken(user.EmailAddress);
             if (string.IsNullOrEmpty(token))
             {
                 return BadRequest("Could not generate a valid JWT Token for this user. Check that your inputs are correct.");
             }
             
             // So the use async bit in Startup.Configure can set the token in the request headers by default.
-            HttpContext.Session.SetString("Token", token);
+            // HttpContext.Session.SetString("Token", token);
 
             return Ok(token);
         }
