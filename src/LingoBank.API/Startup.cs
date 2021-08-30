@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Text;
 using LingoBank.API.Services;
+using LingoBank.API.Services.Hosted;
 using LingoBank.Core;
 using LingoBank.Database.Contexts;
 using LingoBank.Database.Entities;
@@ -112,7 +113,7 @@ namespace LingoBank.API
 
                     options.User.AllowedUserNameCharacters =
                         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                    options.User.RequireUniqueEmail = false;
+                    options.User.RequireUniqueEmail = true;
                 })
                 .AddRoles<IdentityRole>()
                 .AddDefaultTokenProviders()
@@ -136,22 +137,15 @@ namespace LingoBank.API
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
+
+            services.AddHostedService<DatabaseSetupHostedService>();
+            
             RuntimeIocContainer.ConfigureServicesForRuntime(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LingoContext lingoContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            try
-            {
-                // lingoContext.Database.EnsureDeleted();
-                lingoContext.Database.EnsureCreated();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"[STARTUP] An error occurred whilst migrating the database." +
-                              $"See exception message for details. {ex.Message}");
-            }
             
             if (env.IsDevelopment())
             {
