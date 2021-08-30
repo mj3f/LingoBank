@@ -23,6 +23,8 @@ namespace LingoBank.Core.CommandHandlers
                 Role = command.UserWithPassword.Role ?? "User"
             };
             IdentityResult result = await _userManager.CreateAsync(appUser, command.UserWithPassword.Password);
+            
+            command.ResultCallback.Invoke(result);
         }
     }
 }
