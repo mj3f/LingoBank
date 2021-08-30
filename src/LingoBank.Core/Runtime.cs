@@ -94,7 +94,7 @@ namespace LingoBank.Core
             {
                 IRuntimeCommandHandler<TCommand> handler = ServiceProvider.GetRequiredService(handlerType) as IRuntimeCommandHandler<TCommand>;
                 _logger.Information("[Runtime] Handler is {handler}", handler);
-
+                await handler?.ExecuteAsync((dynamic) command);
                 command.HasExecuted = true;
             }
             catch (Exception exception)
