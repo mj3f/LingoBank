@@ -99,7 +99,7 @@ namespace LingoBank.API.Services.Hosted
                             UserName = "devadmin",
                             Password = "HelloWorld12345!"
                         },
-                        ResultCallback = result =>
+                        OnResult = result =>
                         {
                             if (result.Succeeded)
                             {

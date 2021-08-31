@@ -24,7 +24,7 @@ namespace LingoBank.Core.CommandHandlers
             };
             IdentityResult result = await _userManager.CreateAsync(appUser, command.UserWithPassword.Password);
             
-            command.ResultCallback.Invoke(result);
+            command.OnResult.Invoke(result);
         }
     }
 }

@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace LingoBank.Core.Commands
 {
-    public class CreateUserCommand : IRuntimeCommand
+    public class CreateUserCommand : IRuntimeIdentityCommand
     {
         public UserWithPasswordDto UserWithPassword { get; set; }
         
-        public Action<IdentityResult> ResultCallback { get; set; }
+        public Action<IdentityResult> OnResult { get; set; }
         
         public bool Validate()
         {
