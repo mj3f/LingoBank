@@ -23,9 +23,9 @@ namespace LingoBank.API.Authentication
 
         public JwtTokenGenerator(IConfiguration configuration, IRuntime runtime)
         {
-            _key = configuration["Jwt:Key"];
-            _issuer = configuration["Jwt:Issuer"];
-            _audience = configuration["Jwt:Audience"];
+            _key = configuration[JwtTokenGenerationOptions.AppSettingsJwtKeyIndex];
+            _issuer = JwtTokenGenerationOptions.Issuer;
+            _audience = JwtTokenGenerationOptions.Audience;
             _runtime = runtime;
         }
 
@@ -48,22 +48,19 @@ namespace LingoBank.API.Authentication
             
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, userDto.UserName),
+                new Claim(ClaimTypes.NameIdentifier, userDto.Id),
+                // new Claim(ClaimTypes.Name, userDto.UserName),
                 new Claim(ClaimTypes.Email, userDto.EmailAddress),
                 new Claim(ClaimTypes.Role, userDto.Role),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                // new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));        
-            
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);           
             
             var tokenDescriptor = new JwtSecurityToken(
                 _issuer, 
-                _issuer, 
+                _audience, 
                 claims,
                 expires: DateTime.Now.AddMinutes(ExpiryInMinutes), 
-                signingCredentials: credentials);
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key)), SecurityAlgorithms.HmacSha256));
             
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }

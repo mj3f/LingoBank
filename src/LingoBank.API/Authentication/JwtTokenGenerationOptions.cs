@@ -8,7 +8,7 @@ namespace LingoBank.API.Authentication
         public const string Issuer = "lingobank.api/jwt/issuer";
         public const string Audience = "lingobank.api/jwt/audience";
         public const string Subject = "user";
-        public const string AppSettingsJwtKeyIndex = "Jwt:Key";
+        public const string AppSettingsJwtKeyIndex = "JwtSecretKey";
         public const int TokenExpiryInMinutes = 30;
     }
 }
