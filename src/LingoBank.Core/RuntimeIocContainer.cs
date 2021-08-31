@@ -4,6 +4,7 @@ using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
 using LingoBank.Core.QueryHandlers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LingoBank.Core
@@ -29,6 +30,7 @@ namespace LingoBank.Core
             services.AddTransient<IRuntimeQueryHandler<GetPhrasesQuery, List<PhraseDto>>, GetPhrasesQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetUsersQuery, List<UserDto>>, GetUsersQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetUserByIdQuery, UserDto>, GetUserByIdQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<SignInUserQuery, SignInResult>, SignInUserQueryHandler>();
             
             #endregion
 

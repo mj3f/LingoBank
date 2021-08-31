@@ -1,10 +1,11 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
-using LingoBank.API.Services;
+using LingoBank.API.Authentication;
 using LingoBank.Core;
 using LingoBank.Core.Dtos;
-using Microsoft.AspNetCore.Http;
+using LingoBank.Core.Queries;
 using Microsoft.AspNetCore.Mvc;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace LingoBank.API.Controllers
 {
@@ -14,20 +15,41 @@ namespace LingoBank.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IRuntime _runtime;
-        private readonly ITokenService _tokenService;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public AuthController(IRuntime runtime, ITokenService tokenService)
+        public AuthController(IRuntime runtime, IJwtTokenGenerator jwtTokenGenerator)
         {
             _runtime = runtime;
-            _tokenService = tokenService;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         [HttpPost("login")]
         [ProducesResponseType(200)]
         [Description("Returns a jwt token if the user exists.")]
-        public async Task<IActionResult> Login([FromBody] UserWithPasswordDto user)
+        public async Task<IActionResult> Login([FromBody] UserWithPasswordDto userWithPassword)
         {
-            string token = await _tokenService.BuildToken(user.EmailAddress);
+
+            UserDto user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
+                { EmailAddress = userWithPassword.EmailAddress });
+
+            if (user is null)
+            {
+                return BadRequest("No user found.");
+            }
+
+            SignInResult signInResult = await _runtime.ExecuteQueryAsync(new SignInUserQuery
+            {
+                User = user,
+                Password = userWithPassword.Password
+            });
+            
+            if (!signInResult.Succeeded)
+            {
+                return BadRequest("Login credentials invalid.");
+            }
+            
+            string token = await _jwtTokenGenerator.BuildToken(user.EmailAddress);
+            
             if (string.IsNullOrEmpty(token))
             {
                 return BadRequest("Could not generate a valid JWT Token for this user. Check that your inputs are correct.");

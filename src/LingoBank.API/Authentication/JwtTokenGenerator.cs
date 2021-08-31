@@ -10,18 +10,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
-namespace LingoBank.API.Services
+namespace LingoBank.API.Authentication
 {
-    public class TokenService : ITokenService
+    public class JwtTokenGenerator : IJwtTokenGenerator
     {
         private const double ExpiryInMinutes = 30;
-        private static ILogger _logger = Log.ForContext<TokenService>();
+        private static ILogger _logger = Log.ForContext<JwtTokenGenerator>();
         private readonly IRuntime _runtime;
         
         // Properties for generating/validating a JWT token.
         private readonly string _key, _issuer, _audience;
 
-        public TokenService(IConfiguration configuration, IRuntime runtime)
+        public JwtTokenGenerator(IConfiguration configuration, IRuntime runtime)
         {
             _key = configuration["Jwt:Key"];
             _issuer = configuration["Jwt:Issuer"];
@@ -49,16 +49,21 @@ namespace LingoBank.API.Services
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, userDto.UserName),
+                new Claim(ClaimTypes.Email, userDto.EmailAddress),
                 new Claim(ClaimTypes.Role, userDto.Role),
-                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));        
             
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);           
             
-            var tokenDescriptor = new JwtSecurityToken(_issuer, _issuer, claims,
-                expires: DateTime.Now.AddMinutes(ExpiryInMinutes), signingCredentials: credentials);
+            var tokenDescriptor = new JwtSecurityToken(
+                _issuer, 
+                _issuer, 
+                claims,
+                expires: DateTime.Now.AddMinutes(ExpiryInMinutes), 
+                signingCredentials: credentials);
             
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }

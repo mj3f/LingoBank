@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Text;
+using LingoBank.API.Authentication;
 using LingoBank.API.Services;
 using LingoBank.API.Services.Hosted;
 using LingoBank.Core;
@@ -10,7 +11,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NSwag;
+using NSwag.Generation.Processors.Security;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
 
@@ -78,6 +79,14 @@ namespace LingoBank.API
                 config.GenerateAbstractProperties = true;
                 config.GenerateKnownTypes = true;
                 config.DocumentName = "OpenAPI";
+                config.DocumentProcessors.Add(new SecurityDefinitionAppender(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    Description = "Copy 'Bearer ' + valid JWT token into field",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                }));
+                config.OperationProcessors.Add(new OperationSecurityScopeProcessor(JwtBearerDefaults.AuthenticationScheme));
             });
             
             services.AddCors(options =>
@@ -123,31 +132,26 @@ namespace LingoBank.API
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddHealthChecks();
-            
-            services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder()
-                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser()
-                .Build());
-            
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddAuthentication(options =>
+
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false; // dev envionrment purposes.
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    // ValidateIssuer = true,
-                    // ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                     ValidateLifetime = true,
+                    RequireExpirationTime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]))
+                    ValidIssuer = JwtTokenGenerationOptions.Issuer,
+                    ValidAudience = JwtTokenGenerationOptions.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[JwtTokenGenerationOptions.AppSettingsJwtKeyIndex])),
+                    ClockSkew = TimeSpan.Zero
                 };
             });
-
+            services.AddAuthorization();
             services.AddHostedService<DatabaseSetupHostedService>();
             
             RuntimeIocContainer.ConfigureServicesForRuntime(services);
@@ -161,6 +165,7 @@ namespace LingoBank.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
+                app.UseSwaggerUi3();
             }
 
             // app.UseHttpsRedirection();
@@ -171,12 +176,10 @@ namespace LingoBank.API
             app.UseSession();
 
             app.UseRouting();
-            app.UseStaticFiles();
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
-
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStaticFiles();
+            app.UseOpenApi();
             
             app.UseEndpoints(endpoints => 
             { 
