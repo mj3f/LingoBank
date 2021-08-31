@@ -49,16 +49,12 @@ namespace LingoBank.API.Controllers
             }
             
             string token = await _jwtTokenGenerator.BuildToken(user.EmailAddress);
-            
-            if (string.IsNullOrEmpty(token))
-            {
-                return BadRequest("Could not generate a valid JWT Token for this user. Check that your inputs are correct.");
-            }
-            
-            // So the use async bit in Startup.Configure can set the token in the request headers by default.
-            // HttpContext.Session.SetString("Token", token);
 
             return Ok(token);
         }
+        
+        // TODO: Endpoint for getting current logged in user.
+        
+        // TODO: Endpoint for getting a refresh token.
     }
 }
