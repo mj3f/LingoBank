@@ -7,8 +7,8 @@ namespace LingoBank.Core.Commands
     public class CreateUserCommand : IRuntimeIdentityCommand
     {
         public UserWithPasswordDto UserWithPassword { get; set; }
-        
-        public Action<IdentityResult> OnResult { get; set; }
+
+        public Action<IdentityResult> HandleResult { get; set; }
         
         public bool Validate()
         {

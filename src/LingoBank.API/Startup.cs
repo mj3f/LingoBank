@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Text;
 using LingoBank.API.Authentication;
+using LingoBank.API.Services;
 using LingoBank.API.Services.Hosted;
 using LingoBank.Core;
 using LingoBank.Database.Contexts;
@@ -70,9 +71,9 @@ namespace LingoBank.API
                         Name = "MIT",
                         Url = "https://mit-license.org/"
                     };
-                    document.Info.Title = Assembly.GetEntryAssembly().GetName().Name;
+                    document.Info.Title = Assembly.GetEntryAssembly()?.GetName().Name;
                     document.Info.Description = "LingoBank Public API Specification";
-                    document.Info.Version = "v" + Assembly.GetEntryAssembly().GetName().Version.ToString();
+                    document.Info.Version = "v" + Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
                 };
                 config.GenerateAbstractProperties = true;
                 config.GenerateKnownTypes = true;
@@ -151,6 +152,8 @@ namespace LingoBank.API
             });
             services.AddAuthorization();
             services.AddHostedService<DatabaseSetupHostedService>();
+
+            services.AddSingleton<IdentityResultHandlerLoggingService>();
             
             RuntimeIocContainer.ConfigureServicesForRuntime(services);
         }
@@ -185,7 +188,7 @@ namespace LingoBank.API
                 endpoints.MapHealthChecks("/health");
             });
 
-            app.MapWhen(x => !x.Request.Path.Value.StartsWith("/swagger"), builder =>
+            app.MapWhen(x => x.Request.Path.Value != null && !x.Request.Path.Value.StartsWith("/swagger"), builder =>
             {
                 builder.UseSpa(spa => spa.Options.DefaultPage = "/index.html");
             });

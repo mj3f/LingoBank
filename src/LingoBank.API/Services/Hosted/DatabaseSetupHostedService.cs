@@ -22,11 +22,13 @@ namespace LingoBank.API.Services.Hosted
         private static readonly ILogger Logger = Log.ForContext<DatabaseSetupHostedService>();
         private readonly IServiceProvider _serviceProvider;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IdentityResultHandlerLoggingService _identityResultHandlerLoggingService;
 
-        public DatabaseSetupHostedService(IServiceProvider serviceProvider, IWebHostEnvironment env)
+        public DatabaseSetupHostedService(IServiceProvider serviceProvider, IWebHostEnvironment env, IdentityResultHandlerLoggingService loggingService)
         {
             _serviceProvider = serviceProvider;
             _hostingEnvironment = env;
+            _identityResultHandlerLoggingService = loggingService;
         }
         
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -99,24 +101,9 @@ namespace LingoBank.API.Services.Hosted
                             UserName = "devadmin",
                             Password = "HelloWorld12345!"
                         },
-                        OnResult = result =>
-                        {
-                            if (result.Succeeded)
-                            {
-                                Logger.Information(
-                                    "[DatabaseSetupHostedService] development admin account has been created.");
-                            }
-                            else
-                            {
-                                Logger.Information(
-                                    "[DatabaseSetupHostedService] Error occurred when creating user.");
-                                foreach (var error in result.Errors)
-                                {
-                                    Logger.Error($"[DatabaseSetupHostedService] Error Code: {error.Code}");
-                                    Logger.Error($"[DatabaseSetupHostedService] Error Description: {error.Description}");
-                                }
-                            }
-                        }
+                        HandleResult = result => _identityResultHandlerLoggingService.LogIdentityResult(result, 
+                            "[DatabaseSetupHostedService] development admin account has been created.",
+                            "[DatabaseSetupHostedService] error occurred whilst creating admin user.")
                     });
                 }
                 catch (Exception ex)
