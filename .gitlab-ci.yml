@@ -48,7 +48,7 @@ publish-job:    # Publishes the built docker image to gitlab container registry.
   only:
     - master
   dependencies:
-    - package
+    - package-job
   script:
     - echo "Publishing built docker image to container registry..."
     - docker load -i LingoBank.tar
