@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoBank.Core", "LingoBank
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoBank.Database", "LingoBank.Database\LingoBank.Database.csproj", "{C04A5608-8472-465C-A5EF-DE81440718C4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EFDD8272-D142-4FA9-A4C4-F60DC9672476}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoBank.API.UnitTests", "LingoBank.API.UnitTests\LingoBank.API.UnitTests.csproj", "{93EAE34C-5547-4635-AFB9-4E1FC9BF0885}"
 EndProject
 Global
@@ -34,6 +32,5 @@ Global
 		{93EAE34C-5547-4635-AFB9-4E1FC9BF0885}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{93EAE34C-5547-4635-AFB9-4E1FC9BF0885} = {EFDD8272-D142-4FA9-A4C4-F60DC9672476}
 	EndGlobalSection
 EndGlobal
