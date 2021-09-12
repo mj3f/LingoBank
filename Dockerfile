@@ -9,19 +9,23 @@ ARG VERSION=0.0.1
 
 COPY . .
 
-RUN dotnet restore "src/LingoBank.API/LingoBank.API.csproj"
-RUN dotnet test "src/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
+# RUN dotnet restore "src/LingoBank.API/LingoBank.API.csproj"
+# RUN dotnet test "src/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
 
-FROM build AS publish
-RUN dotnet publish "src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
+# FROM build AS publish
+# RUN dotnet publish "src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
 
 FROM node:12 AS webbuild
 WORKDIR /src
 COPY --from=build /src .
 RUN mkdir -p wwwroot
 
+RUN ls -l
+
 WORKDIR /src/src/LingoBank.WebApp
 RUN npm run build
+
+RUN ls -l
 
 RUN cp -R dist/* /src/wwwroot
 
