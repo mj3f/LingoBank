@@ -12,26 +12,10 @@ before_script:
 
 stages:          # List of stages for jobs, and their order of execution
   - build
-  - test
-  - package
   - publish
   # - deploy
 
-build-job:       # Runs dotnet build to make sure no errors where found before building a docker image.
-  stage: build
-  script:
-    - echo "Buliding solution..."
-    - cd src
-    - dotnet build
-
-unit-test-job:   # Runs unit tests for project.
-  stage: test
-  script:
-    - echo "Running unit tests..."
-    - cd src
-    - dotnet test
-
-package-job:     # Packages the project as a docker image.
+build-job:     # Packages the project as a docker image.
   stage: package
   only:
     - master
@@ -48,7 +32,7 @@ publish-job:    # Publishes the built docker image to gitlab container registry.
   only:
     - master
   dependencies:
-    - package-job
+    - build-job
   script:
     - echo "Publishing built docker image to container registry..."
     - docker load -i LingoBank.tar

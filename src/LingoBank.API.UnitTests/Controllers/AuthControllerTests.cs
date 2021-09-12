@@ -1,8 +1,14 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using LingoBank.API.Authentication;
 using LingoBank.Core;
+using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
+using LingoBank.Database.Contexts;
+using LingoBank.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -13,34 +19,36 @@ namespace LingoBank.API.UnitTests.Controllers
         // private readonly Mock<IJwtTokenGenerator> _jwtTokenGeneratorMock = new();
         // private readonly Mock<IRuntime> _runtimeMock = new();
 
-        private readonly IRuntime _runtime;
+        private readonly LingoContext _context;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public AuthControllerTests(IRuntime runtime, IJwtTokenGenerator jwtTokenGenerator)
+        public AuthControllerTests(LingoContext context, IJwtTokenGenerator jwtTokenGenerator)
         {
-            _runtime = runtime;
+            _context = context;
             _jwtTokenGenerator = jwtTokenGenerator;
-        }
-
-        [Fact]
-        public async Task Login_LoginWithUserThatDoesNotExist_UserIsNull()
-        {
-            UserDto user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
-                { EmailAddress = "dummyemail@dummy.com" });
-
-            Assert.Null(user);
         }
 
         [Fact]
         public async Task Login_LoginWithDefaultAdminUser_ShouldReturnAJwtToken()
         {
-            UserDto user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
-                { EmailAddress = "admin@example.com" });
+            // var dbContextOptions = new DbContextOptions<LingoContext>();
+            string email = "admin@example.com";
+            // using (var lingoContext = new LingoContext(dbContextOptions))
+            // {
+            _context.Users.Add(new ApplicationUser
+            {
+                Email = email,
+                Id = Guid.NewGuid().ToString(),
+                UserName = "admin",
+                Role = "Administrator"
+            });
 
-            string token = await _jwtTokenGenerator.BuildToken(user.EmailAddress);
+            await _context.SaveChangesAsync();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             
+            string token = await _jwtTokenGenerator.BuildToken(user.Email);
             Assert.NotNull(token);
-            
+            // }
         }
     }
 }
