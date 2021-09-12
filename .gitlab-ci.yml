@@ -35,7 +35,7 @@ publish-job:    # Publishes the built docker image to gitlab container registry.
     - build-job
   script:
     - echo "Publishing built docker image to container registry..."
-    - docker load -i lingobankngoBank.tar
+    - docker load -i lingobank.tar
     - docker tag lingobank:$CI_COMMIT_REF_SLUG registry.gitlab.com/msjp/lingobank:$CI_COMMIT_REF_SLUG
     - docker push registry.gitlab.com/msjp/lingobank:$CI_COMMIT_REF_SLUG
     - docker rmi lingobank:$CI_COMMIT_REF_SLUG
