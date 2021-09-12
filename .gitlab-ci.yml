@@ -21,11 +21,11 @@ build-job:     # Packages the project as a docker image.
     - master
   script:
     - echo "Building docker image for project..."
-    - docker build --tag LingoBank:$CI_COMMIT_REF_SLUG .
-    - docker save -o LingoBank.tar LingoBank:$CI_COMMIT_REF_SLUG
+    - docker build --tag lingobank:$CI_COMMIT_REF_SLUG .
+    - docker save -o lingobank.tar lingobank:$CI_COMMIT_REF_SLUG
   artifacts:
     paths:
-      - LingoBank.tar
+      - lingobank.tar
 
 publish-job:    # Publishes the built docker image to gitlab container registry.
   stage: publish
@@ -35,10 +35,10 @@ publish-job:    # Publishes the built docker image to gitlab container registry.
     - build-job
   script:
     - echo "Publishing built docker image to container registry..."
-    - docker load -i LingoBank.tar
-    - docker tag LingoBank:$CI_COMMIT_REF_SLUG registry.gitlab.com/msjp/LingoBank:$CI_COMMIT_REF_SLUG
-    - docker push registry.gitlab.com/msjp/LingoBank:$CI_COMMIT_REF_SLUG
-    - docker rmi LingoBank:$CI_COMMIT_REF_SLUG
+    - docker load -i lingobankngoBank.tar
+    - docker tag lingobank:$CI_COMMIT_REF_SLUG registry.gitlab.com/msjp/lingobank:$CI_COMMIT_REF_SLUG
+    - docker push registry.gitlab.com/msjp/lingobank:$CI_COMMIT_REF_SLUG
+    - docker rmi lingobank:$CI_COMMIT_REF_SLUG
 
 # deploy-job:     # Deploys the project to cluster (eventually)
 #   stage: deploy
