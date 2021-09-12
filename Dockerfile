@@ -23,9 +23,14 @@ RUN mkdir -p wwwroot
 RUN ls -l
 
 WORKDIR /src/src/LingoBank.WebApp
-RUN npm run build
+COPY package.json .
+RUN npm install
+
 
 RUN ls -l
+
+RUN npm run build
+
 
 RUN cp -R dist/* /src/wwwroot
 
