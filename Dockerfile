@@ -7,36 +7,34 @@ WORKDIR /src
 ARG BUILDCONFIG=RELEASE
 ARG VERSION=0.0.1
 
-RUN "ls"
+COPY . .
 
-# COPY . .
+RUN dotnet restore "lingo/src/LingoBank.API/LingoBank.API.csproj"
+RUN dotnet test "lingo/src/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
 
-# RUN dotnet restore "src/LingoBank.API/LingoBank.API.csproj"
-# RUN dotnet test "src/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
+FROM build AS publish
+RUN dotnet publish "lingo/src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
 
-# FROM build AS publish
-# RUN dotnet publish "src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
+FROM node:12 AS webbuild
+WORKDIR /src
+# Copy API build from previous workspace.
+COPY --from=build /src .
 
-# FROM node:12 AS webbuild
-# WORKDIR /src
-# # Copy API build from previous workspace.
-# COPY --from=build /src .
+# Create wwwroot folder which is where the built web project will be housed.
+RUN mkdir -p wwwroot
 
-# # Create wwwroot folder which is where the built web project will be housed.
-# RUN mkdir -p wwwroot
+WORKDIR /src/src/LingoBank.WebApp
 
-# WORKDIR /src/src/LingoBank.WebApp
+RUN npm install
 
-# RUN npm install
+RUN npm run build
 
-# RUN npm run build
+# Copy ng build files to wwwroot folder.
+RUN cp -R dist/* /src/wwwroot
 
-# # Copy ng build files to wwwroot folder.
-# RUN cp -R dist/* /src/wwwroot
+FROM base AS final
+WORKDIR /app
+COPY --from=webbuild /src/wwwroot ./wwwroot
+COPY --from=publish /app .
 
-# FROM base AS final
-# WORKDIR /app
-# COPY --from=webbuild /src/wwwroot ./wwwroot
-# COPY --from=publish /app .
-
-# ENTRYPOINT ["dotnet", "LingoBank.API.dll"]
+ENTRYPOINT ["dotnet", "LingoBank.API.dll"]
