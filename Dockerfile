@@ -23,7 +23,7 @@ COPY --from=build /src .
 # Create wwwroot folder which is where the built web project will be housed.
 RUN mkdir -p wwwroot
 
-WORKDIR /src/src/LingoBank.WebApp
+WORKDIR /src/LingoBank.WebApp
 
 RUN npm install
 
