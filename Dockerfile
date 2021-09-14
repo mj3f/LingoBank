@@ -10,7 +10,7 @@ ARG VERSION=0.0.1
 COPY . .
 
 RUN dotnet restore "lingo/src/LingoBank.API/LingoBank.API.csproj"
-RUN dotnet test "lingo/src/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
+RUN dotnet test "lingo/test/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
 
 FROM build AS publish
 RUN dotnet publish "lingo/src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
