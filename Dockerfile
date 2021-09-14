@@ -7,7 +7,7 @@ WORKDIR /src
 ARG BUILDCONFIG=RELEASE
 ARG VERSION=0.0.1
 
-RUN "ls -la"
+RUN "ls -l"
 
 # COPY . .
 
