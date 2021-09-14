@@ -7,13 +7,13 @@ WORKDIR /src
 ARG BUILDCONFIG=RELEASE
 ARG VERSION=0.0.1
 
-COPY . .
+COPY lingo/. .
 
-RUN dotnet restore "lingo/src/LingoBank.API/LingoBank.API.csproj"
-RUN dotnet test "lingo/test/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
+RUN dotnet restore "src/LingoBank.API/LingoBank.API.csproj"
+RUN dotnet test "test/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
 
 FROM build AS publish
-RUN dotnet publish "lingo/src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
+RUN dotnet publish "src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
 
 FROM node:12 AS webbuild
 WORKDIR /src
@@ -23,7 +23,7 @@ COPY --from=build /src .
 # Create wwwroot folder which is where the built web project will be housed.
 RUN mkdir -p wwwroot
 
-WORKDIR /src/LingoBank.WebApp
+WORKDIR /src/src/LingoBank.WebApp
 
 RUN npm install
 
