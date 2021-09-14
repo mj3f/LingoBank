@@ -12,7 +12,7 @@ namespace LingoBank.API.UnitTests
         {
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddDbContext<LingoContext>(options => options.UseInMemoryDatabase("Lingo"));
-            RuntimeIocContainer.ConfigureServicesForRuntime(services);
+            // RuntimeIocContainer.ConfigureServicesForRuntime(services);
         }
     }
 }
