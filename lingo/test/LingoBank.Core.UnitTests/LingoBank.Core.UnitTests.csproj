@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LingoBank.Core\LingoBank.Core.csproj" />
+      <ProjectReference Include="..\..\src\LingoBank.Core\LingoBank.Core.csproj" />
     </ItemGroup>
 
 </Project>

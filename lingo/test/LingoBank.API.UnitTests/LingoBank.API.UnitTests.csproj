@@ -23,7 +23,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LingoBank.API\LingoBank.API.csproj" />
+      <ProjectReference Include="..\..\src\LingoBank.API\LingoBank.API.csproj" />
+      <ProjectReference Include="..\..\src\LingoBank.Database\LingoBank.Database.csproj" />
     </ItemGroup>
 
 </Project>

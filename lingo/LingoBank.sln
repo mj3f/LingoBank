@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoBank.API", "src\LingoBank.API\LingoBank.API.csproj", "{D0948793-B998-4889-BBBF-327CADE9785B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoBank.Core", "src\LingoBank.Core\LingoBank.Core.csproj", "{4777E3B5-7A2C-4FC4-BA3D-6F7F70653415}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoBank.Database", "src\LingoBank.Database\LingoBank.Database.csproj", "{C334EB49-BDBC-4AD8-93FC-4A6DC09B7B0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{8B67799F-E408-4E3B-9553-800D58FAE8A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F48D9652-4B44-47CA-8004-9E02C5B4BDFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoBank.API.UnitTests", "test\LingoBank.API.UnitTests\LingoBank.API.UnitTests.csproj", "{B8A3102A-55CF-4FC5-88FF-4788EF410284}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoBank.Core.UnitTests", "test\LingoBank.Core.UnitTests\LingoBank.Core.UnitTests.csproj", "{7C45CFD8-1A11-41B0-84C0-17166B44011F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0948793-B998-4889-BBBF-327CADE9785B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0948793-B998-4889-BBBF-327CADE9785B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0948793-B998-4889-BBBF-327CADE9785B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0948793-B998-4889-BBBF-327CADE9785B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4777E3B5-7A2C-4FC4-BA3D-6F7F70653415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4777E3B5-7A2C-4FC4-BA3D-6F7F70653415}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4777E3B5-7A2C-4FC4-BA3D-6F7F70653415}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4777E3B5-7A2C-4FC4-BA3D-6F7F70653415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C334EB49-BDBC-4AD8-93FC-4A6DC09B7B0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C334EB49-BDBC-4AD8-93FC-4A6DC09B7B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C334EB49-BDBC-4AD8-93FC-4A6DC09B7B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C334EB49-BDBC-4AD8-93FC-4A6DC09B7B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8A3102A-55CF-4FC5-88FF-4788EF410284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8A3102A-55CF-4FC5-88FF-4788EF410284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8A3102A-55CF-4FC5-88FF-4788EF410284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8A3102A-55CF-4FC5-88FF-4788EF410284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C45CFD8-1A11-41B0-84C0-17166B44011F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C45CFD8-1A11-41B0-84C0-17166B44011F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C45CFD8-1A11-41B0-84C0-17166B44011F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C45CFD8-1A11-41B0-84C0-17166B44011F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D0948793-B998-4889-BBBF-327CADE9785B} = {8B67799F-E408-4E3B-9553-800D58FAE8A3}
+		{4777E3B5-7A2C-4FC4-BA3D-6F7F70653415} = {8B67799F-E408-4E3B-9553-800D58FAE8A3}
+		{C334EB49-BDBC-4AD8-93FC-4A6DC09B7B0C} = {8B67799F-E408-4E3B-9553-800D58FAE8A3}
+		{B8A3102A-55CF-4FC5-88FF-4788EF410284} = {F48D9652-4B44-47CA-8004-9E02C5B4BDFD}
+		{7C45CFD8-1A11-41B0-84C0-17166B44011F} = {F48D9652-4B44-47CA-8004-9E02C5B4BDFD}
+	EndGlobalSection
+EndGlobal
