@@ -46,13 +46,44 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         [Description("Returns details of a user from the id given.")]
         public async Task<IActionResult> GetById(string id)
         {
             try
             {
                 var user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery { Id = id });
+
+                if (user is null)
+                {
+                    return NotFound("No user found for id provided.");
+                }
+                
                 return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id}/languages")]
+        [ProducesResponseType(typeof(List<LanguageDto>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Description("Returns a list of languages belonging to a user.")]
+        public async Task<IActionResult> GetLanguagesAsync(string id)
+        {
+            try
+            {
+                UserDto user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery { Id = id });
+                if (user is null)
+                {
+                    return NotFound("No user found for id provided.");
+                }
+
+                List<LanguageDto> languages = await _runtime.ExecuteQueryAsync(new GetLanguagesQuery { UserId = id });
+                return Ok(languages);
             }
             catch (Exception ex)
             {
@@ -85,7 +116,7 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Description("Edits an existing user.")]
-        public async Task<IActionResult> Edit(string id, [FromBody] UserDto user)
+        public async Task<IActionResult> UpdateAsync(string id, [FromBody] UserDto user)
         {
             try
             {
@@ -104,7 +135,7 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Description("Deletes an existing user.")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
             try
             {

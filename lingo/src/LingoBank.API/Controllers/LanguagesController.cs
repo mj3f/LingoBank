@@ -19,23 +19,6 @@ namespace LingoBank.API.Controllers
 
         public LanguagesController(IRuntime runtime) => _runtime = runtime;
         
-        [HttpGet]
-        [ProducesResponseType(typeof(List<LanguageDto>), 200)]
-        [ProducesResponseType(400)]
-        [Description("Returns a list of all languages created by the user.")]
-        public async Task<IActionResult> GetLanguagesAsync()
-        {
-            try
-            {
-                List<LanguageDto> languages = await _runtime.ExecuteQueryAsync(new GetLanguagesQuery());
-                return Ok(languages);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(LanguageDto), 200)]
         [ProducesResponseType(400)]

@@ -14,17 +14,39 @@ namespace LingoBank.API.UnitTests.Controllers
 {
     public class UsersControllerTests
     {
+        private readonly UsersController _sut;
+        private readonly UserDto _user;
+        private readonly UserWithPasswordDto _userWithPassword;
+
+        public UsersControllerTests()
+        {
+            
+            _userWithPassword = new UserWithPasswordDto
+            {
+                Id = Guid.NewGuid().ToString(),
+                EmailAddress = "test@example.com",
+                UserName = "Test",
+                Role = "User",
+                Password = "Test12345678"
+            };
+
+            _user = _userWithPassword;
+            
+            
+            var runtime = new Mock<IRuntime>();
+            runtime.Setup(x => x.ExecuteQueryAsync(It.IsAny<GetUsersQuery>())).ReturnsAsync(new List<UserDto>());
+            runtime.Setup(x => x.ExecuteQueryAsync(It.IsAny<GetUserByIdQuery>())).ReturnsAsync(_user);
+            runtime.Setup(x => x.ExecuteQueryAsync(It.IsAny<GetLanguagesQuery>())).ReturnsAsync(new List<LanguageDto>());
+
+                
+            _sut = new UsersController(runtime.Object);
+        }
+
         [Fact]
         public async Task GetAllAsync_ShouldReturnUsers()
         {
-            // Arrange
-            var runtime = new Mock<IRuntime>();
-            runtime.Setup(x => x.ExecuteQueryAsync(It.IsAny<GetUsersQuery>())).ReturnsAsync(new List<UserDto>());
-
-            var sut = new UsersController(runtime.Object);
-
             // act
-            IActionResult result = await sut.GetAll();
+            IActionResult result = await _sut.GetAll();
 
             // assert
             Assert.IsType<OkObjectResult>(result);
@@ -33,20 +55,15 @@ namespace LingoBank.API.UnitTests.Controllers
         [Fact]
         public async Task GetByIdAsync_ShouldReturnUser()
         {
-            string id = Guid.NewGuid().ToString();
-            var user = new UserDto
-            {
-                Id = id,
-                EmailAddress = "test@example.com",
-                UserName = "Test",
-                Role = "User"
-            };
-            
-            var runtime = new Mock<IRuntime>();
-            runtime.Setup(x => x.ExecuteQueryAsync(It.IsAny<GetUserByIdQuery>())).ReturnsAsync(user);
+            IActionResult result = await _sut.GetById(_user.Id);
 
-            var sut = new UsersController(runtime.Object);
-            IActionResult result = await sut.GetById(id);
+            Assert.IsType<OkObjectResult>(result);
+        }
+        
+        [Fact]
+        public async Task GetLanguagesAsync_GetListOfLanguagesForUser_ShouldReturnAListOfLanguages()
+        {
+            IActionResult result = await _sut.GetLanguagesAsync(_user.Id);
 
             Assert.IsType<OkObjectResult>(result);
         }
@@ -54,25 +71,8 @@ namespace LingoBank.API.UnitTests.Controllers
         [Fact]
         public async Task CreateAsync_ShouldCreateUser()
         {
-            // Arrange
-            var user = new UserWithPasswordDto
-            {
-                Id = Guid.NewGuid().ToString(),
-                EmailAddress = "test@example.com",
-                UserName = "Test",
-                Role = "User",
-                Password = "Test12345678"
-            };
-           
-            var runtime = new Mock<IRuntime>();
             
-            // Don't need to mock this as a command does not return anything. (so we assume the input is valid for this test)
-            // runtime.Setup(x => x.ExecuteCommandAsync(It.IsAny<CreateUserCommand>()));
-
-            var sut = new UsersController(runtime.Object);
-            
-            // Act
-            IActionResult result = await sut.Create(user);
+            IActionResult result = await _sut.Create(_userWithPassword);
             
             // Assert (assume the user was valid and it was created.
             string okRes = (result as OkObjectResult)?.Value as string ?? string.Empty;
@@ -85,14 +85,9 @@ namespace LingoBank.API.UnitTests.Controllers
         {
             // Arrange
             UserWithPasswordDto user = null;
-           
-            var runtime = new Mock<IRuntime>();
-            runtime.Setup(x => x.ExecuteCommandAsync(It.IsAny<CreateUserCommand>())).ThrowsAsync(new Exception());
-            
-            var sut = new UsersController(runtime.Object);
-            
+
             // Act
-            IActionResult result = await sut.Create(user);
+            IActionResult result = await _sut.Create(user);
             
             // Assert (assume the user was valid and it was created.
             Assert.IsType<BadRequestObjectResult>(result);

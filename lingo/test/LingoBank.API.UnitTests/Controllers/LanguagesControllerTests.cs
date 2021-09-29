@@ -39,15 +39,7 @@ namespace LingoBank.API.UnitTests.Controllers
 
             _sut = new LanguagesController(runtime.Object);
         }
-
-        [Fact]
-        public async Task GetAll_GetListOfLanguages_ReturnList()
-        {
-            IActionResult result = await _sut.GetLanguagesAsync();
-            
-            Assert.IsType<OkObjectResult>(result);
-        }
-
+        
         [Fact]
         public async Task GetById_GetLanguageById_ReturnsALanguage()
         {
