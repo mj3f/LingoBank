@@ -8,14 +8,9 @@ namespace LingoBank.Core.Commands
         
         public bool Validate()
         {
-            if (User != null &&
-                !string.IsNullOrEmpty(User.EmailAddress) &&
-                !string.IsNullOrEmpty(User.UserName))
-            {
-                return true;
-            }
-
-            return false;
+            return User != null &&
+                   !string.IsNullOrEmpty(User.EmailAddress) &&
+                   !string.IsNullOrEmpty(User.UserName);
         }
 
         public bool HasExecuted { get; set; }
