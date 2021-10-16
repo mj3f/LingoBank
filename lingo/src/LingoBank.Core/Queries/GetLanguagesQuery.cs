@@ -5,6 +5,7 @@ namespace LingoBank.Core.Queries
 {
     public sealed class GetLanguagesQuery : IRuntimeQuery<List<LanguageDto>>
     {
-        public bool Validate() => true;
+        public string UserId { get; set; }
+        public bool Validate() => !string.IsNullOrEmpty(UserId);
     }
 }

@@ -12,15 +12,10 @@ namespace LingoBank.Core.Commands
         
         public bool Validate()
         {
-            if (UserWithPassword != null &&
-                !string.IsNullOrEmpty(UserWithPassword.Password) &&
-                !string.IsNullOrEmpty(UserWithPassword.EmailAddress) &&
-                !string.IsNullOrEmpty(UserWithPassword.UserName))
-            {
-                return true;
-            }
-
-            return false;
+            return UserWithPassword != null &&
+                   !string.IsNullOrEmpty(UserWithPassword.Password) &&
+                   !string.IsNullOrEmpty(UserWithPassword.EmailAddress) &&
+                   !string.IsNullOrEmpty(UserWithPassword.UserName);
         }
 
         public bool HasExecuted { get; set; }
