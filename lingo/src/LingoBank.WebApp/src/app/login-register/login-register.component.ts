@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
 
 @Component({
@@ -12,23 +13,25 @@ export class LoginRegisterComponent implements OnInit {
     form: FormGroup;
 
     constructor(
+		public router: Router,
 		public authService: AuthService,
 		fb: FormBuilder) {
 		this.form = fb.group({
-			username: new FormControl('', [Validators.required]),
+			email: new FormControl('', [Validators.required]),
 			password: new FormControl('', [Validators.required])
 		});
 	}
 
-	get username() { return this.form.get('username').value; }
+	get email() { return this.form.get('email').value; }
 	get password() { return this.form.get('password').value; }
 
     ngOnInit(): void {
     }
 
 	handleLogin() {
-		console.log('logging in????');
-		this.authService.login(this.username, this.password).subscribe((token: string) => console.log('token = ', token));
+		this.authService.login(this.email, this.password).subscribe(() => {
+			this.router.navigate(['/languages']);
+		});
 	}
 
 }

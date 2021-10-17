@@ -12,8 +12,16 @@ export class AuthService extends BaseService {
         this.apiUrl += '/auth/';
     }
 
-    public login(username: string, password: string): Observable<string> {
-        const user = new UserWithPassword(username, password);
-        return this.http.post<string>(this.apiUrl + 'login', JSON.stringify(user));
+    public login(email: string, password: string): Observable<string> {
+        const user = new UserWithPassword(email, password);
+        return new Observable(subscriber => {
+            this.http.post<string>(this.apiUrl + 'login', JSON.stringify(user), this.getRequestOptions()).subscribe((token: string) => {
+                // do something with the token here!
+                // this.storeJwtToken(token);
+                this.clearJwtToken();
+                subscriber.complete();
+            },
+            (error) => subscriber.error(error))
+        });
     }
 }
