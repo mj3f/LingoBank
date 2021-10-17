@@ -8,6 +8,7 @@ import { LanguagesModule } from './languages/languages.module';
 import { LanguageService } from './shared/services/language.service';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from './shared/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,10 @@ import { ReactiveFormsModule } from '@angular/forms';
       HttpClientModule,
       ReactiveFormsModule
   ],
-  providers: [LanguageService],
+  providers: [
+      AuthService,
+      LanguageService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

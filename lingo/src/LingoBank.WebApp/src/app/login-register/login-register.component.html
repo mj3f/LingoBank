@@ -1,10 +1,12 @@
-<div class="flex h-screen w-screen justify-center items-center bg-green-500">
+<div class="flex h-screen w-screen justify-center items-center bg-gradient-to-b from-green-600 via-teal-500 to-purple-400">
     <div class="flex flex-col items-center bg-gray-100 rounded-lg h-auto w-96 px-4 py-4">
-        <h1 class="text-4xl text-gray-800 text-center pb-4">Lingo bank</h1>
+        <h1 class="text-4xl text-center pb-4 font-black bg-clip-text text-transparent bg-gradient-to-r from-green-600 via-teal-500 to-purple-400">Lingo bank</h1>
         <form [formGroup]="form" (ngSubmit)="handleLogin()">
-            <input class="w-full h-12 rounded-lg px-4 text-gray-800 text-lg focus:ring-blue-600 mb-4" type="email" formControlName="email" placeholder="email" />
-            <input class="w-full h-12 rounded-lg px-4 text-gray-800 text-lg focus:ring-blue-600 mb-4" type="password" formControlName="password" placeholder="password" />
-            <button class="bg-blue-600 p-2 text-white w-full rounded" type="submit">Login</button>
+            <input class="w-full h-12 border-none rounded-lg px-4 text-gray-800 text-lg focus:ring-blue-600 mb-4" type="email" formControlName="email" placeholder="email" />
+            <input class="w-full h-12 border-none rounded-lg px-4 text-gray-800 text-lg focus:ring-blue-600 mb-4" type="password" formControlName="password" placeholder="password" />
+            <input class="appearance-none rounded checked:bg-blue-600 checked:border-transparent" type="checkbox" id="remember-me" />
+            <label for="remember-me" class="text-gray-800 pl-2 text-sm">Don't you, forget about me!</label>
+            <button class="bg-blue-600 p-2 mt-5 text-white w-full rounded" type="submit">Login</button>
             <button class="text-sm text-gray-800 w-full pt-2 hover:text-blue-600">Forgot password?</button>
         </form>
     </div>
