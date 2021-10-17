@@ -1,12 +1,12 @@
 
 export class User {
-    constructor(public username: string) {
+    constructor(public emailAddress: string) {
         
     }
 }
 
 export class UserWithPassword extends User {
-    constructor(username: string, public password: string) {
-        super(username);
+    constructor(email: string, public password: string) {
+        super(email);
     }
 }

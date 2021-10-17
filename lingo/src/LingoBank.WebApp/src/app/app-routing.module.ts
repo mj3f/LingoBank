@@ -6,7 +6,7 @@ import { LoginRegisterComponent } from './login-register/login-register.componen
 
 const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    // { path: 'languages', component: LanguageListComponent },
+    { path: 'languages', component: LanguageListComponent },
     // { path: 'languages/:id', component: LanguageViewComponent },
     { path: 'login', component: LoginRegisterComponent }
    // { path: 'home', component: HomeComponent },

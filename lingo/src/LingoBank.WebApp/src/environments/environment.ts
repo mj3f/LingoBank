@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  useHttps: false,
+  url: 'localhost:5000',
+  tokenKeyForStorage: 'jwt-token'
 };
 
 /*
