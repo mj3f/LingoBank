@@ -6,16 +6,20 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LanguagesModule } from './languages/languages.module';
 import { LanguageService } from './shared/services/language.service';
+import { LoginRegisterComponent } from './login-register/login-register.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-      AppComponent
+      AppComponent,
+      LoginRegisterComponent
   ],
   imports: [
       BrowserModule,
       AppRoutingModule,
       LanguagesModule,
-      HttpClientModule
+      HttpClientModule,
+      ReactiveFormsModule
   ],
   providers: [LanguageService],
   bootstrap: [AppComponent]
