@@ -3,23 +3,29 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { LanguagesModule } from './languages/languages.module';
 import { LanguageService } from './shared/services/language.service';
+import { LoginRegisterComponent } from './login-register/login-register.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from './shared/services/auth.service';
 
 @NgModule({
   declarations: [
-      AppComponent
+      AppComponent,
+      LoginRegisterComponent
   ],
   imports: [
       BrowserModule,
       AppRoutingModule,
       LanguagesModule,
-      NgbModule,
-      HttpClientModule
+      HttpClientModule,
+      ReactiveFormsModule
   ],
-  providers: [LanguageService],
+  providers: [
+      AuthService,
+      LanguageService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
