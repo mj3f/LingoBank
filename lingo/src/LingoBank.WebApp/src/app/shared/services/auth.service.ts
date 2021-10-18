@@ -14,14 +14,20 @@ export class AuthService extends BaseService {
 
     public login(email: string, password: string): Observable<string> {
         const user = new UserWithPassword(email, password);
-        return new Observable(subscriber => {
+        return new Observable<string>(subscriber => {
             this.http.post<string>(this.apiUrl + 'login', JSON.stringify(user), this.getRequestOptions()).subscribe((token: string) => {
-                // do something with the token here!
-                // this.storeJwtToken(token);
-                this.clearJwtToken();
+                this.storeJwtToken(token);
+                subscriber.next();
                 subscriber.complete();
             },
             (error) => subscriber.error(error))
+        });
+    }
+
+    public logout(): Observable<null> {
+        return new Observable(subscriber => {
+            this.clearJwtToken();
+            subscriber.complete();
         });
     }
 }

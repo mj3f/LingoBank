@@ -30,8 +30,10 @@ export class LoginRegisterComponent implements OnInit {
 
 	handleLogin() {
 		this.authService.login(this.email, this.password).subscribe(() => {
+			console.log('navigate');
 			this.router.navigate(['/languages']);
-		});
+		},
+		(error) => console.error(error));
 	}
 
 }
