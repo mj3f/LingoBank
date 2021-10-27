@@ -9,11 +9,13 @@ import { LanguageService } from './shared/services/language.service';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './shared/services/auth.service';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
       AppComponent,
-      LoginRegisterComponent
+      LoginRegisterComponent,
+      NavbarComponent
   ],
   imports: [
       BrowserModule,

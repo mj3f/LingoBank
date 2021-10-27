@@ -1,5 +1,10 @@
 <div class="w-full">
-	<div class="flex flex-column flex-1">
-		<router-outlet></router-outlet>
+	<div class="flex flex-col md:flex-row flex-1">
+		<div id="navbar" class="flex-col">
+			<app-navbar></app-navbar>
+		</div>
+		<div id="content" class="flex-col">
+			<router-outlet></router-outlet>
+		</div>
 	</div>
 </div>
