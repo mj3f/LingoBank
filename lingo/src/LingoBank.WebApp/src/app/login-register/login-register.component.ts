@@ -6,7 +6,7 @@ import { AuthService } from '../shared/services/auth.service';
 @Component({
   selector: 'app-login-register',
   templateUrl: './login-register.component.html',
-  styleUrls: ['./login-register.component.css']
+  styleUrls: []
 })
 export class LoginRegisterComponent implements OnInit {
 
@@ -30,8 +30,10 @@ export class LoginRegisterComponent implements OnInit {
 
 	handleLogin() {
 		this.authService.login(this.email, this.password).subscribe(() => {
-			this.router.navigate(['/languages']);
-		});
+			console.log('navigate');
+			this.router.navigate(['/home']);
+		},
+		(error) => console.error(error));
 	}
 
 }

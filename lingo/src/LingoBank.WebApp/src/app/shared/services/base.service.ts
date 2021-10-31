@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-
+import jwtDecode, { JwtPayload } from 'jwt-decode';
 
 export abstract class BaseService {
-    protected apiUrl; // = 'http://localhost:5000/api/v0';
+    protected apiUrl;
     private readonly httpPrefix;
     private readonly headers: HttpHeaders;
 
@@ -17,15 +17,26 @@ export abstract class BaseService {
     }
 
     protected getRequestOptions(): RequestOptions {
-        const jwtToken = this.getJwtToken();
+        const tokenString = this.getJwtToken();        
+        let jwtToken = null;
+        
+        if (tokenString) {
+            jwtToken = jwtDecode<JwtPayload>(tokenString);
+        }
+
         let hasCredentials = false;
         let newHeaders: HttpHeaders = null;
+
         if (jwtToken) {
-            hasCredentials = true;
-            newHeaders = new HttpHeaders()
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-                .set('Authorization', jwtToken);
+            if (jwtToken.exp > Math.floor(Date.now() / 1000)) {
+                hasCredentials = true;
+                newHeaders = new HttpHeaders()
+                    .set('Content-Type', 'application/json')
+                    .set('Accept', 'application/json')
+                    .set('Authorization', tokenString);
+            } else {
+                this.clearJwtToken();
+            }
         }
 
         return {
