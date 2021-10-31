@@ -10,19 +10,23 @@ import { LoginRegisterComponent } from './login-register/login-register.componen
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './shared/services/auth.service';
 import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarLinkComponent } from './navbar/navbar-link/navbar-link.component';
+import { HomeComponent } from './home/home.component';
+import { NavbarModule } from './navbar/navbar.module';
 
 @NgModule({
   declarations: [
       AppComponent,
       LoginRegisterComponent,
-      NavbarComponent
+      HomeComponent
   ],
   imports: [
       BrowserModule,
       AppRoutingModule,
       LanguagesModule,
       HttpClientModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      NavbarModule
   ],
   providers: [
       AuthService,

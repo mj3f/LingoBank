@@ -1,13 +1,13 @@
 <div class="flex flex-row md:flex-col w-screen h-16 md:h-screen md:w-64 bg-gradient-to-b from-green-600 via-teal-500 to-purple-400">
-    <h1 class="text-4xl md:text-center p-4 font-black text-white">
+    <h1 class="text-4xl md:text-center p-4 font-black text-white md:border-b-2 md:border-r-0 border-r-2">
                Lingo bank
     </h1>
-    <div id="nav-buttons" class="flex flex-row md:flex-col flex-1 w-full md:h-32 bg-red-700">
-        <a [routerLink]="['/home']" class="flex justify-center items-center border-2 rounded text-center h-16 w-full">
-            <span>Home</span>
-        </a>
+    <div id="nav-buttons" class="flex flex-row md:flex-col flex-1 w-full md:h-32">
+        <app-navbar-link title="Home" [link]="['/home']"></app-navbar-link>
+        <app-navbar-link title="Languages" [link]="['/languages']"></app-navbar-link>
+        <app-navbar-link title="Settings" [link]="['/settings']"></app-navbar-link>
     </div>
-    <div id="controls" class="flex flex-row w-16 md:h-24 md:absolute md:bottom-0 md:left-0 md:w-64 bg-yellow-400">
-
+    <div id="controls" class="flex flex-row justify-center items-center w-16 md:h-24 md:absolute md:bottom-0 md:left-0 md:w-64">
+        <button class="bg-white border-1 border-blue-500 hover:bg-blue-600 hover:text-white h-16 w-32 rounded font-black">Logout</button>
     </div>
 </div>
