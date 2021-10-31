@@ -6,8 +6,7 @@ import { LanguageService } from 'src/app/shared/services/language.service';
 
 @Component({
 	selector: 'app-language-list',
-	templateUrl: './language-list.component.html',
-	styleUrls: ['./language-list.component.css']
+	templateUrl: './language-list.component.html'
 })
 export class LanguageListComponent implements OnInit {
 	languages: Language[];
@@ -16,7 +15,13 @@ export class LanguageListComponent implements OnInit {
 				private router: Router) { }
 
 	ngOnInit(): void {
-		this.getLanguages();
+		// this.getLanguages();
+		this.languages = [
+			new Language('232323', 'English', []),
+			new Language('436566', 'Spanish', []),
+			new Language('365788', 'German', []),
+			new Language('675685', 'Italian', [])
+		]
 	}
 
 	goToLanguageView(id: string) {
