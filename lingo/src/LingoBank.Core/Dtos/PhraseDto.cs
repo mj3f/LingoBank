@@ -1,3 +1,5 @@
+using LingoBank.Core.Enums;
+
 namespace LingoBank.Core.Dtos
 {
     public sealed class PhraseDto
@@ -40,6 +42,6 @@ namespace LingoBank.Core.Dtos
         /// <summary>
         /// The category for which the phrase belongs to.
         /// </summary>
-        public int Category { get; set; }
+        public Category Category { get; set; }
     }
 }

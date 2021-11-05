@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using LingoBank.Core.Commands;
 using LingoBank.Database.Contexts;
 using LingoBank.Database.Entities;
-using LingoBank.Database.Enums;
 
 namespace LingoBank.Core.CommandHandlers
 {
@@ -24,7 +23,7 @@ namespace LingoBank.Core.CommandHandlers
                 Text = command.Phrase.Text,
                 Translation = command.Phrase.Translation,
                 Description = command.Phrase.Description,
-                Category = (Category)command.Phrase.Category
+                Category = (int) command.Phrase.Category
             });
             await _lingoContext.SaveChangesAsync();
         }

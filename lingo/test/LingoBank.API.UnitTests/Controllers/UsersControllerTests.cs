@@ -79,18 +79,5 @@ namespace LingoBank.API.UnitTests.Controllers
             
             Assert.Equal("User created.", okRes);
         }
-
-        [Fact]
-        public async Task CreateAsync_WithNullInput_ShouldNotCreateUser()
-        {
-            // Arrange
-            UserWithPasswordDto user = null;
-
-            // Act
-            IActionResult result = await _sut.Create(user);
-            
-            // Assert (assume the user was valid and it was created.
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
     }
 }

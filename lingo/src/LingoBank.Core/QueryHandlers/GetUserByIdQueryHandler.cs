@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LingoBank.Core.Dtos;
+using LingoBank.Core.Enums;
 using LingoBank.Core.Queries;
 using LingoBank.Database.Contexts;
 using LingoBank.Database.Entities;
@@ -48,7 +49,7 @@ namespace LingoBank.Core.QueryHandlers
                             Description = p.Description,
                             Text = p.Text,
                             Translation = p.Translation,
-                            Category = (int) p.Category
+                            Category = (Category) p.Category
                         }).ToList()
                     });
                 }

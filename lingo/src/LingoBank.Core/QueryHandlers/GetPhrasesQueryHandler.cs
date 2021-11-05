@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LingoBank.Core.Dtos;
+using LingoBank.Core.Enums;
 using LingoBank.Core.Queries;
 using LingoBank.Database.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,7 @@ namespace LingoBank.Core.QueryHandlers
                     Text = phrasesEntity.Text,
                     Translation = phrasesEntity.Translation,
                     Description = phrasesEntity.Description,
-                    Category = (int) phrasesEntity.Category
+                    Category = (Category) phrasesEntity.Category
                 });
             }
             return phrases;

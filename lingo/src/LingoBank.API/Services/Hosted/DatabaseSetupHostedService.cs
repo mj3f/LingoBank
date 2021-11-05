@@ -33,8 +33,25 @@ namespace LingoBank.API.Services.Hosted
         
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            while (!IsDatabaseServerAlive())
+            {
+                Logger.Error("[DatabaseSetupHostedService] Database connection could not be estalbished." +
+                             "Trying again in 5 seconds...");
+                await Task.Delay(5000);
+            }
+            Logger.Information("[DatabaseSetupHostedService] Database connection established.");
+            
             await CreateDatabase(cancellationToken);
             await SeedDefaultDevelopmentAdminAccount();
+        }
+
+        private bool IsDatabaseServerAlive()
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                LingoContext lingoContext = scope.ServiceProvider.GetRequiredService<LingoContext>();
+                return lingoContext.Database.CanConnect();
+            }
         }
 
         /// <summary>
