@@ -2,13 +2,12 @@
     <div class="flex flex-row w-full">
         <h2 class="text-xl font-black w-8/12">{{ language.name }}</h2>
         <div class="w-4/12">
-            <div class="float-right flex flex-row">
-                <div class="px-2"><span class="flag-icon flag-icon-gb"></span></div>
-                <div class="px-2">Flag</div>
+            <div class="float-right flex flex-row" *ngIf="language.code">
+                <div class="px-2"><span [class]="'flag-icon flag-icon=' + language.code"></span></div>
             </div>
         </div>
     </div>
-    <div class="flex-row">
-        <p>(Target to source)</p>
+    <div class="flex-row" *ngIf="language.description">
+        <p>({{ language.description }})</p>
     </div>
 </div>

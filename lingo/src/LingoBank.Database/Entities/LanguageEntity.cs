@@ -13,6 +13,10 @@ namespace LingoBank.Database.Entities
         
         [Required]
         public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public string Code { get; set;}
         
         [ForeignKey("Users")]
         public string UserId { get; set; }
