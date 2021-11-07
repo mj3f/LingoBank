@@ -1,8 +1,8 @@
 <div class="flex flex-col">
     <h2 class="text-4xl font-black">Your Languages</h2>
-    <button class="mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded">Add a new language</button>
-    <ul *ngFor="let language of languages">
-        <li>{{ language.name }}</li>
-    </ul>
+    <button class="w-64 mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded">Add a new language</button>
+    <div *ngFor="let language of languages">
+        <app-language-card [language]="language"></app-language-card>
+    </div>
 </div>
 
