@@ -50,9 +50,9 @@ namespace LingoBank.API
                         }
                     };
                     options.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
-                    options.SerializerSettings.TypeNameAssemblyFormatHandling = Newtonsoft.Json.TypeNameAssemblyFormatHandling.Simple;
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                    options.SerializerSettings.TypeNameAssemblyFormatHandling =
+                        Newtonsoft.Json.TypeNameAssemblyFormatHandling.Simple;
+                });
             
             // Swagger docs
             services.AddSwaggerDocument(config =>
@@ -102,9 +102,9 @@ namespace LingoBank.API
             services.AddDbContext<LingoContext>(options =>
                 options.UseMySql(
                         Configuration.GetConnectionString("DbConnection"),
-                        ServerVersion.FromString("10.4.18-mariadb"),
-                        mySqlOptions => mySqlOptions
-                            .CharSetBehavior(CharSetBehavior.NeverAppend))
+                        new MariaDbServerVersion("10.4.18-mariadb"))
+                        // mySqlOptions => mySqlOptions
+                            //.CharSetBehavior(CharSetBehavior.NeverAppend))
                     .EnableSensitiveDataLogging()
                     .EnableDetailedErrors());
 
