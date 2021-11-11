@@ -3,16 +3,19 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from './button/button.component';
 import { AuthService } from './services/auth.service';
 import { LanguageService } from './services/language.service';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
 	declarations: [
-		ButtonComponent
+		ButtonComponent,
+		ModalComponent
 	],
 	imports: [
 		CommonModule
 	],
 	exports: [
-		ButtonComponent
+		ButtonComponent,
+		ModalComponent
 	],
 	providers: [
 		AuthService,

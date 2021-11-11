@@ -1,8 +1,10 @@
 <div class="flex flex-col">
     <h2 class="text-4xl font-black">Your Languages</h2>
-    <button class="w-64 mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded">Add a new language</button>
+    <button class="w-64 mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded" (click)="addLanguage()">Add a new language</button>
     <div *ngFor="let language of languages">
         <app-language-card [language]="language"></app-language-card>
     </div>
 </div>
-
+<app-modal [title]="'test'" [show]="showModal" (cancelOrDismissButtonClicked)="toggleModal()" (okButtonClicked)="toggleModal()">
+    Hello there, are you sure you want to continue reading this shite?? huh, I guess you do if you got this far. Needless to say that you just wasted your time.
+</app-modal>
