@@ -5,6 +5,22 @@
         <app-language-card [language]="language"></app-language-card>
     </div>
 </div>
-<app-modal [title]="'test'" [show]="showModal" (cancelOrDismissButtonClicked)="toggleModal()" (okButtonClicked)="toggleModal()">
-    Hello there, are you sure you want to continue reading this shite?? huh, I guess you do if you got this far. Needless to say that you just wasted your time.
+<app-modal [title]="'Add a new Language'" [show]="showModal" (cancelOrDismissButtonClicked)="onModalCancelButtonClicked()" (okButtonClicked)="onModalOkButtonClicked()">
+    <form [formGroup]="form">
+        <div class="flex flex-col w-full">
+            <div class="mb-2">
+                <label for="name" class="block text-gray-800 font-semibold">Name</label>
+                <input type="text" id="name" formControlName="name" class="border rounded w-full" />
+            </div>
+            <div class="mb-2">
+                <!-- Change this to a dropdown -->
+                <label for="code" class="block text-gray-800 font-semibold">Code</label>
+                <input type="text" id="code" formControlName="code" class="border rounded w-full" />
+            </div>
+            <div class="mb-2">
+                <label for="description" class="block text-gray-800 font-semibold">Description</label>
+                <input type="text" id="description" formControlName="description" class="border rounded w-full" />
+            </div>
+        </div>
+    </form>
 </app-modal>
