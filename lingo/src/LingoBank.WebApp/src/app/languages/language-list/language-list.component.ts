@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Language } from 'src/app/shared/models/language.model';
 import { LanguageService } from 'src/app/shared/services/language.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
 	selector: 'app-language-list',
@@ -17,6 +18,7 @@ export class LanguageListComponent implements OnInit {
 
 	constructor(private languageService: LanguageService,
 				private router: Router,
+				private userService: UserService,
 				formBuilder: FormBuilder) {
 		this.form = formBuilder.group({
 			name: new FormControl('', [Validators.required]),
@@ -30,17 +32,17 @@ export class LanguageListComponent implements OnInit {
 	get description(): string { return this.form.get('description').value; }
 
 	ngOnInit(): void {
-		// this.getLanguages();
-		this.languages = [
-			new Language('English', 'gb', '',[]),
-			new Language('Spanish', 'es', '', []),
-			new Language('German', 'de', '', []),
-			new Language('Italian', 'it', '', [])
-		];
-
-		for (const language of this.languages) {
-			language.description = 'This is a dummy description';
-		}
+		this.getLanguages();
+		// this.languages = [
+		// 	new Language('English', 'gb', '',[]),
+		// 	new Language('Spanish', 'es', '', []),
+		// 	new Language('German', 'de', '', []),
+		// 	new Language('Italian', 'it', '', [])
+		// ];
+		//
+		// for (const language of this.languages) {
+		// 	language.description = 'This is a dummy description';
+		// }
 	}
 
 	public goToLanguageView(id: string): void {
@@ -58,7 +60,7 @@ export class LanguageListComponent implements OnInit {
 	public onModalOkButtonClicked(): void {
 		this.toggleModal();
 		const language = new Language(this.name, this.code, this.description, []);
-		language.userId = '????';
+		language.userId = 'f5706113-ee78-4b12-a245-4307348477be'; // TODO: get current user from jwt token
 		this.createLanguage(language).add(_ => this.clearForm());
 	}
 
@@ -72,7 +74,8 @@ export class LanguageListComponent implements OnInit {
 	}
 
 	private getLanguages(): Subscription {
-		return this.languageService.getAll().subscribe(data => this.languages = data);
+		const id = 'f5706113-ee78-4b12-a245-4307348477be'; // TODO: get current user from jwt token
+		return this.userService.getLanguages(id).subscribe(data => this.languages = data);
 	}
 
 	private createLanguage(language: Language): Subscription {

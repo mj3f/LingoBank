@@ -4,6 +4,7 @@ import { ButtonComponent } from './button/button.component';
 import { AuthService } from './services/auth.service';
 import { LanguageService } from './services/language.service';
 import { ModalComponent } from './components/modal/modal.component';
+import { UserService } from './services/user.service';
 
 @NgModule({
 	declarations: [
@@ -20,6 +21,7 @@ import { ModalComponent } from './components/modal/modal.component';
 	providers: [
 		AuthService,
 		LanguageService,
+		UserService
 	],
 })
 export class SharedModule { }
