@@ -88,16 +88,7 @@ namespace LingoBank.API
                 config.OperationProcessors.Add(new OperationSecurityScopeProcessor(JwtBearerDefaults.AuthenticationScheme));
             });
             
-            services.AddCors(options =>
-            {
-                options.AddPolicy(
-                    name: "AllowOrigin",
-                    builder =>{
-                        builder.AllowAnyOrigin()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader();
-                    });
-            });
+            services.AddCors();
 
             services.AddDbContext<LingoContext>(options =>
                 options.UseMySql(
@@ -171,12 +162,19 @@ namespace LingoBank.API
 
             // app.UseHttpsRedirection();
 
-            app.UseCors("AllowOrigin");
-
             // Leverage session state and add the jwt token to the auth header if applicable.
             app.UseSession();
-
             app.UseRouting();
+            
+            app.UseCors(builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins(new[]
+                {
+                    "http://localhost:4200",
+                })
+                .AllowCredentials());
+            
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();

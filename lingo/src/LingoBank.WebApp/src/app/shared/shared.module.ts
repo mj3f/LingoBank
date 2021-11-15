@@ -5,6 +5,7 @@ import { AuthService } from './services/auth.service';
 import { LanguageService } from './services/language.service';
 import { ModalComponent } from './components/modal/modal.component';
 import { UserService } from './services/user.service';
+import { CurrentUserService } from './services/current-user.service';
 
 @NgModule({
 	declarations: [
@@ -21,7 +22,8 @@ import { UserService } from './services/user.service';
 	providers: [
 		AuthService,
 		LanguageService,
-		UserService
+		UserService,
+		CurrentUserService
 	],
 })
 export class SharedModule { }

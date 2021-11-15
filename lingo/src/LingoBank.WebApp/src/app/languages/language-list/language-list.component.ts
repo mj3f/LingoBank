@@ -61,7 +61,10 @@ export class LanguageListComponent implements OnInit {
 		this.toggleModal();
 		const language = new Language(this.name, this.code, this.description, []);
 		language.userId = 'f5706113-ee78-4b12-a245-4307348477be'; // TODO: get current user from jwt token
-		this.createLanguage(language).add(_ => this.clearForm());
+		this.createLanguage(language).add(_ => {
+			this.clearForm();
+			this.getLanguages();
+		});
 	}
 
 	public onModalCancelButtonClicked(): void {

@@ -33,7 +33,7 @@ export abstract class BaseService {
 				newHeaders = new HttpHeaders()
 					.set('Content-Type', 'application/json')
 					.set('Accept', 'application/json')
-					.set('Authorization', tokenString);
+					.set('Authorization', 'Bearer ' + tokenString);
 			} else {
 				this.clearJwtToken();
 			}
