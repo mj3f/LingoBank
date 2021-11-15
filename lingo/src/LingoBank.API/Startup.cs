@@ -50,9 +50,9 @@ namespace LingoBank.API
                         }
                     };
                     options.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
-                    options.SerializerSettings.TypeNameAssemblyFormatHandling = Newtonsoft.Json.TypeNameAssemblyFormatHandling.Simple;
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                    options.SerializerSettings.TypeNameAssemblyFormatHandling =
+                        Newtonsoft.Json.TypeNameAssemblyFormatHandling.Simple;
+                });
             
             // Swagger docs
             services.AddSwaggerDocument(config =>
@@ -88,23 +88,14 @@ namespace LingoBank.API
                 config.OperationProcessors.Add(new OperationSecurityScopeProcessor(JwtBearerDefaults.AuthenticationScheme));
             });
             
-            services.AddCors(options =>
-            {
-                options.AddPolicy(
-                    name: "AllowOrigin",
-                    builder =>{
-                        builder.AllowAnyOrigin()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader();
-                    });
-            });
+            services.AddCors();
 
             services.AddDbContext<LingoContext>(options =>
                 options.UseMySql(
                         Configuration.GetConnectionString("DbConnection"),
-                        ServerVersion.FromString("10.4.18-mariadb"),
-                        mySqlOptions => mySqlOptions
-                            .CharSetBehavior(CharSetBehavior.NeverAppend))
+                        new MariaDbServerVersion("10.4.18-mariadb"))
+                        // mySqlOptions => mySqlOptions
+                            //.CharSetBehavior(CharSetBehavior.NeverAppend))
                     .EnableSensitiveDataLogging()
                     .EnableDetailedErrors());
 
@@ -171,12 +162,19 @@ namespace LingoBank.API
 
             // app.UseHttpsRedirection();
 
-            app.UseCors("AllowOrigin");
-
             // Leverage session state and add the jwt token to the auth header if applicable.
             app.UseSession();
-
             app.UseRouting();
+            
+            app.UseCors(builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins(new[]
+                {
+                    "http://localhost:4200",
+                })
+                .AllowCredentials());
+            
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();

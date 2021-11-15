@@ -21,6 +21,8 @@ namespace LingoBank.Core.CommandHandlers
                 Id = Guid.NewGuid().ToString(),
                 Name = command.Language.Name,
                 UserId = command.Language.UserId,
+                Code = command.Language.Code,
+                Description = command.Language.Description,
                 Phrases = new List<PhraseEntity>()
             });
             

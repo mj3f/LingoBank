@@ -3,63 +3,63 @@ import { environment } from 'src/environments/environment';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 
 export abstract class BaseService {
-    protected apiUrl;
-    private readonly httpPrefix;
-    private readonly headers: HttpHeaders;
+	protected apiUrl;
+	private readonly httpPrefix;
+	private readonly headers: HttpHeaders;
 
-    constructor(http: HttpClient) {
-        this.headers = new HttpHeaders()
-            .set('Content-Type', 'application/json')
-            .set('Accept', 'application/json');
+	constructor(http: HttpClient) {
+		this.headers = new HttpHeaders()
+			.set('Content-Type', 'application/json')
+			.set('Accept', 'application/json');
 
-        this.httpPrefix = environment.useHttps ? 'https://' : 'http://';
-        this.apiUrl = this.httpPrefix + environment.url + '/api/v0';
-    }
+		this.httpPrefix = environment.useHttps ? 'https://' : 'http://';
+		this.apiUrl = this.httpPrefix + environment.url + '/api/v0';
+	}
 
-    protected getRequestOptions(): RequestOptions {
-        const tokenString = this.getJwtToken();        
-        let jwtToken = null;
-        
-        if (tokenString) {
-            jwtToken = jwtDecode<JwtPayload>(tokenString);
-        }
+	protected getRequestOptions(): RequestOptions {
+		const tokenString = this.getJwtToken();
+		let jwtToken = null;
 
-        let hasCredentials = false;
-        let newHeaders: HttpHeaders = null;
+		if (tokenString) {
+			jwtToken = jwtDecode<JwtPayload>(tokenString);
+		}
 
-        if (jwtToken) {
-            if (jwtToken.exp > Math.floor(Date.now() / 1000)) {
-                hasCredentials = true;
-                newHeaders = new HttpHeaders()
-                    .set('Content-Type', 'application/json')
-                    .set('Accept', 'application/json')
-                    .set('Authorization', tokenString);
-            } else {
-                this.clearJwtToken();
-            }
-        }
+		let hasCredentials = false;
+		let newHeaders: HttpHeaders = null;
 
-        return {
-            headers: newHeaders ?? this.headers,
-            withCredentials: hasCredentials
-        };
-    }
+		if (jwtToken) {
+			if (jwtToken.exp > Math.floor(Date.now() / 1000)) {
+				hasCredentials = true;
+				newHeaders = new HttpHeaders()
+					.set('Content-Type', 'application/json')
+					.set('Accept', 'application/json')
+					.set('Authorization', 'Bearer ' + tokenString);
+			} else {
+				this.clearJwtToken();
+			}
+		}
 
-    protected storeJwtToken(token: string) {
-        localStorage.setItem(environment.tokenKeyForStorage, token);
-    }
+		return {
+			headers: newHeaders ?? this.headers,
+			withCredentials: hasCredentials
+		};
+	}
 
-    protected getJwtToken(): string {
-        return localStorage.getItem(environment.tokenKeyForStorage);
-    }
+	protected storeJwtToken(token: string) {
+		localStorage.setItem(environment.tokenKeyForStorage, token);
+	}
 
-    protected clearJwtToken() {
-        localStorage.removeItem(environment.tokenKeyForStorage);
-    }
+	protected getJwtToken(): string {
+		return localStorage.getItem(environment.tokenKeyForStorage);
+	}
+
+	protected clearJwtToken() {
+		localStorage.removeItem(environment.tokenKeyForStorage);
+	}
 }
 
 export interface RequestOptions {
-    headers: HttpHeaders,
-    withCredentials: boolean,
-    body?: any
+	headers: HttpHeaders,
+	withCredentials: boolean,
+	body?: any
 }

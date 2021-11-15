@@ -4,15 +4,13 @@ import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
 
 @Component({
-  selector: 'app-login-register',
-  templateUrl: './login-register.component.html',
-  styleUrls: []
+	selector: 'app-login-register',
+	templateUrl: './login-register.component.html'
 })
-export class LoginRegisterComponent implements OnInit {
+export class LoginRegisterComponent {
+	form: FormGroup;
 
-    form: FormGroup;
-
-    constructor(
+	constructor(
 		public router: Router,
 		public authService: AuthService,
 		fb: FormBuilder) {
@@ -22,16 +20,12 @@ export class LoginRegisterComponent implements OnInit {
 		});
 	}
 
-	get email() { return this.form.get('email').value; }
-	get password() { return this.form.get('password').value; }
+	get email(): string { return this.form.get('email').value; }
+	get password(): string { return this.form.get('password').value; }
 
-    ngOnInit(): void {
-    }
-
-	handleLogin() {
+	handleLogin(): void {
 		this.authService.login(this.email, this.password).subscribe(() => {
-			console.log('navigate');
-			this.router.navigate(['/home']);
+			this.authService.getCurrentUser().subscribe(_ => this.router.navigate(['/home']));
 		},
 		(error) => console.error(error));
 	}

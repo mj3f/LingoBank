@@ -68,6 +68,7 @@ namespace LingoBank.API.Controllers
         }
 
         [HttpGet("{id}/languages")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(List<LanguageDto>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]

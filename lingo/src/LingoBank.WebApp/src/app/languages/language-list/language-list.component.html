@@ -1,8 +1,26 @@
 <div class="flex flex-col">
     <h2 class="text-4xl font-black">Your Languages</h2>
-    <button class="mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded">Add a new language</button>
-    <ul *ngFor="let language of languages">
-        <li>{{ language.name }}</li>
-    </ul>
+    <button class="w-64 mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded" (click)="addLanguage()">Add a new language</button>
+    <div *ngFor="let language of languages">
+        <app-language-card [language]="language"></app-language-card>
+    </div>
 </div>
-
+<app-modal [title]="'Add a new Language'" [show]="showModal" (cancelOrDismissButtonClicked)="onModalCancelButtonClicked()" (okButtonClicked)="onModalOkButtonClicked()">
+    <form [formGroup]="form">
+        <div class="flex flex-col w-full">
+            <div class="mb-2">
+                <label for="name" class="block text-gray-800 font-semibold">Name</label>
+                <input type="text" id="name" formControlName="name" class="border rounded w-full" />
+            </div>
+            <div class="mb-2">
+                <!-- Change this to a dropdown -->
+                <label for="code" class="block text-gray-800 font-semibold">Code</label>
+                <input type="text" id="code" formControlName="code" class="border rounded w-full" />
+            </div>
+            <div class="mb-2">
+                <label for="description" class="block text-gray-800 font-semibold">Description</label>
+                <input type="text" id="description" formControlName="description" class="border rounded w-full" />
+            </div>
+        </div>
+    </form>
+</app-modal>

@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
 using LingoBank.Database.Contexts;
-using LingoBank.Database.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace LingoBank.Core.CommandHandlers
@@ -23,7 +22,7 @@ namespace LingoBank.Core.CommandHandlers
             phrase.Text = command.Phrase.Text;
             phrase.Translation = command.Phrase.Translation;
             phrase.Description = command.Phrase.Description;
-            phrase.Category = (Category) command.Phrase.Category;
+            phrase.Category = (int) command.Phrase.Category;
             await _lingoContext.SaveChangesAsync();
         }
     }

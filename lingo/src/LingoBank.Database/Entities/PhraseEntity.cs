@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LingoBank.Database.Enums;
 
 namespace LingoBank.Database.Entities
 {
@@ -28,6 +27,6 @@ namespace LingoBank.Database.Entities
         public string Description { get; set; }
         
         [Required]
-        public Category Category { get; set; }
+        public int Category { get; set; }
     }
 }

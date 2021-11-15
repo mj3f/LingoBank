@@ -1,4 +1,7 @@
 
 export class Language {
-    constructor(public id: string, public name: string, public phrases: any[]) {}
+	public id: string;
+	public userId: string;
+
+	constructor(public name: string, public code: string, public description: string, public phrases: any[]) {}
 }
