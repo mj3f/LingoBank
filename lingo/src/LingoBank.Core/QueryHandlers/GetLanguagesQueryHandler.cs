@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
@@ -16,19 +17,14 @@ namespace LingoBank.Core.QueryHandlers
         public async Task<List<LanguageDto>> ExecuteAsync(GetLanguagesQuery query)
         {
             var languageEntities = await _lingoContext.Languages.ToListAsync();
-            var languages = new List<LanguageDto>();
-            
-            foreach (var language in languageEntities)
+            return languageEntities.Select(language => new LanguageDto
             {
-                var l = new LanguageDto
-                {
-                    Id = language.Id,
-                    Name = language.Name,
-                    UserId = language.UserId
-                };
-                languages.Add(l);
-            }
-            return languages;
+                Id = language.Id,
+                Name = language.Name,
+                UserId = language.UserId,
+                Code = language.Code,
+                Description = language.Description
+            }).ToList();
         }
     }
 }

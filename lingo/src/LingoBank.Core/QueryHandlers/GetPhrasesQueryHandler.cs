@@ -17,22 +17,22 @@ namespace LingoBank.Core.QueryHandlers
 
         public async Task<List<PhraseDto>> ExecuteAsync(GetPhrasesQuery query)
         {
-            var phrasesEntities = await _lingoContext.Phrases.Where(x => x.LanguageId == query.LanguageId).ToListAsync();
-            var phrases = new List<PhraseDto>();
-            foreach (var phrasesEntity in phrasesEntities)
-            {
-                phrases.Add(new PhraseDto
-                {
-                    Id = phrasesEntity.Id,
-                    LanguageId = phrasesEntity.LanguageId,
-                    SourceLanguage = phrasesEntity.SourceLanguage,
-                    TargetLanguage = phrasesEntity.TargetLanguage,
-                    Text = phrasesEntity.Text,
-                    Translation = phrasesEntity.Translation,
-                    Description = phrasesEntity.Description,
-                    Category = (Category) phrasesEntity.Category
-                });
-            }
+            List<PhraseDto> phrases = await _lingoContext.Phrases
+                .Where(x => x.LanguageId == query.LanguageId)
+                .Select(
+                    x => new PhraseDto
+                    {
+                        Id = x.Id,
+                        LanguageId = x.LanguageId,
+                        SourceLanguage = x.SourceLanguage,
+                        TargetLanguage = x.TargetLanguage,
+                        Text = x.Text,
+                        Translation = x.Translation,
+                        Description = x.Description,
+                        Category = (Category) x.Category
+                    })
+                .ToListAsync();
+            
             return phrases;
         }
     }

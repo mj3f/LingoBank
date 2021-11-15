@@ -1,25 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Language } from 'src/app/shared/models/language.model';
 import { LanguageService } from 'src/app/shared/services/language.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../shared/services/user.service';
+import { CurrentUserService } from '../../shared/services/current-user.service';
+import { User } from '../../shared/models/user.model';
 
 @Component({
 	selector: 'app-language-list',
 	templateUrl: './language-list.component.html'
 })
-export class LanguageListComponent implements OnInit {
+export class LanguageListComponent implements OnInit, OnDestroy {
 
 	public form: FormGroup;
 	languages: Language[];
 	showModal = false;
+	currentUser: User;
 
-	constructor(private languageService: LanguageService,
-				private router: Router,
-				private userService: UserService,
-				formBuilder: FormBuilder) {
+	constructor(
+		private currentUserService: CurrentUserService,
+		private languageService: LanguageService,
+		private router: Router,
+		private userService: UserService,
+		formBuilder: FormBuilder) {
 		this.form = formBuilder.group({
 			name: new FormControl('', [Validators.required]),
 			code: new FormControl('', [Validators.required, Validators.maxLength(2)]), // Probably will be a dropdown for this tbh.
@@ -32,17 +37,14 @@ export class LanguageListComponent implements OnInit {
 	get description(): string { return this.form.get('description').value; }
 
 	ngOnInit(): void {
-		this.getLanguages();
-		// this.languages = [
-		// 	new Language('English', 'gb', '',[]),
-		// 	new Language('Spanish', 'es', '', []),
-		// 	new Language('German', 'de', '', []),
-		// 	new Language('Italian', 'it', '', [])
-		// ];
-		//
-		// for (const language of this.languages) {
-		// 	language.description = 'This is a dummy description';
-		// }
+		this.currentUserService.userSubject.subscribe((user: User) => {
+			this.currentUser = user;
+			this.getLanguages();
+		});
+	}
+
+	ngOnDestroy(): void {
+		this.currentUserService.userSubject.unsubscribe();
 	}
 
 	public goToLanguageView(id: string): void {
@@ -58,9 +60,13 @@ export class LanguageListComponent implements OnInit {
 	}
 
 	public onModalOkButtonClicked(): void {
+		if (!this.currentUser) {
+			return;
+		}
+
 		this.toggleModal();
 		const language = new Language(this.name, this.code, this.description, []);
-		language.userId = 'f5706113-ee78-4b12-a245-4307348477be'; // TODO: get current user from jwt token
+		language.userId = this.currentUser.id; // TODO: get current user from jwt token
 		this.createLanguage(language).add(_ => {
 			this.clearForm();
 			this.getLanguages();
@@ -77,7 +83,10 @@ export class LanguageListComponent implements OnInit {
 	}
 
 	private getLanguages(): Subscription {
-		const id = 'f5706113-ee78-4b12-a245-4307348477be'; // TODO: get current user from jwt token
+		if (!this.currentUser) {
+			return null;
+		}
+		const id = this.currentUser.id;
 		return this.userService.getLanguages(id).subscribe(data => this.languages = data);
 	}
 

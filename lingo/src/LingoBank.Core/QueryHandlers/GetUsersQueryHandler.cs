@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
@@ -18,20 +19,13 @@ namespace LingoBank.Core.QueryHandlers
         {
             var appUsers = await _context.Users.ToListAsync();
 
-            var users = new List<UserDto>();
-
-            foreach (var user in appUsers)
+            return appUsers.Select(user => new UserDto
             {
-                users.Add(new UserDto
-                {
-                    Id = user.Id,
-                    EmailAddress = user.Email,
-                    Role = user.Role,
-                    UserName = user.UserName
-                });
-            }
-
-            return users;
+                Id = user.Id,
+                EmailAddress = user.Email,
+                Role = user.Role,
+                UserName = user.UserName
+            }).ToList();
         }
     }
 }
