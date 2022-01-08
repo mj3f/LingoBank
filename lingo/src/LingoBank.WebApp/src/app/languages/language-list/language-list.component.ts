@@ -1,18 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import { Language } from 'src/app/shared/models/language.model';
 import { LanguageService } from 'src/app/shared/services/language.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../shared/services/user.service';
 import { CurrentUserService } from '../../shared/services/current-user.service';
 import { User } from '../../shared/models/user.model';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
 	selector: 'app-language-list',
 	templateUrl: './language-list.component.html'
 })
-export class LanguageListComponent implements OnInit, OnDestroy {
+export class LanguageListComponent implements OnInit {
 
 	public form: FormGroup;
 	languages: Language[];
@@ -37,14 +38,10 @@ export class LanguageListComponent implements OnInit, OnDestroy {
 	get description(): string { return this.form.get('description').value; }
 
 	ngOnInit(): void {
-		this.currentUserService.userSubject.subscribe((user: User) => {
+		this.currentUserService.userSubject.pipe(take(1)).subscribe((user: User) => {
 			this.currentUser = user;
 			this.getLanguages();
 		});
-	}
-
-	ngOnDestroy(): void {
-		this.currentUserService.userSubject.unsubscribe();
 	}
 
 	public goToLanguageView(id: string): void {
@@ -69,7 +66,6 @@ export class LanguageListComponent implements OnInit, OnDestroy {
 		language.userId = this.currentUser.id; // TODO: get current user from jwt token
 		this.createLanguage(language).add(_ => {
 			this.clearForm();
-			this.getLanguages();
 		});
 	}
 
@@ -86,11 +82,15 @@ export class LanguageListComponent implements OnInit, OnDestroy {
 		if (!this.currentUser) {
 			return null;
 		}
-		const id = this.currentUser.id;
-		return this.userService.getLanguages(id).subscribe(data => this.languages = data);
+
+		return this.userService.getLanguages(this.currentUser.id)
+			.pipe(take(1))
+			.subscribe(data => this.languages = data);
 	}
 
 	private createLanguage(language: Language): Subscription {
-		return this.languageService.create(language).subscribe();
+		return this.languageService.create(language)
+			.pipe(take(1))
+			.subscribe((l: Language) => this.languages.push(l));
 	}
 }

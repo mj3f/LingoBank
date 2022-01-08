@@ -5,7 +5,11 @@
         <app-language-card [language]="language"></app-language-card>
     </div>
 </div>
-<app-modal [title]="'Add a new Language'" [show]="showModal" (cancelOrDismissButtonClicked)="onModalCancelButtonClicked()" (okButtonClicked)="onModalOkButtonClicked()">
+<app-modal
+        [title]="'Add a new Language'"
+        [show]="showModal"
+        (cancelOrDismissButtonClicked)="onModalCancelButtonClicked()"
+        (okButtonClicked)="onModalOkButtonClicked()">
     <form [formGroup]="form">
         <div class="flex flex-col w-full">
             <div class="mb-2">

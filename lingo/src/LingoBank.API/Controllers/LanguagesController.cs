@@ -54,7 +54,7 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(LanguageDto), 200)]
         [ProducesResponseType(400)]
         [Description("Creates a new language")]
         public async Task<IActionResult> CreateLanguageAsync([FromBody] LanguageDto language)
@@ -62,7 +62,7 @@ namespace LingoBank.API.Controllers
             try
             {
                 await _runtime.ExecuteCommandAsync(new CreateLanguageCommand {Language = language});
-                return Ok("Language created");
+                return Ok(language);
             }
             catch (Exception ex)
             {
@@ -71,7 +71,7 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPut("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(LanguageDto), 200)]
         [ProducesResponseType(400)]
         [Description("Edits an existing language")]
         public async Task<IActionResult> EditLanguageAsync(string id, [FromBody] LanguageDto language)
@@ -79,7 +79,7 @@ namespace LingoBank.API.Controllers
             try
             {
                 await _runtime.ExecuteCommandAsync(new EditLanguageCommand() {Id = id, Language = language});
-                return Ok("Language Modified");
+                return Ok(language);
             }
             catch (Exception ex)
             {

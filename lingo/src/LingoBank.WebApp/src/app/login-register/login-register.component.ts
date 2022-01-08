@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
+import {take} from 'rxjs/operators';
 
 @Component({
 	selector: 'app-login-register',
@@ -25,7 +26,9 @@ export class LoginRegisterComponent {
 
 	handleLogin(): void {
 		this.authService.login(this.email, this.password).subscribe(() => {
-			this.authService.getCurrentUser().subscribe(_ => this.router.navigate(['/home']));
+			this.authService.getCurrentUser()
+				.pipe(take(1))
+				.subscribe(_ => this.router.navigate(['/home']));
 		},
 		(error) => console.error(error));
 	}

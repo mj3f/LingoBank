@@ -20,12 +20,12 @@ export class LanguageService extends BaseService {
 		return this.http.get<Language>(this.apiUrl + '/' + id, this.getRequestOptions());
 	}
 
-	public create(language: Language): Observable<string> {
-		return this.http.post<string>(this.apiUrl, JSON.stringify(language), this.getRequestOptions());
+	public create(language: Language): Observable<Language> {
+		return this.http.post<Language>(this.apiUrl, JSON.stringify(language), this.getRequestOptions());
 	}
 
-	public edit(language: Language): Observable<string> {
-		return this.http.put<string>(this.apiUrl + '/' + language?.id, JSON.stringify(language), this.getRequestOptions());
+	public edit(language: Language): Observable<Language> {
+		return this.http.put<Language>(this.apiUrl + '/' + language?.id, JSON.stringify(language), this.getRequestOptions());
 	}
 
 }

@@ -18,7 +18,7 @@ namespace LingoBank.API.Controllers
         public PhrasesController(IRuntime runtime) => _runtime = runtime;
         
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(PhraseDto), 200)]
         [ProducesResponseType(400)]
         [Description("Creates a new phrase for a language")]
         public async Task<IActionResult> CreatePhraseAsync([FromBody] PhraseDto phrase)
@@ -26,7 +26,7 @@ namespace LingoBank.API.Controllers
             try
             {
                 await _runtime.ExecuteCommandAsync(new CreatePhraseCommand { Phrase = phrase });
-                return Ok("Phrase created");
+                return Ok(phrase);
             }
             catch (Exception ex)
             {
@@ -35,7 +35,7 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPut("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(PhraseDto), 200)]
         [ProducesResponseType(400)]
         [Description("Edits an existing phrase")]
         public async Task<IActionResult> EditPhraseAsync(string id, [FromBody] PhraseDto phrase)
@@ -43,7 +43,7 @@ namespace LingoBank.API.Controllers
             try
             {
                 await _runtime.ExecuteCommandAsync(new EditPhraseCommand { Id = id, Phrase = phrase });
-                return Ok("Phrase Modified");
+                return Ok(phrase);
             }
             catch (Exception ex)
             {

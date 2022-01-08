@@ -93,7 +93,7 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType( 200)]
+        [ProducesResponseType(typeof(UserDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -103,7 +103,7 @@ namespace LingoBank.API.Controllers
             try
             {
                 await _runtime.ExecuteCommandAsync(new CreateUserCommand { UserWithPassword = userWithPassword });
-                return Ok("User created.");
+                return Ok((UserDto) userWithPassword); // TODO: Check this doesn't send the password back.
             }
             catch (Exception ex)
             {
@@ -112,7 +112,7 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPut("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(UserDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -122,7 +122,7 @@ namespace LingoBank.API.Controllers
             try
             {
                 await _runtime.ExecuteCommandAsync(new EditUserCommand { User = user });
-                return Ok("User updated.");
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -141,7 +141,7 @@ namespace LingoBank.API.Controllers
             try
             {
                 await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
-                return Ok("User deleted.");
+                return Ok(id);
             }
             catch (Exception ex)
             {
