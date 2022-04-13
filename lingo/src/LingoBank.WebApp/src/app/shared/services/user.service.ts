@@ -3,9 +3,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
-import { Language } from '../models/language.model';
+import { Language } from '../../languages/language.model';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class UserService extends BaseService {
 	constructor(private http: HttpClient) {
 		super(http);

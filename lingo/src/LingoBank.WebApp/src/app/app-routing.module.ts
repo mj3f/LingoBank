@@ -6,12 +6,12 @@ import { LanguageViewComponent } from './languages/language-view/language-view.c
 import { LoginRegisterComponent } from './login-register/login-register.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent },
-    { path: 'languages', component: LanguageListComponent },
-    // { path: 'languages/:id', component: LanguageViewComponent },
-    { path: 'login', component: LoginRegisterComponent }
-   // { path: 'settings', component: SettingsComponent },
+	{ path: '', redirectTo: '/login', pathMatch: 'full' },
+	{ path: 'home', component: HomeComponent },
+	{ path: 'languages', component: LanguageListComponent },
+	{ path: 'languages/:id', component: LanguageViewComponent },
+	{ path: 'login', component: LoginRegisterComponent }
+	// { path: 'settings', component: SettingsComponent },
 ];
 
 @NgModule({

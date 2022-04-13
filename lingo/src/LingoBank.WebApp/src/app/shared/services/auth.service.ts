@@ -5,11 +5,14 @@ import { User, UserWithPassword } from '../models/user.model';
 import { BaseService } from './base.service';
 import { CurrentUserService } from './current-user.service';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class AuthService extends BaseService {
 
-	constructor(private http: HttpClient,
-				private currentUserService: CurrentUserService) {
+	constructor(
+		private http: HttpClient,
+		private currentUserService: CurrentUserService) {
 		super(http);
 		this.apiUrl += '/auth';
 	}

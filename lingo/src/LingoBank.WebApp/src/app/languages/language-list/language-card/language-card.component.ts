@@ -1,17 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Language } from '../../../shared/models/language.model';
+import { Component, Input } from '@angular/core';
+import { Language } from '../../language.model';
+import {Router} from '@angular/router';
 
 @Component({
 	selector: 'app-language-card',
 	templateUrl: './language-card.component.html',
 })
-export class LanguageCardComponent implements OnInit {
+export class LanguageCardComponent {
 	@Input()
 	public language: Language;
 
-	constructor() { }
+	constructor(private router: Router) { }
 
-	ngOnInit(): void {
+	public goToLanguageView(): void {
+		this.router.navigate(['/languages/', this.language.id]);
 	}
 
 }

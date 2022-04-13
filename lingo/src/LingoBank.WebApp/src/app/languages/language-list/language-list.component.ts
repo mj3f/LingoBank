@@ -1,13 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import {Subject, Subscription} from 'rxjs';
-import { Language } from 'src/app/shared/models/language.model';
-import { LanguageService } from 'src/app/shared/services/language.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../shared/services/user.service';
-import { CurrentUserService } from '../../shared/services/current-user.service';
-import { User } from '../../shared/models/user.model';
-import {take, takeUntil} from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import {Observable} from 'rxjs';
+import {Language} from 'src/app/languages/language.model';
+import {LanguageService} from 'src/app/languages/language.service';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UserService} from '../../shared/services/user.service';
+import {CurrentUserService} from '../../shared/services/current-user.service';
+import {User} from '../../shared/models/user.model';
+import {take, tap} from 'rxjs/operators';
 
 @Component({
 	selector: 'app-language-list',
@@ -17,13 +16,13 @@ export class LanguageListComponent implements OnInit {
 
 	public form: FormGroup;
 	languages: Language[];
+	languages$: Observable<Language[]>;
 	showModal = false;
 	currentUser: User;
 
 	constructor(
 		private currentUserService: CurrentUserService,
 		private languageService: LanguageService,
-		private router: Router,
 		private userService: UserService,
 		formBuilder: FormBuilder) {
 		this.form = formBuilder.group({
@@ -40,12 +39,8 @@ export class LanguageListComponent implements OnInit {
 	ngOnInit(): void {
 		this.currentUserService.userSubject.pipe(take(1)).subscribe((user: User) => {
 			this.currentUser = user;
-			this.getLanguages();
+			this.languages$ = this.getLanguages(user.id);
 		});
-	}
-
-	public goToLanguageView(id: string): void {
-		this.router.navigate(['/languages/', id]);
 	}
 
 	public addLanguage(): void {
@@ -64,9 +59,14 @@ export class LanguageListComponent implements OnInit {
 		this.toggleModal();
 		const language = new Language(this.name, this.code, this.description, []);
 		language.userId = this.currentUser.id; // TODO: get current user from jwt token
-		this.createLanguage(language).add(_ => {
-			this.clearForm();
-		});
+
+		this.createLanguage(language)
+			.pipe(take(1))
+			.subscribe((createdLanguage: Language) => {
+				this.clearForm();
+				this.languages.push(createdLanguage);
+			}
+		);
 	}
 
 	public onModalCancelButtonClicked(): void {
@@ -78,19 +78,12 @@ export class LanguageListComponent implements OnInit {
 		this.showModal = !this.showModal;
 	}
 
-	private getLanguages(): Subscription {
-		if (!this.currentUser) {
-			return null;
-		}
-
-		return this.userService.getLanguages(this.currentUser.id)
-			.pipe(take(1))
-			.subscribe(data => this.languages = data);
+	private getLanguages(userId: string): Observable<Language[]> {
+		return this.userService.getLanguages(userId)
+			.pipe(tap((languages: Language[]) => this.languages = languages));
 	}
 
-	private createLanguage(language: Language): Subscription {
-		return this.languageService.create(language)
-			.pipe(take(1))
-			.subscribe((l: Language) => this.languages.push(l));
+	private createLanguage(language: Language): Observable<Language> {
+		return this.languageService.create(language);
 	}
 }
