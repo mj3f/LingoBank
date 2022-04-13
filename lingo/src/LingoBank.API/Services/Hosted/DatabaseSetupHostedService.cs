@@ -11,6 +11,7 @@ using LingoBank.Core.Queries;
 using LingoBank.Database.Contexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -23,21 +24,27 @@ namespace LingoBank.API.Services.Hosted
         private readonly IServiceProvider _serviceProvider;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IdentityResultHandlerLoggingService _identityResultHandlerLoggingService;
+        private readonly IConfiguration _configuration;
 
-        public DatabaseSetupHostedService(IServiceProvider serviceProvider, IWebHostEnvironment env, IdentityResultHandlerLoggingService loggingService)
+        public DatabaseSetupHostedService(
+            IServiceProvider serviceProvider,
+            IWebHostEnvironment env,
+            IdentityResultHandlerLoggingService loggingService,
+            IConfiguration configuration)
         {
             _serviceProvider = serviceProvider;
             _hostingEnvironment = env;
             _identityResultHandlerLoggingService = loggingService;
+            _configuration = configuration;
         }
         
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             while (!IsDatabaseServerAlive())
             {
-                Logger.Error("[DatabaseSetupHostedService] Database connection could not be estalbished." +
+                Logger.Error("[DatabaseSetupHostedService] Database connection could not be established." +
                              "Trying again in 5 seconds...");
-                await Task.Delay(5000);
+                await Task.Delay(5000, cancellationToken);
             }
             Logger.Information("[DatabaseSetupHostedService] Database connection established.");
             
@@ -91,16 +98,18 @@ namespace LingoBank.API.Services.Hosted
             {
                 return;
             }
-            
+
             using (var scope = _serviceProvider.CreateScope())
             {
                 var runtime = scope.ServiceProvider.GetRequiredService<IRuntime>();
+                string username = "devadmin";
+                string emailAddress = "admin@example.com";
 
                 try
                 {
                     UserDto existingUser = await runtime.ExecuteQueryAsync(new GetUserByIdQuery
                     {
-                        EmailAddress = "admin@example.com"
+                        EmailAddress = emailAddress
                     });
 
                     if (existingUser is not null)
@@ -109,14 +118,23 @@ namespace LingoBank.API.Services.Hosted
                         return;
                     }
                     
+                    string? password = _configuration.GetSection("DevAdminAccount:Password").Value;
+
+                    if (string.IsNullOrEmpty(password))
+                    {
+                        Logger.Error("[DatabaseSetupHostedService] Error: Password input for dev account not" +
+                                     "provided in appSettings.json.");
+                        return;
+                    }
+                    
                     await runtime.ExecuteCommandAsync(new CreateUserCommand
                     {
                         UserWithPassword = new UserWithPasswordDto
                         {
-                            EmailAddress = "admin@example.com",
+                            EmailAddress = emailAddress,
                             Role = "Administrator",
-                            UserName = "devadmin",
-                            Password = "HelloWorld12345!"
+                            UserName = username,
+                            Password = password
                         },
                         HandleResult = result => _identityResultHandlerLoggingService.LogIdentityResult(result, 
                             "[DatabaseSetupHostedService] development admin account has been created.",

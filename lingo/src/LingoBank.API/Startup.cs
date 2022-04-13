@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +19,6 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NSwag;
 using NSwag.Generation.Processors.Security;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
 
 namespace LingoBank.API
@@ -91,13 +89,8 @@ namespace LingoBank.API
             services.AddCors();
 
             services.AddDbContext<LingoContext>(options =>
-                options.UseMySql(
-                        Configuration.GetConnectionString("DbConnection"),
-                        new MariaDbServerVersion("10.4.18-mariadb"))
-                        // mySqlOptions => mySqlOptions
-                            //.CharSetBehavior(CharSetBehavior.NeverAppend))
-                    .EnableSensitiveDataLogging()
-                    .EnableDetailedErrors());
+                options.UseSqlServer(Configuration.GetConnectionString("DbConnection"))
+            );
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
