@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -23,18 +22,15 @@ namespace LingoBank.API.Services.Hosted
         private static readonly ILogger Logger = Log.ForContext<DatabaseSetupHostedService>();
         private readonly IServiceProvider _serviceProvider;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly IdentityResultHandlerLoggingService _identityResultHandlerLoggingService;
         private readonly IConfiguration _configuration;
 
         public DatabaseSetupHostedService(
             IServiceProvider serviceProvider,
             IWebHostEnvironment env,
-            IdentityResultHandlerLoggingService loggingService,
             IConfiguration configuration)
         {
             _serviceProvider = serviceProvider;
             _hostingEnvironment = env;
-            _identityResultHandlerLoggingService = loggingService;
             _configuration = configuration;
         }
         
@@ -127,7 +123,7 @@ namespace LingoBank.API.Services.Hosted
                         return;
                     }
                     
-                    await runtime.ExecuteCommandAsync(new CreateUserCommand
+                    RuntimeCommandResult result = await runtime.ExecuteCommandAsync(new CreateUserCommand
                     {
                         UserWithPassword = new UserWithPasswordDto
                         {
@@ -135,11 +131,18 @@ namespace LingoBank.API.Services.Hosted
                             Role = "Administrator",
                             UserName = username,
                             Password = password
-                        },
-                        HandleResult = result => _identityResultHandlerLoggingService.LogIdentityResult(result, 
-                            "[DatabaseSetupHostedService] development admin account has been created.",
-                            "[DatabaseSetupHostedService] error occurred whilst creating admin user.")
+                        }
                     });
+
+                    if (result.IsSuccessful)
+                    {
+                        Logger.Information("[DatabaseSetupHostedService] Dev admin account seeded.");
+                    }
+                    else
+                    {
+                        Logger.Error("[DatabaseSetupHostedService] Dev admin account failed to seed. See exception(s) for details" +
+                                           $"{result.Message}");
+                    }
                 }
                 catch (Exception ex)
                 {

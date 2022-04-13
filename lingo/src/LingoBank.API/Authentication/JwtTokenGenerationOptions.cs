@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace LingoBank.API.Authentication
 {
-    public sealed class JwtTokenGenerationOptions
+    public static class JwtTokenGenerationOptions
     {
         public const string Issuer = "lingobank.api/jwt/issuer";
         public const string Audience = "lingobank.api/jwt/audience";

@@ -11,15 +11,21 @@ namespace LingoBank.Core.CommandHandlers
 
         public EditLanguageCommandHandler(LingoContext context) => _lingoContext = context;
 
-        public async Task ExecuteAsync(EditLanguageCommand command)
+        public async Task<RuntimeCommandResult> ExecuteAsync(EditLanguageCommand command)
         {
             var language = await _lingoContext.Languages
                 .FirstOrDefaultAsync(x => x.Id == command.Id);
+
+            if (language is null)
+            {
+                return new RuntimeCommandResult(false, $"No language with id {command.Id}");
+            }
             
 
             language.Name = command.Language.Name;
             await _lingoContext.SaveChangesAsync();
-            
+
+            return new RuntimeCommandResult(true);
         }
     }
 }

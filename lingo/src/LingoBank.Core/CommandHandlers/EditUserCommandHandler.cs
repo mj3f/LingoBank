@@ -13,7 +13,7 @@ namespace LingoBank.Core.CommandHandlers
         public EditUserCommandHandler(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
 
-        public async Task ExecuteAsync(EditUserCommand command)
+        public async Task<RuntimeCommandResult> ExecuteAsync(EditUserCommand command)
         {
             var appUser = await _userManager.FindByIdAsync(command.User.Id);
            
@@ -21,7 +21,8 @@ namespace LingoBank.Core.CommandHandlers
             appUser.UserName = command.User.UserName;
 
             IdentityResult result = await _userManager.UpdateAsync(appUser);
-            
+
+            return new RuntimeCommandResult(result.Succeeded, result.Errors.ToString());
         }
     }
 }

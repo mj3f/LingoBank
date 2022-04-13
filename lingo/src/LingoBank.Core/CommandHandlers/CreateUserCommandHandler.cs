@@ -13,7 +13,7 @@ namespace LingoBank.Core.CommandHandlers
         public CreateUserCommandHandler(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
 
-        public async Task ExecuteAsync(CreateUserCommand command)
+        public async Task<RuntimeCommandResult> ExecuteAsync(CreateUserCommand command)
         {
             var appUser = new ApplicationUser
             {
@@ -23,8 +23,8 @@ namespace LingoBank.Core.CommandHandlers
                 Role = command.UserWithPassword.Role ?? "User"
             };
             IdentityResult result = await _userManager.CreateAsync(appUser, command.UserWithPassword.Password);
-            
-            command.HandleResult.Invoke(result);
+
+            return new RuntimeCommandResult(result.Succeeded, result.Errors.ToString());
         }
     }
 }

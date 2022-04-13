@@ -25,8 +25,14 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                await _runtime.ExecuteCommandAsync(new CreatePhraseCommand { Phrase = phrase });
-                return Ok(phrase);
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreatePhraseCommand { Phrase = phrase });
+
+                if (isSuccessful)
+                {
+                    return Ok(phrase);
+                }
+
+                return BadRequest(message);
             }
             catch (Exception ex)
             {
@@ -42,8 +48,14 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                await _runtime.ExecuteCommandAsync(new EditPhraseCommand { Id = id, Phrase = phrase });
-                return Ok(phrase);
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditPhraseCommand { Id = id, Phrase = phrase });
+
+                if (isSuccessful)
+                {
+                    return Ok(phrase);
+                }
+
+                return BadRequest(message);
             }
             catch (Exception ex)
             {

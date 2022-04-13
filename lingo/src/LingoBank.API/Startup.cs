@@ -136,8 +136,6 @@ namespace LingoBank.API
             });
             services.AddAuthorization();
             services.AddHostedService<DatabaseSetupHostedService>();
-
-            services.AddSingleton<IdentityResultHandlerLoggingService>();
             
             RuntimeIocContainer.ConfigureServicesForRuntime(services);
         }

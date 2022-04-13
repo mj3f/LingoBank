@@ -12,13 +12,13 @@ namespace LingoBank.Core.CommandHandlers
         public DeleteUserCommandHandler(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
 
-        public async Task ExecuteAsync(DeleteUserCommand command)
+        public async Task<RuntimeCommandResult> ExecuteAsync(DeleteUserCommand command)
         {
             var appUser = await _userManager.FindByIdAsync(command.Id);
 
             IdentityResult result = await _userManager.DeleteAsync(appUser);
 
-          
+            return new RuntimeCommandResult(result.Succeeded, result.Errors.ToString());
         }
     }
 }

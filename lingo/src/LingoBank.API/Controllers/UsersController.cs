@@ -102,8 +102,14 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                await _runtime.ExecuteCommandAsync(new CreateUserCommand { UserWithPassword = userWithPassword });
-                return Ok((UserDto) userWithPassword); // TODO: Check this doesn't send the password back.
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreateUserCommand { UserWithPassword = userWithPassword });
+
+                if (isSuccessful)
+                {
+                    return Ok((UserDto) userWithPassword); // TODO: Check this doesn't send the password back.
+                }
+
+                return BadRequest(message);
             }
             catch (Exception ex)
             {
@@ -121,8 +127,14 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                await _runtime.ExecuteCommandAsync(new EditUserCommand { User = user });
-                return Ok(user);
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditUserCommand { User = user });
+
+                if (isSuccessful)
+                {
+                    return Ok(user);
+                }
+
+                return BadRequest(message);
             }
             catch (Exception ex)
             {
@@ -140,8 +152,14 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
-                return Ok(id);
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
+
+                if (isSuccessful)
+                {
+                    return Ok(id);
+                }
+
+                return BadRequest(message);
             }
             catch (Exception ex)
             {

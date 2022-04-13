@@ -61,8 +61,14 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                await _runtime.ExecuteCommandAsync(new CreateLanguageCommand {Language = language});
-                return Ok(language);
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreateLanguageCommand { Language = language });
+
+                if (isSuccessful)
+                {
+                    return Ok(language);
+                }
+
+                return BadRequest(message);
             }
             catch (Exception ex)
             {
@@ -78,8 +84,14 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                await _runtime.ExecuteCommandAsync(new EditLanguageCommand() {Id = id, Language = language});
-                return Ok(language);
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditLanguageCommand() {Id = id, Language = language});
+
+                if (isSuccessful)
+                {
+                    return Ok(language);
+                }
+
+                return BadRequest(message);
             }
             catch (Exception ex)
             {

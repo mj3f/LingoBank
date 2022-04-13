@@ -12,7 +12,7 @@ namespace LingoBank.Core.CommandHandlers
 
         public CreatePhraseCommandHandler(LingoContext context) => _lingoContext = context;
 
-        public async Task ExecuteAsync(CreatePhraseCommand command)
+        public async Task<RuntimeCommandResult> ExecuteAsync(CreatePhraseCommand command)
         {
             await _lingoContext.Phrases.AddAsync(new PhraseEntity
             {
@@ -26,6 +26,8 @@ namespace LingoBank.Core.CommandHandlers
                 Category = (int) command.Phrase.Category
             });
             await _lingoContext.SaveChangesAsync();
+
+            return new RuntimeCommandResult(true);
         }
     }
 }

@@ -9,9 +9,7 @@ namespace LingoBank.Database.Contexts
         public DbSet<LanguageEntity> Languages { get; set; }
         
         public DbSet<PhraseEntity> Phrases { get; set; }
-        
-        public DbSet<ApplicationUser> Users { get; set; }
-        
+
         public LingoContext(DbContextOptions options) : base(options)
         {
         }

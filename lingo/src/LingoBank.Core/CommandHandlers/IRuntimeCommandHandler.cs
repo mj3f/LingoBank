@@ -5,6 +5,6 @@ namespace LingoBank.Core.CommandHandlers
 {
     public interface IRuntimeCommandHandler<TCommand> where TCommand : class, IRuntimeCommand
     {
-        Task ExecuteAsync(TCommand command);
+        Task<RuntimeCommandResult> ExecuteAsync(TCommand command);
     }
 }

@@ -34,8 +34,7 @@ namespace LingoBank.Core.UnitTests.CommandHandlerTests
                     UserName = "testuser",
                     Role = "User",
                     Password = "Demo12345678"
-                },
-                HandleResult = (res) => commandExecutionResult = res
+                }
             });
             
             // Test will fail if result is null.
@@ -74,8 +73,7 @@ namespace LingoBank.Core.UnitTests.CommandHandlerTests
                     UserName = "testuser",
                     Role = "User",
                     Password = input
-                },
-                HandleResult = (res) => commandExecutionResult = res
+                }
             });
             
             // Test will fail if result is null.
@@ -113,8 +111,7 @@ namespace LingoBank.Core.UnitTests.CommandHandlerTests
                     UserName = "testuser",
                     Role = "User",
                     Password = "Demo1344566756565"
-                },
-                HandleResult = (res) => commandExecutionResult = res
+                }
             });
             
             // Test will fail if result is null.
