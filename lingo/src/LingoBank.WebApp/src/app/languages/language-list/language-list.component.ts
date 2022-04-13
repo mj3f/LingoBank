@@ -3,9 +3,9 @@ import {Observable} from 'rxjs';
 import {Language} from 'src/app/languages/language.model';
 import {LanguageService} from 'src/app/languages/language.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../shared/services/user.service';
-import {CurrentUserService} from '../../shared/services/current-user.service';
-import {User} from '../../shared/models/user.model';
+import {UserService} from '../../users/services/user.service';
+import {CurrentUserService} from '../../users/services/current-user.service';
+import {User} from '../../users/models/user.model';
 import {take, tap} from 'rxjs/operators';
 
 @Component({
