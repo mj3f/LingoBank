@@ -4,7 +4,7 @@ import { LanguageListComponent } from './language-list/language-list.component';
 import { LanguageViewComponent } from './language-view/language-view.component';
 import { SharedModule } from '../shared/shared.module';
 import { LanguageCardComponent } from './language-list/language-card/language-card.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LanguagePhrasesListComponent } from './language-view/language-phrases-list/language-phrases-list.component';
 
 
@@ -13,7 +13,8 @@ import { LanguagePhrasesListComponent } from './language-view/language-phrases-l
 	imports: [
 		CommonModule,
 		SharedModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		FormsModule
 	],
 	exports: [
 		LanguageListComponent

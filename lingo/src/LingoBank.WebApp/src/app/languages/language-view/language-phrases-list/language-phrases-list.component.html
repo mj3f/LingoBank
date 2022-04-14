@@ -1,30 +1,11 @@
 <div class="flex flex-col pt-2">
     <h2 class="text-2xl font-semibold">Phrases</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Source</th>
-            <th>Text</th>
-            <th>Translation</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>English</td>
-            <td>Good morning!</td>
-            <td>Guten morgan!</td>
-        </tr>
-        <tr>
-            <td>English</td>
-            <td>Breakfast</td>
-            <td>frustuck (spelling :P)</td>
-        </tr>
-        <tr>
-            <td>English</td>
-            <td>Is it ready?</td>
-            <td>Fertig ist es?</td>
-        </tr>
-        </tbody>
-    </table>
+    <form [formGroup]="searchBarForm">
+        <input type="text" placeholder="search for keyword or phrase" class="border-2 rounded p-2" formControlName="search" />
+    </form>
+    <p>Results</p>
+    <div *ngFor="let searchedPhrase of filteredPhrases$ | async as filteredPhrases">
+        <p>{{ searchedPhrase.text }}</p>
+    </div>
 </div>
 
