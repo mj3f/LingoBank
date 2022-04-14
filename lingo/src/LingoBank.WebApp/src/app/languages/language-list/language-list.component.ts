@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
-import {Language} from 'src/app/languages/language.model';
-import {LanguageService} from 'src/app/languages/language.service';
+import {Language} from 'src/app/languages/models/language.model';
+import {LanguageService} from 'src/app/languages/services/language.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../users/services/user.service';
 import {CurrentUserService} from '../../users/services/current-user.service';

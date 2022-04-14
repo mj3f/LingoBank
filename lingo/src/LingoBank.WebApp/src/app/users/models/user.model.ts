@@ -1,4 +1,4 @@
-import { Language } from '../../languages/language.model';
+import { Language } from '../../languages/models/language.model';
 
 export class User {
 	public id: string;
