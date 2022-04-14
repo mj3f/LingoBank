@@ -5,10 +5,11 @@ import { LanguageViewComponent } from './language-view/language-view.component';
 import { SharedModule } from '../shared/shared.module';
 import { LanguageCardComponent } from './language-list/language-card/language-card.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LanguagePhrasesListComponent } from './language-view/language-phrases-list/language-phrases-list.component';
 
 
 @NgModule({
-	declarations: [LanguageListComponent, LanguageViewComponent, LanguageCardComponent],
+	declarations: [LanguageListComponent, LanguageViewComponent, LanguageCardComponent, LanguagePhrasesListComponent],
 	imports: [
 		CommonModule,
 		SharedModule,

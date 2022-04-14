@@ -1,5 +1,4 @@
-<div class="row" *ngIf="language$ | async as language">
-    <div class="col">
-        <h3>{{language.name}}</h3>
-    </div>
+<div class="flex flex-col" *ngIf="language$ | async as language">
+    <h3 class="text-4xl font-semibold">{{language.name}}</h3>
+    <app-language-phrases-list [phrases]="language.phrases"></app-language-phrases-list>
 </div>

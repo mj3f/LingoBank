@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Language } from 'src/app/languages/language.model';
-import { LanguageService } from 'src/app/languages/language.service';
+import { Language } from 'src/app/languages/models/language.model';
+import { LanguageService } from 'src/app/languages/services/language.service';
 
 @Component({
 	selector: 'app-language-view',
