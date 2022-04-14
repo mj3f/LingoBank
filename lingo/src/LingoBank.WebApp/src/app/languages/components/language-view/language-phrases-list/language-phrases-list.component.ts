@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { Phrase } from '../../models/phrase.model';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { Observable, of} from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Phrase } from '../../../models/phrase.model';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
-import { PhraseService } from '../../services/phrase/phrase.service';
-import { Language } from '../../models/language.model';
+import { PhraseService } from '../../../services/phrase/phrase.service';
+import { Language } from '../../../models/language.model';
 
 @Component({
 	selector: 'app-language-phrases-list',
@@ -77,7 +77,6 @@ export class LanguagePhrasesListComponent implements OnInit {
 		phrase.targetLanguage = this.language.name;
 		phrase.category = 0;
 
-		console.log('Phrase = ', phrase);
 		this.phraseService.create(phrase).pipe(take(1)).subscribe((createdPhrase: Phrase) => this.phraseCreated.emit(createdPhrase));
 	}
 

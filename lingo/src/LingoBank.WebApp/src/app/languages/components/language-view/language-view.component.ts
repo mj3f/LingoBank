@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Language } from 'src/app/languages/models/language.model';
 import { LanguageService } from 'src/app/languages/services/language/language.service';
-import { Phrase } from '../models/phrase.model';
+import { Phrase } from '../../models/phrase.model';
 import { tap } from 'rxjs/operators';
 
 @Component({

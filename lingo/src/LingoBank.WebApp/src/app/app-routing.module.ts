@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { LanguageListComponent } from './languages/language-list/language-list.component';
-import { LanguageViewComponent } from './languages/language-view/language-view.component';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 
 const routes: Routes = [
 	{ path: '', redirectTo: '/login', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent },
-	{ path: 'languages', component: LanguageListComponent },
-	{ path: 'languages/:id', component: LanguageViewComponent },
 	{ path: 'login', component: LoginRegisterComponent },
+	{ path: 'languages', loadChildren: () => import('./languages/languages.module').then(m => m.LanguagesModule) },
 	{ path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule) },
 	{ path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) }
 ];

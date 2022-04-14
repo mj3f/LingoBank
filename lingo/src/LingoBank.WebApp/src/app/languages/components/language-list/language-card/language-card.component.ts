@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Language } from '../../models/language.model';
+import { Language } from '../../../models/language.model';
 import {Router} from '@angular/router';
 
 @Component({
