@@ -77,7 +77,11 @@ export class LanguagePhrasesListComponent implements OnInit {
 		phrase.targetLanguage = this.language.name;
 		phrase.category = 0;
 
-		this.phraseService.create(phrase).pipe(take(1)).subscribe((createdPhrase: Phrase) => this.phraseCreated.emit(createdPhrase));
+		this.phraseService.create(phrase).pipe(take(1)).subscribe((createdPhrase: Phrase) => {
+			this.clearForm();
+			this.toggleModal();
+			this.phraseCreated.emit(createdPhrase);
+		});
 	}
 
 	public onModalCancelButtonClicked(): void {

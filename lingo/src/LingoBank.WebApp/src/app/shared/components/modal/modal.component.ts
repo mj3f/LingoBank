@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
 	selector: 'app-modal',
 	templateUrl: './modal.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalComponent implements OnInit {
 
