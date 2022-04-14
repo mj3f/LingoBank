@@ -2,7 +2,7 @@
     <h2 class="text-2xl font-semibold">Phrases</h2>
     <button class="w-64 mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded" (click)="createPhrase()">Create Phrase</button>
     <form [formGroup]="searchBarForm">
-        <input type="text" placeholder="search for keyword or phrase" class="border-2 rounded p-2 w-64" formControlName="search" />
+        <input type="text" placeholder="search for keyword or phrase" class="border-2 rounded p-2 w-64" formControlName="search" appAutofocus />
     </form>
     <p>Results</p>
     <div *ngFor="let searchedPhrase of filteredPhrases$ | async">

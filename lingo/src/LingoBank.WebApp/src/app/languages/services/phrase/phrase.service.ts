@@ -4,9 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Phrase} from '../../models/phrase.model';
 
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable()
 export class PhraseService extends BaseService {
 
 	constructor(private http: HttpClient) {
