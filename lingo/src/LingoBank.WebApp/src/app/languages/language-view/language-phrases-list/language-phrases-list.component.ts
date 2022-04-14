@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { Phrase } from '../../models/phrase.model';
-import {AbstractControl, FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {from, Observable, of, Subject} from 'rxjs';
-import {combineLatest, debounceTime, distinctUntilChanged, startWith, switchMap} from 'rxjs/operators';
-import {fromArray} from 'rxjs/internal/observable/fromArray';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { Observable, of} from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
+import { PhraseService } from '../../services/phrase/phrase.service';
+import { Language } from '../../models/language.model';
 
 @Component({
 	selector: 'app-language-phrases-list',
@@ -12,33 +13,49 @@ import {fromArray} from 'rxjs/internal/observable/fromArray';
 export class LanguagePhrasesListComponent implements OnInit {
 
 	@Input()
-	public phrases: Phrase[];
+	public language: Language;
+
+	@Output()
+	public phraseCreated: EventEmitter<Phrase> = new EventEmitter<Phrase>();
+
+	showModal: boolean;
+	phrases: Phrase[];
 
 	filteredPhrases$: Observable<Phrase[]>;
 
 	searchBarForm: FormGroup;
+	phraseForm: FormGroup;
 
-	constructor(fb: FormBuilder) {
+	constructor(
+		private phraseService: PhraseService,
+		fb: FormBuilder) {
 		this.searchBarForm = fb.group({
 			search: new FormControl('')
+		});
+
+		this.phraseForm = fb.group({
+			sourceLanguage: new FormControl('', [Validators.required]),
+			text: new FormControl('', [Validators.required]),
+			translation: new FormControl('', [Validators.required]),
+			description: new FormControl('')
 		});
 	}
 
 	get searchInput(): AbstractControl { return this.searchBarForm.get('search'); }
 
 	ngOnInit(): void {
+		this.phrases = this.language.phrases;
 		// Testing only
 		if (!this.phrases) {
 			this.phrases = [
-				new Phrase('1', '1', 'English', 'German', 'This is a test', 'whatever', 0),
-				new Phrase('2', '1', 'English', 'German', 'tes', 'whatever', 0),
-				new Phrase('3', '1', 'English', 'German', 'Revolution', 'whatever', 0),
-				new Phrase('4', '1', 'English', 'German', 'Test me!', 'whatever', 0),
-				new Phrase('5', '1', 'English', 'German', 'Hello', 'whatever', 0),
+				new Phrase('English', 'This is a test', 'whatever'),
+				new Phrase('English', 'tes', 'whatever'),
+				new Phrase('English', 'Revolution', 'whatever'),
+				new Phrase('English', 'Test me !', 'whatever'),
+				new Phrase('English', 'Hello', 'whatever'),
 			];
 		}
 
-		console.log('do it');
 		this.filteredPhrases$ = this.searchInput.valueChanges.pipe(
 			debounceTime(200),
 			distinctUntilChanged(),
@@ -48,6 +65,33 @@ export class LanguagePhrasesListComponent implements OnInit {
 				return of(phrases); // Observable<Phrase[]> instead of Phrase[].
 			})
 		);
+	}
+
+	createPhrase(): void {
+		this.toggleModal();
+	}
+
+	public onModalOkButtonClicked(): void {
+		const phrase: Phrase = Object.assign({}, this.phraseForm.value);
+		phrase.languageId = this.language.id;
+		phrase.targetLanguage = this.language.name;
+		phrase.category = 0;
+
+		console.log('Phrase = ', phrase);
+		this.phraseService.create(phrase).pipe(take(1)).subscribe((createdPhrase: Phrase) => this.phraseCreated.emit(createdPhrase));
+	}
+
+	public onModalCancelButtonClicked(): void {
+		this.clearForm();
+		this.toggleModal();
+	}
+
+	private toggleModal(): void {
+		this.showModal = !this.showModal;
+	}
+
+	private clearForm(): void {
+		this.phraseForm.reset();
 	}
 
 }

@@ -28,6 +28,9 @@ namespace LingoBank.API.Controllers
             try
             {
                 LanguageDto language = await _runtime.ExecuteQueryAsync(new GetLanguageByIdQuery { Id = id });
+                List<PhraseDto> phrases = await _runtime.ExecuteQueryAsync(new GetPhrasesQuery { LanguageId = id });
+
+                language.Phrases = phrases;
                 return Ok(language);
             }
             catch (Exception ex)

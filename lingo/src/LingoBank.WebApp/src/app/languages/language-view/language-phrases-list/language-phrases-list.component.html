@@ -1,11 +1,38 @@
 <div class="flex flex-col pt-2">
     <h2 class="text-2xl font-semibold">Phrases</h2>
+    <button class="w-64 mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded" (click)="createPhrase()">Create Phrase</button>
     <form [formGroup]="searchBarForm">
-        <input type="text" placeholder="search for keyword or phrase" class="border-2 rounded p-2" formControlName="search" />
+        <input type="text" placeholder="search for keyword or phrase" class="border-2 rounded p-2 w-64" formControlName="search" />
     </form>
     <p>Results</p>
-    <div *ngFor="let searchedPhrase of filteredPhrases$ | async as filteredPhrases">
+    <div *ngFor="let searchedPhrase of filteredPhrases$ | async">
         <p>{{ searchedPhrase.text }}</p>
     </div>
 </div>
-
+<app-modal
+        [title]="'Add a new Phrase'"
+        [show]="showModal"
+        (cancelOrDismissButtonClicked)="onModalCancelButtonClicked()"
+        (okButtonClicked)="onModalOkButtonClicked()">
+    <form [formGroup]="phraseForm">
+        <div class="flex flex-col w-full">
+            <div class="mb-2">
+                <label for="sourceLanguage" class="block text-gray-800 font-semibold">Source Language</label>
+                <input type="text" id="sourceLanguage" formControlName="sourceLanguage" class="border rounded w-full" />
+            </div>
+            <div class="mb-2">
+                <!-- Change this to a dropdown -->
+                <label for="text" class="block text-gray-800 font-semibold">Text</label>
+                <input type="text" id="text" formControlName="text" class="border rounded w-full" />
+            </div>
+            <div class="mb-2">
+                <label for="translation" class="block text-gray-800 font-semibold">Translation</label>
+                <input type="text" id="translation" formControlName="translation" class="border rounded w-full" />
+            </div>
+            <div class="mb-2">
+                <label for="description" class="block text-gray-800 font-semibold">Description</label>
+                <input type="text" id="description" formControlName="description" class="border rounded w-full" />
+            </div>
+        </div>
+    </form>
+</app-modal>

@@ -29,7 +29,7 @@ namespace LingoBank.API.Controllers
 
                 if (isSuccessful)
                 {
-                    return Ok(phrase);
+                    return Ok(phrase); // How to return the phrase created, or at least the ID from the command, at this point the id property is still null when returning this.
                 }
 
                 return BadRequest(message);
