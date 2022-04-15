@@ -6,7 +6,7 @@
     </form>
     <p>Results</p>
     <div *ngFor="let searchedPhrase of filteredPhrases$ | async">
-        <p>{{ searchedPhrase.text }}</p>
+        <p>{{ searchedPhrase | languagePhrase }}</p>
     </div>
 </div>
 <app-modal

@@ -11,20 +11,20 @@ import { NavbarModule } from './navbar/navbar.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [
-      AppComponent,
-      LoginRegisterComponent,
-      HomeComponent
-  ],
-  imports: [
-      BrowserModule,
-      AppRoutingModule,
-      LanguagesModule,
-      HttpClientModule,
-      ReactiveFormsModule,
-      NavbarModule,
-      SharedModule
-  ],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		LoginRegisterComponent,
+		HomeComponent
+	],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		LanguagesModule,
+		HttpClientModule,
+		ReactiveFormsModule,
+		NavbarModule,
+		SharedModule
+	],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }

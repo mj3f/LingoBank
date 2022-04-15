@@ -9,10 +9,11 @@ import { LanguagePhrasesListComponent } from './components/language-view/languag
 import { LanguagesRoutingModule } from './languages-routing.module';
 import { LanguageService } from './services/language/language.service';
 import { PhraseService } from './services/phrase/phrase.service';
+import { LanguagePhrasePipe } from './pipes/language-phrase/language-phrase.pipe';
 
 
 @NgModule({
-	declarations: [LanguageListComponent, LanguageViewComponent, LanguageCardComponent, LanguagePhrasesListComponent],
+	declarations: [LanguageListComponent, LanguageViewComponent, LanguageCardComponent, LanguagePhrasesListComponent, LanguagePhrasePipe],
 	imports: [
 		CommonModule,
 		SharedModule,

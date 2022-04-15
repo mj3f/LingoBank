@@ -27,7 +27,6 @@ export class LanguageViewComponent implements OnInit {
 	}
 
 	createPhrase(phrase: Phrase): void {
-		console.log('kanguage = ', this.language);
 		if (this.language.phrases) {
 			this.language.phrases.push(phrase);
 		}

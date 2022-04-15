@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Phrase } from '../../../models/phrase.model';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
@@ -8,7 +8,8 @@ import { Language } from '../../../models/language.model';
 
 @Component({
 	selector: 'app-language-phrases-list',
-	templateUrl: './language-phrases-list.component.html'
+	templateUrl: './language-phrases-list.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LanguagePhrasesListComponent implements OnInit {
 
@@ -96,5 +97,4 @@ export class LanguagePhrasesListComponent implements OnInit {
 	private clearForm(): void {
 		this.phraseForm.reset();
 	}
-
 }
