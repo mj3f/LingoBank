@@ -46,16 +46,6 @@ export class LanguagePhrasesListComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.phrases = this.language.phrases;
-		// Testing only
-		if (!this.phrases) {
-			this.phrases = [
-				new Phrase('English', 'This is a test', 'whatever'),
-				new Phrase('English', 'tes', 'whatever'),
-				new Phrase('English', 'Revolution', 'whatever'),
-				new Phrase('English', 'Test me !', 'whatever'),
-				new Phrase('English', 'Hello', 'whatever'),
-			];
-		}
 
 		this.filteredPhrases$ = this.searchInput.valueChanges.pipe(
 			debounceTime(200),

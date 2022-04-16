@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { Language } from '../../models/language.model';
 import { BaseService } from '../../../shared/services/base.service';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class LanguageService extends BaseService {
 
 	constructor(private http: HttpClient) {

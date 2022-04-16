@@ -7,8 +7,6 @@ import { LanguageCardComponent } from './components/language-list/language-card/
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LanguagePhrasesListComponent } from './components/language-view/language-phrases-list/language-phrases-list.component';
 import { LanguagesRoutingModule } from './languages-routing.module';
-import { LanguageService } from './services/language/language.service';
-import { PhraseService } from './services/phrase/phrase.service';
 import { LanguagePhrasePipe } from './pipes/language-phrase/language-phrase.pipe';
 
 
@@ -20,10 +18,6 @@ import { LanguagePhrasePipe } from './pipes/language-phrase/language-phrase.pipe
 		ReactiveFormsModule,
 		FormsModule,
 		LanguagesRoutingModule
-	],
-	providers: [
-		LanguageService,
-		PhraseService
 	]
 })
 export class LanguagesModule { }

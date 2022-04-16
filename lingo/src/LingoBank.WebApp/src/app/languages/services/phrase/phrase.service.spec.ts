@@ -1,16 +1,28 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PhraseService } from './phrase.service';
+import { Phrase } from '../../models/phrase.model';
 
 describe('PhraseService', () => {
-  let service: PhraseService;
+	let service: PhraseService;
+	let phrase: Phrase;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(PhraseService);
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({});
+		service = TestBed.inject(PhraseService);
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+		phrase = new Phrase('English', 'Test phrase', 'Unknown');
+		phrase.targetLanguage = 'Unknown';
+		phrase.languageId = 'test1234';
+	});
+
+	it('should be created', () => {
+		expect(service).toBeTruthy();
+	});
+
+	it('should create a phrase and return it an an Observable', () => {
+		waitForAsync(() => {
+			service.create(phrase).subscribe(returnedPhrase => expect(returnedPhrase).toBeDefined());
+		});
+	});
 });
