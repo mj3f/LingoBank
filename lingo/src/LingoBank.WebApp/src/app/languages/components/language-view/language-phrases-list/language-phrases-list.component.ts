@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { Phrase } from '../../../models/phrase.model';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, take } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, startWith, switchMap, take } from 'rxjs/operators';
 import { PhraseService } from '../../../services/phrase/phrase.service';
 import { Language } from '../../../models/language.model';
 
@@ -14,18 +14,17 @@ import { Language } from '../../../models/language.model';
 export class LanguagePhrasesListComponent implements OnInit {
 
 	@Input()
-	public language: Language;
+	language: Language;
 
 	@Output()
-	public phraseCreated: EventEmitter<Phrase> = new EventEmitter<Phrase>();
+	phraseCreated: EventEmitter<Phrase> = new EventEmitter<Phrase>();
 
 	showModal: boolean;
-	phrases: Phrase[];
-
-	filteredPhrases$: Observable<Phrase[]>;
-
+	phrases$: Observable<Phrase[]>;
 	searchBarForm: FormGroup;
 	phraseForm: FormGroup;
+
+	private phrases: Phrase[];
 
 	constructor(
 		private phraseService: PhraseService,
@@ -47,14 +46,15 @@ export class LanguagePhrasesListComponent implements OnInit {
 	ngOnInit(): void {
 		this.phrases = this.language.phrases;
 
-		this.filteredPhrases$ = this.searchInput.valueChanges.pipe(
+		this.phrases$ = this.searchInput.valueChanges.pipe(
 			debounceTime(200),
 			distinctUntilChanged(),
 			switchMap((term: string) => {
 				const phrases: Phrase[] = this.phrases.filter(phrase =>
 					phrase.text.toLowerCase().includes(term.toLowerCase())); // search case in-sensitive.
 				return of(phrases); // Observable<Phrase[]> instead of Phrase[].
-			})
+			}),
+			startWith(this.phrases)
 		);
 	}
 
@@ -62,7 +62,7 @@ export class LanguagePhrasesListComponent implements OnInit {
 		this.toggleModal();
 	}
 
-	public onModalOkButtonClicked(): void {
+	onModalOkButtonClicked(): void {
 		const phrase: Phrase = Object.assign({}, this.phraseForm.value);
 		phrase.languageId = this.language.id;
 		phrase.targetLanguage = this.language.name;
