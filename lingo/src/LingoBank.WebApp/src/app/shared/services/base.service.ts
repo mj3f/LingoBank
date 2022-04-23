@@ -45,7 +45,7 @@ export abstract class BaseService {
 		};
 	}
 
-	protected storeJwtToken(token: string) {
+	protected storeJwtToken(token: string): void {
 		localStorage.setItem(environment.tokenKeyForStorage, token);
 	}
 
@@ -53,7 +53,7 @@ export abstract class BaseService {
 		return localStorage.getItem(environment.tokenKeyForStorage);
 	}
 
-	protected clearJwtToken() {
+	protected clearJwtToken(): void {
 		localStorage.removeItem(environment.tokenKeyForStorage);
 	}
 }

@@ -6,12 +6,12 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 
 
 @NgModule({
-  declarations: [
-    UserProfileComponent
-  ],
-  imports: [
-    CommonModule,
-    UsersRoutingModule
-  ]
+	declarations: [
+		UserProfileComponent
+	],
+	imports: [
+		CommonModule,
+		UsersRoutingModule
+	]
 })
 export class UsersModule { }

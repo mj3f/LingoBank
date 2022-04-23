@@ -13,24 +13,14 @@ export class AppComponent implements OnInit, OnDestroy {
 	isLoggedIn = false;
 
 	constructor(
-		private authService: AuthService,
-		private currentUserService: CurrentUserService) {}
+		private authService: AuthService) {}
 
 	ngOnInit(): void {
-		this.currentUserService.userSubject.subscribe(
-			(user: User) => {
-				if (user) {
-					this.isLoggedIn = true;
-				}
-			},
-			error => this.isLoggedIn = false);
-
-		// get current user to see whether isLoggedIn should be true (getCurrentUser will notify the subject).
-		this.authService.getCurrentUser().subscribe();
+		this.authService.isTokenValid.subscribe((isValid: boolean) => this.isLoggedIn = isValid);
 	}
 
 	ngOnDestroy(): void {
-		this.currentUserService.userSubject.unsubscribe();
+		this.authService.isTokenValid.unsubscribe();
 	}
 
 }
