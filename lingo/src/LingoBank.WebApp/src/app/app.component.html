@@ -3,7 +3,7 @@
 		<div id="navbar" class="flex-col" *ngIf="isLoggedIn">
 			<app-navbar></app-navbar>
 		</div>
-		<div id="content" class="flex-col pt-4 pl-4 w-full">
+		<div id="content" [ngClass]="{'flex-col pt-4 pl-4 w-full' : isLoggedIn, 'w-full' : !isLoggedIn}">
 			<router-outlet></router-outlet>
 		</div>
 	</div>

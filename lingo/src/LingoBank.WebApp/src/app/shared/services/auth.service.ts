@@ -39,6 +39,7 @@ export class AuthService extends BaseService {
 		return new Observable(subscriber => {
 			this.clearJwtToken();
 			this.isTokenValid.next(false);
+			subscriber.next();
 			subscriber.complete();
 		});
 	}
@@ -66,8 +67,6 @@ export class AuthService extends BaseService {
 
 		const decodedToken = jwtDecode<JwtPayload>(token);
 		const isValid: boolean = Date.now() <= decodedToken.exp * 1000;
-
-		console.log('token is valid? ', isValid); // fixme: doesn't set to false after 30 mins when token is supposed to expire.
 		this.isTokenValid.next(isValid);
 	}
 }

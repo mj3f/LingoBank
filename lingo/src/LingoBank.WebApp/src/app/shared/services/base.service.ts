@@ -59,7 +59,7 @@ export abstract class BaseService {
 }
 
 export interface RequestOptions {
-	headers: HttpHeaders,
-	withCredentials: boolean,
-	body?: any
+	headers: HttpHeaders;
+	withCredentials: boolean;
+	body?: any;
 }
