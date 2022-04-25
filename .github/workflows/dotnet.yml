@@ -29,7 +29,7 @@ jobs:
           dotnet-version '6.x.x'
       
       - name: Run Unit tests
-        working-directory: ./lingo/test # ?
+        working-directory: ./lingo/test
         run: |
           dotnet test LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
           dotnet test LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
