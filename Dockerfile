@@ -1,19 +1,20 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 ARG BUILDCONFIG=RELEASE
 ARG VERSION=0.0.1
 
 COPY lingo/. .
 
-RUN dotnet restore "src/LingoBank.API/LingoBank.API.csproj"
-RUN dotnet test "test/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj"
+# RUN dotnet restore "src/LingoBank.API/LingoBank.API.csproj"
+RUN dotnet restore "lingo/LingoBank.sln"
+
 
 FROM build AS publish
-RUN dotnet publish "src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
+RUN dotnet publish "lingo/src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
 
 FROM node:12 AS webbuild
 WORKDIR /src
