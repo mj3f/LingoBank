@@ -4,7 +4,8 @@ on:
     branches:
       - master
 defaults:
-  working-directory: ./lingo
+  run:
+    working-directory: ./lingo
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,7 +27,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version '6.x.x'
+          dotnet-version: '6.x.x'
       
       - name: Run Unit tests
         working-directory: ./lingo/test
