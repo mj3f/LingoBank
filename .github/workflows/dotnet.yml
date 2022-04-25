@@ -14,7 +14,8 @@ jobs:
         run: dotnet restore lingo/LingoBank.sln
       - name: Restore
         run: dotnet build lingo/LingoBank.sln --no-restore
-      - name: Test
+      - name: Run API Unit Tests
         run: dotnet test lingo/test/LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
+      - name: Run Business logic (Core) Unit Tests
         run: dotnet test lingo/test/LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
 
