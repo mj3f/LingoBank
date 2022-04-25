@@ -1,0 +1,20 @@
+name: dotnet
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.x.x'
+      
+      - name: Restore
+        run: dotnet restore lingo/LingoBank.sln
+      - name: Restore
+        run: dotnet build lingo/LingoBank.sln --no-restore
+      - name: Test
+        run: dotnet test lingo/test/LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
+        run: dotnet test lingo/test/LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
+
