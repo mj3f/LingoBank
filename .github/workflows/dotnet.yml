@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+defaults:
+  working-directory: ./lingo
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,11 +16,20 @@ jobs:
           dotnet-version: '6.x.x'
       
       - name: Restore
-        run: dotnet restore lingo/LingoBank.sln
+        run: dotnet restore LingoBank.sln
       - name: Restore
-        run: dotnet build lingo/LingoBank.sln --no-restore
-      - name: Run API Unit Tests
-        run: dotnet test lingo/test/LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
-      - name: Run Business logic (Core) Unit Tests
-        run: dotnet test lingo/test/LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
-
+        run: dotnet build LingoBank.sln --no-restore --configuration Release
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version '6.x.x'
+      
+      - name: Run Unit tests
+        working-directory: ./lingo/test
+        run: |
+          dotnet test LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
+          dotnet test LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
