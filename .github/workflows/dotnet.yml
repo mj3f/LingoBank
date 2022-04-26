@@ -33,6 +33,6 @@ jobs:
           dotnet-version: '6.x.x'
       - name: Run Unit tests
         run: |
-          dotnet test test/LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
-          dotnet test test/LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
+          dotnet test test/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
+          dotnet test test/LingoBank.Core.UnitTests/LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
 
