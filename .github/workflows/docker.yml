@@ -1,8 +1,10 @@
 name: docker-ci
-on: 
-  push:
-    branches:
-      - master
+on:
+  workflow_run:
+    workflows:
+      - "dotnet"
+    types:
+      - "completed"
 jobs:
   docker:
     runs-on: ubuntu-latest

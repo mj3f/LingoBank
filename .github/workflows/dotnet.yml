@@ -28,8 +28,9 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.x.x'
-      
       - name: Run Unit tests
+        working-directory: ./lingo/test
         run: |
           dotnet test test/LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
           dotnet test test/LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
+
