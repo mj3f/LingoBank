@@ -3,12 +3,12 @@ on:
   push:
     branches:
       - master
+defaults:
+  run:
+    working-directory: ./lingo
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./lingo
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET
@@ -22,9 +22,6 @@ jobs:
         run: dotnet build LingoBank.sln --no-restore --configuration Release
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./lingo/test/
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET
@@ -33,6 +30,7 @@ jobs:
           dotnet-version: '6.x.x'
       - name: Run Unit tests
         run: |
-          dotnet test test/LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
-          dotnet test test/LingoBank.Core.UnitTests/LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
+          cd test/
+          dotnet test LingoBank.API.UnitTests/LingoBank.API.UnitTests.csproj --configuration Release --verbosity normal
+          dotnet test LingoBank.Core.UnitTests/LingoBank.Core.UnitTests.csproj --configuration Release --verbosity normal
 
