@@ -6,7 +6,7 @@ on:
     types:
       - "completed"
 jobs:
-  login:
+  login-build-and-push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,10 +16,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - name: Docker build image and push to container registry
         run: |
           docker build . --tag ghcr.io/${{ github.actor }}/lingobank:latest
