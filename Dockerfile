@@ -10,11 +10,11 @@ ARG VERSION=0.0.1
 COPY lingo/. .
 
 # RUN dotnet restore "src/LingoBank.API/LingoBank.API.csproj"
-RUN dotnet restore "lingo/LingoBank.sln"
+RUN dotnet restore "LingoBank.sln"
 
 
 FROM build AS publish
-RUN dotnet publish "lingo/src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
+RUN dotnet publish "src/LingoBank.API/LingoBank.API.csproj" -c Release -o /app
 
 FROM node:12 AS webbuild
 WORKDIR /src
