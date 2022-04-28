@@ -22,5 +22,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Docker build image and push to container registry
         run: |
-          docker build . --tag ghci.io/${{ github.actor }}/lingobank:latest
-          docker push ghci.io/${{ github.actor }}/lingobank:latest
+          docker build . --tag ghcr.io/${{ github.actor }}/lingobank:latest
+          docker push ghcr.io/${{ github.actor }}/lingobank:latest
