@@ -35,3 +35,4 @@ msbuild.wrn
 .idea/
 src/LingoBank.API/appsettings.Development.json
 .angular/
+lingo/src/LingoBank.API/appsettings.Development.json

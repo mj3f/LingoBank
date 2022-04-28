@@ -33,7 +33,7 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [Description("Returns a jwt token if the user exists.")]
-        public async Task<IActionResult> Login([FromBody] UserWithPasswordDto userWithPassword)
+        public async Task<IActionResult> Login([FromBody] LoginDto userWithPassword)
         {
 
             UserDto user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery

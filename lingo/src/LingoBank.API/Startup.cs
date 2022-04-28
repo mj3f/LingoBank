@@ -148,7 +148,6 @@ namespace LingoBank.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
-                app.UseSwaggerUi3();
             }
 
             // app.UseHttpsRedirection();
@@ -170,6 +169,7 @@ namespace LingoBank.API
             app.UseAuthorization();
             app.UseStaticFiles();
             app.UseOpenApi();
+            app.UseSwaggerUi3();
             
             app.UseEndpoints(endpoints => 
             { 
