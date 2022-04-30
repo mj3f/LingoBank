@@ -96,7 +96,7 @@ namespace LingoBank.API.Controllers
         {
             string? email = User.FindFirst(ClaimTypes.Email)?.Value;
             
-            if (email is not null)
+            if (!string.IsNullOrEmpty(email))
             {
                 string token = await _jwtTokenGenerator.BuildToken(email);
                 return Ok(token);
