@@ -1,5 +1,6 @@
 using System;
 using Azure.Identity;
+using LingoBank.Core.Dtos;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
@@ -23,7 +24,9 @@ namespace LingoBank.API
             try
             {
                 Log.Information("Starting Web Host...");
-                CreateHostBuilder(args).Build().Run();
+                CreateHostBuilder(args)
+                    .Build()
+                    .Run();
             }
             catch (Exception ex)
             {
@@ -63,10 +66,14 @@ namespace LingoBank.API
                                 var credentials = new DefaultAzureCredential();
                                 config.AddAzureAppConfiguration(options =>
                                 {
-                                    options.Connect(appConfigurationConnectionString)
+                                    var appConfigOptions = options.Connect(appConfigurationConnectionString)
                                         .Select(KeyFilter.Any, null)
-                                        .ConfigureKeyVault(keyVault => keyVault.SetCredential(credentials)); 
-                                
+                                        .ConfigureKeyVault(keyVault => keyVault.SetCredential(credentials));
+
+                                    string connectedOrNotConnected =
+                                        appConfigOptions != null ? "Connected" : "Could not connect";
+                                    Log.Information($"{connectedOrNotConnected} to Azure App Configuration");
+
                                 });
                             }
                             else
@@ -75,9 +82,13 @@ namespace LingoBank.API
                                 var credentials = new ManagedIdentityCredential(managedIdentityClientId);
                                 config.AddAzureAppConfiguration(options =>
                                 {
-                                    options.Connect(new Uri(appConfigurationConnectionString), credentials)
+                                    var appConfigOptions = options.Connect(new Uri(appConfigurationConnectionString), credentials)
                                         .Select(KeyFilter.Any, null)
                                         .ConfigureKeyVault(keyVault => keyVault.SetCredential(credentials));
+                                    
+                                    string connectedOrNotConnected =
+                                        appConfigOptions != null ? "Connected" : "Could not connect";
+                                    Log.Information($"{connectedOrNotConnected} to Azure App Configuration");
                                 });
                             }
                         }
