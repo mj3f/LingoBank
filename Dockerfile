@@ -31,7 +31,7 @@ RUN npm install
 RUN npm run build
 
 # Copy ng build files to wwwroot folder.
-RUN cp -R dist/* /src/wwwroot
+RUN cp -R dist/LingoBank-WebApp/* /src/wwwroot
 
 FROM base AS final
 WORKDIR /app
