@@ -89,7 +89,7 @@ namespace LingoBank.API
             services.AddCors();
 
             services.AddDbContext<LingoContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DbConnection"))
+                options.UseSqlServer(Configuration.GetConnectionString("DbConnectionString"))
             );
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
