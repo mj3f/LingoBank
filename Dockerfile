@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 8000
+EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
@@ -35,6 +35,7 @@ RUN cp -R dist/* /src/wwwroot
 
 FROM base AS final
 WORKDIR /app
+ENV ASPNETCORE_URLS=http://+:5000
 COPY --from=webbuild /src/wwwroot ./wwwroot
 COPY --from=publish /app .
 
