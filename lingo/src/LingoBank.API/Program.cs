@@ -78,7 +78,7 @@ namespace LingoBank.API
                             }
                             else
                             {
-                                var managedIdentityClientId = settings.GetConnectionString("ManageIdentityClientId");
+                                var managedIdentityClientId = settings.GetConnectionString("ManagedIdentityClientId");
                                 var credentials = new ManagedIdentityCredential(managedIdentityClientId);
                                 config.AddAzureAppConfiguration(options =>
                                 {
