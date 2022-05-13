@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using LingoBank.API.Controllers;
 using LingoBank.Core;
+using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -53,20 +54,51 @@ namespace LingoBank.API.UnitTests.Controllers
             result.StatusCode.Should().Be(404);
         }
         
-        [Fact(Skip = "Remove Moq")]
-        public async Task CreateAsync_CreateANewLanguage_Successful()
+        [Fact]
+        public async Task CreateLanguageAsync_WithLanguageObject_ShouldCreateLanguage()
         {
-            IActionResult result = await _sut.CreateLanguageAsync(_language);
+            _runtime.ExecuteCommandAsync(Arg.Is<CreateLanguageCommand>(command => command.Language == _language))
+                .Returns(new RuntimeCommandResult(true));
+            var result = (OkObjectResult) await _sut.CreateLanguageAsync(_language);
 
-            Assert.IsType<OkObjectResult>(result);
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().BeEquivalentTo(_language);
         }
         
-        [Fact(Skip = "Remove Moq")]
-        public async Task EditAsync_UpdateAnExistingLanguage_Successful()
+        [Fact]
+        public async Task CreateLanguageAsync_WithNullObject_ShouldReturnError()
         {
-            IActionResult result = await _sut.EditLanguageAsync(_language.Id, _language);
+            _runtime.ExecuteCommandAsync(Arg.Any<CreateLanguageCommand>())
+                .Returns(new RuntimeCommandResult(false));
+            var result = (BadRequestObjectResult) await _sut.CreateLanguageAsync(null);
 
-            Assert.IsType<OkObjectResult>(result);
+            result.StatusCode.Should().Be(400);
+        }
+        
+        [Fact]
+        public async Task EditLanguageAsync_WithExistingLanguageObject_ShouldUpdateTheLanguage()
+        {
+            _runtime.ExecuteCommandAsync(Arg.Is<EditLanguageCommand>(command => command.Language == _language))
+                .Returns(new RuntimeCommandResult(true));
+            var result = (OkObjectResult) await _sut.EditLanguageAsync(_language.Id, _language);
+
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().BeEquivalentTo(_language);
+        }
+        
+        [Fact]
+        public async Task EditLanguageAsync_WithLanguageObjectAndInvalidId_ShouldReturnError() // id does not match language in db.
+        {
+            string id = Guid.NewGuid().ToString();
+            var language = new LanguageDto 
+            {
+                Name = "Test"
+            };
+            _runtime.ExecuteCommandAsync(Arg.Is<EditLanguageCommand>(command => command.Id == id && command.Language == language))
+                .Returns(new RuntimeCommandResult(false));
+            var result = (BadRequestObjectResult) await _sut.EditLanguageAsync(id, language);
+
+            result.StatusCode.Should().Be(400);
         }
         
     }

@@ -74,7 +74,7 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditLanguageCommand() {Id = id, Language = language});
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditLanguageCommand { Id = id, Language = language });
 
                 if (isSuccessful)
                 {
