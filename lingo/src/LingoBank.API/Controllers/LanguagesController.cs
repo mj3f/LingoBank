@@ -27,7 +27,11 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                LanguageDto language = await _runtime.ExecuteQueryAsync(new GetLanguageByIdQuery { Id = id });
+                LanguageDto? language = await _runtime.ExecuteQueryAsync(new GetLanguageByIdQuery { Id = id });
+                if (language is null)
+                {
+                    return NotFound("Language not found.");
+                }
                 List<PhraseDto> phrases = await _runtime.ExecuteQueryAsync(new GetPhrasesQuery { LanguageId = id });
 
                 language.Phrases = phrases;
@@ -39,23 +43,6 @@ namespace LingoBank.API.Controllers
             }
         }
 
-        [HttpGet("{languageId}/phrases")]
-        [ProducesResponseType(typeof(LanguageDto), 200)]
-        [ProducesResponseType(400)]
-        [Description("Returns a list of phrases belonging to a language.")]
-        public async Task<IActionResult> GetLanguagePhrasesAsync(string languageId)
-        {
-            try
-            {
-                List<PhraseDto> phrases = await _runtime.ExecuteQueryAsync(new GetPhrasesQuery { LanguageId = languageId });
-                return Ok(phrases);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        
         [HttpPost]
         [ProducesResponseType(typeof(LanguageDto), 200)]
         [ProducesResponseType(400)]

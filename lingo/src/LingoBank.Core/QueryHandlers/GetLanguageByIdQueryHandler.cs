@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LingoBank.Core.QueryHandlers
 {
-    public sealed class GetLanguageByIdQueryHandler : IRuntimeQueryHandler<GetLanguageByIdQuery, LanguageDto>
+    public sealed class GetLanguageByIdQueryHandler : IRuntimeQueryHandler<GetLanguageByIdQuery, LanguageDto?>
     {
         private readonly LingoContext _lingoContext;
 
