@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
-import {take} from 'rxjs/operators';
+import { take } from 'rxjs/operators';
+import { ButtonComponent } from '../shared/components/button/button.component';
 
 @Component({
 	selector: 'app-login-register',
@@ -24,6 +25,8 @@ export class LoginRegisterComponent {
 	get email(): string { return this.form.get('email').value; }
 	get password(): string { return this.form.get('password').value; }
 
+	@ViewChild('viewContainerRef', { static: true, read: ViewContainerRef }) viewContainerRef: ViewContainerRef;
+
 	handleLogin(): void {
 		this.authService.login(this.email, this.password).subscribe(() => {
 			this.authService.getCurrentUser()
@@ -31,6 +34,13 @@ export class LoginRegisterComponent {
 				.subscribe(_ => this.router.navigate(['/home']));
 		},
 		(error) => console.error(error));
+	}
+
+	tempLoadDynamicComponent(): void {
+		const viewContainerRef = this.viewContainerRef;
+		viewContainerRef.clear();
+		viewContainerRef.createComponent(ButtonComponent);
+
 	}
 
 }

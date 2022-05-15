@@ -7,7 +7,8 @@
             <input class="appearance-none rounded checked:bg-blue-600 checked:border-transparent" type="checkbox" id="remember-me" />
             <label for="remember-me" class="text-gray-800 pl-2 text-sm">Don't you, forget about me!</label>
             <button class="bg-blue-500 hover:bg-blue-600 p-2 mt-5 text-white w-full rounded" type="submit">Login</button>
-            <button class="text-sm text-gray-800 w-full pt-2 hover:text-blue-600">Forgot password?</button>
+            <button class="text-sm text-gray-800 w-full pt-2 hover:text-blue-600" (click)="tempLoadDynamicComponent()">Forgot password?</button>
+            <ng-container #viewContainerRef></ng-container>
         </form>
     </div>
 </div>
