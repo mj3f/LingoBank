@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs';
-import {Language} from 'src/app/languages/models/language.model';
-import {LanguageService} from 'src/app/languages/services/language/language.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../../users/services/user.service';
-import {CurrentUserService} from '../../../users/services/current-user.service';
-import {User} from '../../../users/models/user.model';
-import {take, tap} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Language } from 'src/app/languages/models/language.model';
+import { LanguageService } from 'src/app/languages/services/language/language.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../../users/services/user.service';
+import { CurrentUserService } from '../../../users/services/current-user.service';
+import { User } from '../../../users/models/user.model';
+import { take } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-language-list',
@@ -15,7 +15,6 @@ import {take, tap} from 'rxjs/operators';
 export class LanguageListComponent implements OnInit {
 
 	public form: FormGroup;
-	languages: Language[];
 	languages$: Observable<Language[]>;
 	showModal = false;
 	currentUser: User;
@@ -54,13 +53,13 @@ export class LanguageListComponent implements OnInit {
 
 		this.toggleModal();
 		const language = new Language(this.name, this.code, this.description, []);
+		language.id = '';
 		language.userId = this.currentUser.id; // TODO: get current user from jwt token
 
 		this.createLanguage(language)
 			.pipe(take(1))
-			.subscribe((createdLanguage: Language) => {
+			.subscribe(_ => {
 				this.clearForm();
-				this.languages.push(createdLanguage);
 			}
 		);
 	}
@@ -79,8 +78,7 @@ export class LanguageListComponent implements OnInit {
 	}
 
 	private getLanguages(userId: string): Observable<Language[]> {
-		return this.userService.getLanguages(userId)
-			.pipe(tap((languages: Language[]) => this.languages = languages));
+		return this.userService.getLanguages(userId);
 	}
 
 	private createLanguage(language: Language): Observable<Language> {

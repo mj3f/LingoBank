@@ -47,7 +47,7 @@ export class LanguagePhrasesListComponent implements OnInit {
 		this.phrases = this.language.phrases;
 
 		this.phrases$ = this.searchInput.valueChanges.pipe(
-			debounceTime(200),
+			debounceTime(400),
 			distinctUntilChanged(),
 			switchMap((term: string) => {
 				const phrases: Phrase[] = this.phrases.filter(phrase =>
@@ -64,6 +64,7 @@ export class LanguagePhrasesListComponent implements OnInit {
 
 	onModalOkButtonClicked(): void {
 		const phrase: Phrase = Object.assign({}, this.phraseForm.value);
+		phrase.id = '';
 		phrase.languageId = this.language.id;
 		phrase.targetLanguage = this.language.name;
 		phrase.category = 0;
