@@ -2,7 +2,7 @@ using LingoBank.Core.Dtos;
 
 namespace LingoBank.Core.Queries
 {
-    public sealed class GetUserByIdQuery : IRuntimeQuery<UserDto>
+    public sealed class GetUserByIdQuery : IRuntimeQuery<UserDto?>
     {
         /// <summary>
         /// Search for a user using their unique identifier.

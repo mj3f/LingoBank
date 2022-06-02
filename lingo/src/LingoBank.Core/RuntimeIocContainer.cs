@@ -29,7 +29,7 @@ namespace LingoBank.Core
             services.AddTransient<IRuntimeQueryHandler<GetLanguageByIdQuery, LanguageDto?>, GetLanguageByIdQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetPhrasesQuery, List<PhraseDto>>, GetPhrasesQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetUsersQuery, List<UserDto>>, GetUsersQueryHandler>();
-            services.AddTransient<IRuntimeQueryHandler<GetUserByIdQuery, UserDto>, GetUserByIdQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetUserByIdQuery, UserDto?>, GetUserByIdQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<SignInUserQuery, SignInResult>, SignInUserQueryHandler>();
             
             #endregion
