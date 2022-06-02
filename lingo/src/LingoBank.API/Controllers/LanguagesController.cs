@@ -32,9 +32,7 @@ namespace LingoBank.API.Controllers
                 {
                     return NotFound("Language not found.");
                 }
-                List<PhraseDto> phrases = await _runtime.ExecuteQueryAsync(new GetPhrasesQuery { LanguageId = id });
 
-                language.Phrases = phrases;
                 return Ok(language);
             }
             catch (Exception ex)

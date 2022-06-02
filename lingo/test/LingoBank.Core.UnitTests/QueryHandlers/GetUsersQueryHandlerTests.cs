@@ -15,9 +15,7 @@ namespace LingoBank.Core.UnitTests.QueryHandlers;
 public class GetUsersQueryHandlerTests
 {
     private GetUsersQueryHandler _sut;
-
     private readonly LingoContext _context;
-    private List<ApplicationUser> _data;
 
     public GetUsersQueryHandlerTests()
     {
@@ -30,8 +28,7 @@ public class GetUsersQueryHandlerTests
     {
         _sut = new GetUsersQueryHandler(_context);
         var users = await _sut.ExecuteAsync(new GetUsersQuery());
-
-        // Assert.NotNull(users);
+        
         users.Should().HaveCount(0);
 
     }

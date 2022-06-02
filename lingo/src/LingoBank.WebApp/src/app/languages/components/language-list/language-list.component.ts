@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Language } from 'src/app/languages/models/language.model';
 import { LanguageService } from 'src/app/languages/services/language/language.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -78,7 +78,8 @@ export class LanguageListComponent implements OnInit {
 	}
 
 	private getLanguages(userId: string): Observable<Language[]> {
-		return this.userService.getLanguages(userId);
+		return of([]);
+		// TODO: get languages API endpoint removed. List of languages returned by calling get user by id instead.
 	}
 
 	private createLanguage(language: Language): Observable<Language> {

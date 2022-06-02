@@ -32,22 +32,12 @@ namespace LingoBank.Core.QueryHandlers
                 
                 foreach (var language in languageEntities) // Checks if at least one language is in list.
                 {
+                    // language phrases should be fetched separately using the GetLanguageByIdQuery.
                     languages.Add(new LanguageDto
                     {
                         Id = language.Id,
                         Name = language.Name,
-                        UserId = language.UserId,
-                        Phrases = language.Phrases?.Select(p => new PhraseDto
-                        {
-                            Id = p.Id,
-                            LanguageId = p.LanguageId,
-                            SourceLanguage = p.SourceLanguage,
-                            TargetLanguage = p.TargetLanguage,
-                            Description = p.Description,
-                            Text = p.Text,
-                            Translation = p.Translation,
-                            Category = (Category) p.Category
-                        }).ToList() ?? new List<PhraseDto>()
+                        UserId = language.UserId
                     });
                 }
             }
