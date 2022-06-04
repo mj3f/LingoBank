@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Language } from 'src/app/languages/models/language.model';
 import { LanguageService } from 'src/app/languages/services/language/language.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../users/services/user.service';
 import { CurrentUserService } from '../../../users/services/current-user.service';
 import { User } from '../../../users/models/user.model';
-import { take } from 'rxjs/operators';
+import { map, retry, take } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-language-list',
@@ -78,8 +78,10 @@ export class LanguageListComponent implements OnInit {
 	}
 
 	private getLanguages(userId: string): Observable<Language[]> {
-		return of([]);
-		// TODO: get languages API endpoint removed. List of languages returned by calling get user by id instead.
+		return this.userService.getById(userId)
+			.pipe(
+				map((user: User) => user.languages),
+				retry(3));
 	}
 
 	private createLanguage(language: Language): Observable<Language> {
