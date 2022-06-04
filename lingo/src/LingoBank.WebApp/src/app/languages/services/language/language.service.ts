@@ -14,10 +14,6 @@ export class LanguageService extends BaseService {
 		this.apiUrl += '/languages';
 	}
 
-	public getAll(): Observable<Language[]> {
-		return this.http.get<Language[]>(this.apiUrl, this.getRequestOptions());
-	}
-
 	public getById(id: string): Observable<Language> {
 		return this.http.get<Language>(this.apiUrl + '/' + id, this.getRequestOptions());
 	}

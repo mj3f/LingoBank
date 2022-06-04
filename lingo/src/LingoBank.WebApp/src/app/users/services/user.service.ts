@@ -21,8 +21,4 @@ export class UserService extends BaseService {
 	public getById(id: string): Observable<User> {
 		return this.http.get<User>(this.apiUrl + '/' + id, this.getRequestOptions());
 	}
-
-	public getLanguages(userId: string): Observable<Language[]> {
-		return this.http.get<Language[]>(this.apiUrl + '/' + userId + '/languages');
-	}
 }

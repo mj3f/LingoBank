@@ -10,17 +10,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LingoBank.Core.QueryHandlers
 {
-    public sealed class GetUserByIdQueryHandler : IRuntimeQueryHandler<GetUserByIdQuery, UserDto>
+    public sealed class GetUserByIdQueryHandler : IRuntimeQueryHandler<GetUserByIdQuery, UserDto?>
     {
         private readonly LingoContext _context;
 
         public GetUserByIdQueryHandler(LingoContext context) => _context = context;
-
-
-        public async Task<UserDto> ExecuteAsync(GetUserByIdQuery query)
+        
+        public async Task<UserDto?> ExecuteAsync(GetUserByIdQuery query)
         {
-
-            ApplicationUser appUser = await GetUser(query);
+            ApplicationUser? appUser = await GetUser(query);
             
             if (appUser == null)
             {
@@ -31,26 +29,15 @@ namespace LingoBank.Core.QueryHandlers
             if (query.IncludeLanguages)
             {
                 var languageEntities = _context.Languages.Where(l => l.UserId == query.Id).ToList();
-
-            
+                
                 foreach (var language in languageEntities) // Checks if at least one language is in list.
                 {
+                    // language phrases should be fetched separately using the GetLanguageByIdQuery.
                     languages.Add(new LanguageDto
                     {
                         Id = language.Id,
                         Name = language.Name,
-                        UserId = language.UserId,
-                        Phrases = language.Phrases?.Select(p => new PhraseDto
-                        {
-                            Id = p.Id,
-                            LanguageId = p.LanguageId,
-                            SourceLanguage = p.SourceLanguage,
-                            TargetLanguage = p.TargetLanguage,
-                            Description = p.Description,
-                            Text = p.Text,
-                            Translation = p.Translation,
-                            Category = (Category) p.Category
-                        }).ToList()
+                        UserId = language.UserId
                     });
                 }
             }
@@ -71,7 +58,7 @@ namespace LingoBank.Core.QueryHandlers
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        private async Task<ApplicationUser> GetUser(GetUserByIdQuery query)
+        private async Task<ApplicationUser?> GetUser(GetUserByIdQuery query)
         {
             if (!string.IsNullOrEmpty(query.Id))
             {

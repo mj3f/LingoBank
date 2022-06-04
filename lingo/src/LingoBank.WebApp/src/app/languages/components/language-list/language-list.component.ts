@@ -6,7 +6,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { UserService } from '../../../users/services/user.service';
 import { CurrentUserService } from '../../../users/services/current-user.service';
 import { User } from '../../../users/models/user.model';
-import { take } from 'rxjs/operators';
+import { map, retry, take } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-language-list',
@@ -78,7 +78,10 @@ export class LanguageListComponent implements OnInit {
 	}
 
 	private getLanguages(userId: string): Observable<Language[]> {
-		return this.userService.getLanguages(userId);
+		return this.userService.getById(userId)
+			.pipe(
+				map((user: User) => user.languages),
+				retry(3));
 	}
 
 	private createLanguage(language: Language): Observable<Language> {

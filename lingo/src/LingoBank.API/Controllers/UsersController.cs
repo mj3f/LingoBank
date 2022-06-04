@@ -28,7 +28,7 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Description("Returns a list of all users. This task can be performed by an administrator only.")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
             try
             {
@@ -48,7 +48,7 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [Description("Returns details of a user from the id given.")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
             try
             {
@@ -67,38 +67,13 @@ namespace LingoBank.API.Controllers
             }
         }
 
-        [HttpGet("{id}/languages")]
-        [AllowAnonymous]
-        [ProducesResponseType(typeof(List<LanguageDto>), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [Description("Returns a list of languages belonging to a user.")]
-        public async Task<IActionResult> GetLanguagesAsync(string id)
-        {
-            try
-            {
-                UserDto user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery { Id = id });
-                if (user is null)
-                {
-                    return NotFound("No user found for id provided.");
-                }
-
-                List<LanguageDto> languages = await _runtime.ExecuteQueryAsync(new GetLanguagesQuery { UserId = id });
-                return Ok(languages);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        
         [HttpPost]
         [ProducesResponseType(typeof(UserDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Description("Creates a new user.")]
-        public async Task<IActionResult> Create(UserWithPasswordDto userWithPassword)
+        public async Task<IActionResult> CreateAsync(UserWithPasswordDto userWithPassword)
         {
             try
             {

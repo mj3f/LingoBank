@@ -24,14 +24,10 @@ namespace LingoBank.Core
             services.AddScoped<IRuntime, Runtime>();
             
             #region Queries
-
-            services.AddTransient<IRuntimeQueryHandler<GetLanguagesQuery, List<LanguageDto>>, GetLanguagesQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetLanguageByIdQuery, LanguageDto?>, GetLanguageByIdQueryHandler>();
-            services.AddTransient<IRuntimeQueryHandler<GetPhrasesQuery, List<PhraseDto>>, GetPhrasesQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetUsersQuery, List<UserDto>>, GetUsersQueryHandler>();
-            services.AddTransient<IRuntimeQueryHandler<GetUserByIdQuery, UserDto>, GetUserByIdQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetUserByIdQuery, UserDto?>, GetUserByIdQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<SignInUserQuery, SignInResult>, SignInUserQueryHandler>();
-            
             #endregion
 
             #region Commands

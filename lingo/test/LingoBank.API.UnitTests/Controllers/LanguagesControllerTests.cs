@@ -37,7 +37,6 @@ namespace LingoBank.API.UnitTests.Controllers
         public async Task GetLanguageByIdAsync_WithId_ShouldReturnLanguage()
         {
             _runtime.ExecuteQueryAsync(Arg.Is<GetLanguageByIdQuery>(query => query.Id == _language.Id)).Returns(_language);
-            _runtime.ExecuteQueryAsync(Arg.Is<GetPhrasesQuery>(query => query.LanguageId == _language.Id)).Returns(_language.Phrases as List<PhraseDto>);
             var result = (OkObjectResult) await _sut.GetLanguageByIdAsync(_language.Id);
             
             result.StatusCode.Should().Be(200);

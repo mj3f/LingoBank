@@ -2,8 +2,10 @@ import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
-import { take } from 'rxjs/operators';
+import { exhaustMap, take, tap } from 'rxjs/operators';
 import { ButtonComponent } from '../shared/components/button/button.component';
+import { Observable } from 'rxjs';
+import { User } from '../users/models/user.model';
 
 @Component({
 	selector: 'app-login-register',
@@ -11,6 +13,7 @@ import { ButtonComponent } from '../shared/components/button/button.component';
 })
 export class LoginRegisterComponent {
 	form: FormGroup;
+	loginInProgress = false;
 
 	constructor(
 		public router: Router,
@@ -28,19 +31,29 @@ export class LoginRegisterComponent {
 	@ViewChild('viewContainerRef', { static: true, read: ViewContainerRef }) viewContainerRef: ViewContainerRef;
 
 	handleLogin(): void {
-		this.authService.login(this.email, this.password).subscribe(() => {
-			this.authService.getCurrentUser()
-				.pipe(take(1))
-				.subscribe(_ => this.router.navigate(['/home']));
-		},
-		(error) => console.error(error));
+		this.authService.login(this.email, this.password)
+			.pipe(
+				tap(_ => this.loginInProgress = true),
+				take(1),
+				exhaustMap(_ => this.getCurrentUser())
+			).subscribe(
+				_ => {
+					this.loginInProgress = false;
+					this.router.navigate(['/home']);
+				},
+				error => console.error(error)
+			);
 	}
 
 	tempLoadDynamicComponent(): void {
 		const viewContainerRef = this.viewContainerRef;
 		viewContainerRef.clear();
 		viewContainerRef.createComponent(ButtonComponent);
+	}
 
+	private getCurrentUser(): Observable<User> {
+		return this.authService.getCurrentUser()
+			.pipe(take(1));
 	}
 
 }
