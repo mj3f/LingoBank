@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using LingoBank.API.Authorization;
 using LingoBank.Core;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
@@ -15,7 +16,7 @@ namespace LingoBank.API.Controllers
     [ApiController]
     [Produces("application/json")]
     [Route("api/v0/users")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{Roles.Administrator}, {Roles.User}")]
     public sealed class UsersController : ControllerBase
     {
         private readonly IRuntime _runtime;
@@ -23,6 +24,7 @@ namespace LingoBank.API.Controllers
         public UsersController(IRuntime runtime) => _runtime = runtime;
 
         [HttpGet]
+        [Authorize(Roles = Roles.Administrator)]
         [ProducesResponseType(typeof(List<UserDto>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -73,15 +75,15 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Description("Creates a new user.")]
-        public async Task<IActionResult> CreateAsync(UserWithPasswordDto userWithPassword)
+        public async Task<IActionResult> CreateAsync(CreateUserDto createUser)
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreateUserCommand { UserWithPassword = userWithPassword });
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreateUserCommand { CreateUser = createUser, Role = Roles.User });
 
                 if (isSuccessful)
                 {
-                    return Ok((UserDto) userWithPassword); // TODO: Check this doesn't send the password back.
+                    return Ok("User created.");
                 }
 
                 return BadRequest(message);

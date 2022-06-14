@@ -2,17 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using LingoBank.API.Authorization;
 using LingoBank.Core;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LingoBank.API.Controllers
 {
-    [Route("api/v0/languages")]
-    [Produces("application/json")]
     [ApiController]
+    [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{Roles.Administrator}, {Roles.User}")]
+    [Route("api/v0/languages")]
     public sealed class LanguagesController : ControllerBase
     {
         private readonly IRuntime _runtime;

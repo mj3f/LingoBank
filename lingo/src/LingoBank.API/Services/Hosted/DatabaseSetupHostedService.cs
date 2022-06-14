@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LingoBank.API.Authorization;
 using LingoBank.Core;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
@@ -103,7 +104,7 @@ namespace LingoBank.API.Services.Hosted
 
                 try
                 {
-                    UserDto existingUser = await runtime.ExecuteQueryAsync(new GetUserByIdQuery
+                    UserDto? existingUser = await runtime.ExecuteQueryAsync(new GetUserByIdQuery
                     {
                         EmailAddress = emailAddress
                     });
@@ -125,13 +126,9 @@ namespace LingoBank.API.Services.Hosted
                     
                     RuntimeCommandResult result = await runtime.ExecuteCommandAsync(new CreateUserCommand
                     {
-                        UserWithPassword = new UserWithPasswordDto
-                        {
-                            EmailAddress = emailAddress,
-                            Role = "Administrator",
-                            UserName = username,
-                            Password = password
-                        }
+                        CreateUser = new CreateUserDto(username, emailAddress, password),
+                        Role = Roles.Administrator
+                        
                     });
 
                     if (result.IsSuccessful)
