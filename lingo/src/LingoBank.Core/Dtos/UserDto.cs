@@ -29,12 +29,4 @@ namespace LingoBank.Core.Dtos
         /// </summary>
         public List<LanguageDto> Languages { get; set; }
     }
-
-    public sealed class UserWithPasswordDto : UserDto
-    {
-        /// <summary>
-        /// The users defined password when signing up to the service.
-        /// </summary>
-        public string Password { get; set; }
-    }
 }

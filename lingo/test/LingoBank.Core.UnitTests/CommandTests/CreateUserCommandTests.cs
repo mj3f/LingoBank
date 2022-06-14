@@ -13,28 +13,19 @@ namespace LingoBank.Core.UnitTests.CommandTests
         {
             var createUserCommand = new CreateUserCommand
             {
-                UserWithPassword = new UserWithPasswordDto
-                {
-                    EmailAddress = "hello@example.com",
-                    UserName = "Test user",
-                    Password = "Hello123456!!5g"
-                }
+                CreateUser = new CreateUserDto("Test user", "hello@example.com", "Hello123456!!5g"),
+                Role = "User"
             };
             
             Assert.True(createUserCommand.Validate());
         }
         
-        [Theory]
-        [MemberData(nameof(UserWithPasswordTestDataGenerator.GetTestData), MemberType = typeof(UserWithPasswordTestDataGenerator))]
-        public void Validate_ShouldReturnFalse(UserWithPasswordDto a, UserWithPasswordDto b, UserWithPasswordDto c)
+        [Fact]
+        public void Validate_ShouldReturnFalse()
         {
-            var createUserCommandA = new CreateUserCommand { UserWithPassword = a };
-            var createUserCommandB = new CreateUserCommand { UserWithPassword = b };
-            var createUserCommandC = new CreateUserCommand { UserWithPassword = c };
+            var createUserCommandA = new CreateUserCommand { CreateUser = new CreateUserDto("", "", ""), Role = ""};
 
             Assert.False(createUserCommandA.Validate());
-            Assert.False(createUserCommandB.Validate());
-            Assert.False(createUserCommandC.Validate());
         }
     }
 }

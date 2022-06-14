@@ -4,14 +4,16 @@ namespace LingoBank.Core.Commands
 {
     public class CreateUserCommand : IRuntimeCommand
     {
-        public UserWithPasswordDto UserWithPassword { get; set; }
+        public CreateUserDto CreateUser { get; init; } = null!;
+        public string Role { get; init; } = null!;
 
         public bool Validate()
         {
-            return UserWithPassword != null &&
-                   !string.IsNullOrEmpty(UserWithPassword.Password) &&
-                   !string.IsNullOrEmpty(UserWithPassword.EmailAddress) &&
-                   !string.IsNullOrEmpty(UserWithPassword.UserName);
+            return CreateUser != null &&
+                   !string.IsNullOrEmpty(Role) &&
+                   !string.IsNullOrEmpty(CreateUser.Password) &&
+                   !string.IsNullOrEmpty(CreateUser.EmailAddress) &&
+                   !string.IsNullOrEmpty(CreateUser.UserName);
         }
 
         public bool HasExecuted { get; set; }

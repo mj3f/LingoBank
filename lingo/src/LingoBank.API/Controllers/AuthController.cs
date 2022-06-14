@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using LingoBank.API.Authentication;
+using LingoBank.API.Authorization;
 using LingoBank.Core;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
@@ -15,7 +16,7 @@ namespace LingoBank.API.Controllers
 {
     [ApiController]
     [Produces("application/json")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{Roles.Administrator}, {Roles.User}")]
     [Route("api/v0/auth")]
     public class AuthController : ControllerBase
     {
@@ -36,7 +37,7 @@ namespace LingoBank.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto userWithPassword)
         {
 
-            UserDto user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
+            UserDto? user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
                 { EmailAddress = userWithPassword.EmailAddress });
 
             if (user is null)
