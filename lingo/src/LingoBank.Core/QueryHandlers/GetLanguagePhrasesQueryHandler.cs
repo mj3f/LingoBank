@@ -35,13 +35,9 @@ public class GetLanguagePhrasesQueryHandler : IRuntimeQueryHandler<GetLanguagePh
             .Skip((query.Page - 1) * CoreConstants.PagedNumberOfItemsPerPage)
             .Take(CoreConstants.PagedNumberOfItemsPerPage)
             .ToList();
-
-        if (phrases is null)
-        {
-            return null;
-        }
         
-        List<PhraseDto> phraseDtos = phrases.Select(p => new PhraseDto
+        
+        List<PhraseDto>? phraseDtos = phrases?.Select(p => new PhraseDto
         {
             Id = p.Id,
             LanguageId = p.LanguageId,
@@ -53,6 +49,6 @@ public class GetLanguagePhrasesQueryHandler : IRuntimeQueryHandler<GetLanguagePh
             Category = (Category) p.Category
         }).ToList();
 
-        return new Paged<PhraseDto>(phraseDtos, languageEntity.Phrases!.Count, query.Page);
+        return new Paged<PhraseDto>(phraseDtos, languageEntity.Phrases?.Count ?? 0, query.Page);
     }
 }

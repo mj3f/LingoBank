@@ -4,7 +4,7 @@ namespace LingoBank.Core.Dtos;
 
 public class Paged<T> where T : class
 {
-    public IList<T> Data { get; }
+    public IList<T>? Data { get; }
     
     public int Total { get; }
 
@@ -14,7 +14,7 @@ public class Paged<T> where T : class
     
     public int PrevPage { get; }
 
-    public Paged(IList<T> data, int total, int pageNumber)
+    public Paged(IList<T>? data, int total, int pageNumber)
     {
         Data = data;
         Total = total;

@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LingoBank.Core.Constants;
 using LingoBank.Core.Dtos;
 using LingoBank.Core.Queries;
 using LingoBank.Database.Contexts;
+using LingoBank.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LingoBank.Core.QueryHandlers;
@@ -16,7 +18,7 @@ public class GetLanguagesQueryHandler : IRuntimeQueryHandler<GetLanguagesQuery, 
 
         public async Task<Paged<LanguageDto>?> ExecuteAsync(GetLanguagesQuery query)
         {
-            var languageEntities = await _context.Languages
+            List<LanguageEntity>? languageEntities = await _context.Languages
                 .Skip((query.Page - 1) * CoreConstants.PagedNumberOfItemsPerPage)
                 .Take(CoreConstants.PagedNumberOfItemsPerPage)
                 .ToListAsync();
@@ -27,15 +29,10 @@ public class GetLanguagesQueryHandler : IRuntimeQueryHandler<GetLanguagesQuery, 
                 Description = l.Description,
                 Id = l.Id,
                 Name = l.Name,
-                Phrases = null,
+                Phrases = null!,
                 UserId = l.UserId
             }).ToList();
-
-            if (languages is null)
-            {
-                return null;
-            }
-
+            
             return new Paged<LanguageDto>(languages, _context.Languages.Count(), query.Page);
         }
 }
