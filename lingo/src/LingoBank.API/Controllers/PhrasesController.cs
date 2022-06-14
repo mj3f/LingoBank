@@ -5,6 +5,7 @@ using LingoBank.API.Authorization;
 using LingoBank.Core;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
+using LingoBank.Core.Queries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,27 @@ namespace LingoBank.API.Controllers
         private readonly IRuntime _runtime;
 
         public PhrasesController(IRuntime runtime) => _runtime = runtime;
+        
+        [HttpGet]
+        [Authorize(Roles = Roles.Administrator)]
+        [ProducesResponseType(typeof(Paged<PhraseDto>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Description("Returns a paginated list of all phrases. Accessible by Administrators only.")]
+        public async Task<IActionResult> GetPhrasesAsync([FromQuery] int page)
+        {
+            try
+            {
+                Paged<PhraseDto> phrases = await _runtime.ExecuteQueryAsync(new GetPhrasesQuery { Page = page });
+
+                return Ok(phrases);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         
         [HttpPost]
         [ProducesResponseType(typeof(PhraseDto), 200)]
