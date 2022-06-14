@@ -41,6 +41,34 @@ namespace LingoBank.API.Controllers
             }
         }
 
+        [HttpGet("{id}/phrases")]
+        [ProducesResponseType(typeof(Paged<PhraseDto>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Description("Returns a paginated list of phrases for a language.")]
+        public async Task<IActionResult> GetLanguagePhrasesAsync(string id, [FromQuery] int page)
+        {
+            try
+            {
+                Paged<PhraseDto>? phrases = await _runtime.ExecuteQueryAsync(new GetLanguagePhrasesQuery
+                {
+                    LanguageId = id,
+                    Page = page
+                });
+
+                if (phrases is null)
+                {
+                    return BadRequest($"No phrases found for language with id: {id}");
+                }
+
+                return Ok(phrases);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(LanguageDto), 200)]
         [ProducesResponseType(400)]
