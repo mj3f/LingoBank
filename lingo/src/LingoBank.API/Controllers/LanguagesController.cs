@@ -22,6 +22,32 @@ namespace LingoBank.API.Controllers
         private readonly IRuntime _runtime;
 
         public LanguagesController(IRuntime runtime) => _runtime = runtime;
+
+        [HttpGet]
+        [Authorize(Roles = Roles.Administrator)]
+        [ProducesResponseType(typeof(Paged<LanguageDto>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Description("Returns a paginated list of all languages. Accessible by Administrators only.")]
+        public async Task<IActionResult> GetLanguagesAsync([FromQuery] int page)
+        {
+            try
+            {
+                Paged<LanguageDto>? languages = await _runtime.ExecuteQueryAsync(new GetLanguagesQuery {Page = page});
+
+                if (languages is null)
+                {
+                    return BadRequest("No languages in database.");
+                }
+
+                return Ok(languages);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(LanguageDto), 200)]

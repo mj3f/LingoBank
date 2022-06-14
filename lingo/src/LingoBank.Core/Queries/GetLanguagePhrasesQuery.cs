@@ -2,7 +2,7 @@ using LingoBank.Core.Dtos;
 
 namespace LingoBank.Core.Queries;
 
-public class GetLanguagePhrasesQuery : IRuntimeQuery<Paged<PhraseDto>?>
+public class GetLanguagePhrasesQuery : IRuntimeQuery<Paged<PhraseDto>?>, IPaginatedQuery
 {
     public string LanguageId { get; init; }
     
