@@ -34,13 +34,8 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                Paged<LanguageDto>? languages = await _runtime.ExecuteQueryAsync(new GetLanguagesQuery {Page = page});
-
-                if (languages is null)
-                {
-                    return BadRequest("No languages in database.");
-                }
-
+                Paged<LanguageDto> languages = await _runtime.ExecuteQueryAsync(new GetLanguagesQuery {Page = page});
+                
                 return Ok(languages);
             }
             catch (Exception ex)

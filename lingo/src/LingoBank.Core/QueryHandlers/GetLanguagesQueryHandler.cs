@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LingoBank.Core.QueryHandlers;
 
-public class GetLanguagesQueryHandler : IRuntimeQueryHandler<GetLanguagesQuery, Paged<LanguageDto>?>
+public class GetLanguagesQueryHandler : IRuntimeQueryHandler<GetLanguagesQuery, Paged<LanguageDto>>
 {
     private readonly LingoContext _context;
     
     public GetLanguagesQueryHandler(LingoContext context) => _context = context;
 
-        public async Task<Paged<LanguageDto>?> ExecuteAsync(GetLanguagesQuery query)
+        public async Task<Paged<LanguageDto>> ExecuteAsync(GetLanguagesQuery query)
         {
             List<LanguageEntity>? languageEntities = await _context.Languages
                 .Skip((query.Page - 1) * CoreConstants.PagedNumberOfItemsPerPage)
