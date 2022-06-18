@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
 import { exhaustMap, take, tap } from 'rxjs/operators';
@@ -12,16 +12,16 @@ import { User } from '../users/models/user.model';
 	templateUrl: './login-register.component.html'
 })
 export class LoginRegisterComponent {
-	form: FormGroup;
+	form: UntypedFormGroup;
 	loginInProgress = false;
 
 	constructor(
 		public router: Router,
 		public authService: AuthService,
-		fb: FormBuilder) {
+		fb: UntypedFormBuilder) {
 		this.form = fb.group({
-			email: new FormControl('', [Validators.required]),
-			password: new FormControl('', [Validators.required])
+			email: new UntypedFormControl('', [Validators.required]),
+			password: new UntypedFormControl('', [Validators.required])
 		});
 	}
 

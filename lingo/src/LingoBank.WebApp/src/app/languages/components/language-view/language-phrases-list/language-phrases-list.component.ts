@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Phrase } from '../../../models/phrase.model';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, startWith, switchMap, take } from 'rxjs/operators';
 import { PhraseService } from '../../../services/phrase/phrase.service';
@@ -21,23 +21,23 @@ export class LanguagePhrasesListComponent implements OnInit {
 
 	showModal: boolean;
 	phrases$: Observable<Phrase[]>;
-	searchBarForm: FormGroup;
-	phraseForm: FormGroup;
+	searchBarForm: UntypedFormGroup;
+	phraseForm: UntypedFormGroup;
 
 	private phrases: Phrase[];
 
 	constructor(
 		private phraseService: PhraseService,
-		fb: FormBuilder) {
+		fb: UntypedFormBuilder) {
 		this.searchBarForm = fb.group({
-			search: new FormControl('')
+			search: new UntypedFormControl('')
 		});
 
 		this.phraseForm = fb.group({
-			sourceLanguage: new FormControl('', [Validators.required]),
-			text: new FormControl('', [Validators.required]),
-			translation: new FormControl('', [Validators.required]),
-			description: new FormControl('')
+			sourceLanguage: new UntypedFormControl('', [Validators.required]),
+			text: new UntypedFormControl('', [Validators.required]),
+			translation: new UntypedFormControl('', [Validators.required]),
+			description: new UntypedFormControl('')
 		});
 	}
 

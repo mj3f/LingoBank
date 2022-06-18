@@ -9,7 +9,7 @@ import { CurrentUserService } from '../../../users/services/current-user.service
 import { LanguageService } from '../../services/language/language.service';
 import { UserService } from '../../../users/services/user.service';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -27,7 +27,7 @@ describe('LanguageViewComponent', () => {
 			declarations: [ LanguageListComponent, LanguageCardComponent ],
 			providers: [
 				{ provide: HttpClient, useValue: httpClient },
-				FormBuilder
+				UntypedFormBuilder
 			]
 		}).compileComponents();
 

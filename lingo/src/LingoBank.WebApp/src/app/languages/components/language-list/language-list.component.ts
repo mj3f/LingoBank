@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Language } from 'src/app/languages/models/language.model';
 import { LanguageService } from 'src/app/languages/services/language/language.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../users/services/user.service';
 import { CurrentUserService } from '../../../users/services/current-user.service';
 import { User } from '../../../users/models/user.model';
@@ -14,7 +14,7 @@ import { map, retry, take } from 'rxjs/operators';
 })
 export class LanguageListComponent implements OnInit {
 
-	public form: FormGroup;
+	public form: UntypedFormGroup;
 	languages$: Observable<Language[]>;
 	showModal = false;
 	currentUser: User;
@@ -23,11 +23,11 @@ export class LanguageListComponent implements OnInit {
 		private currentUserService: CurrentUserService,
 		private languageService: LanguageService,
 		private userService: UserService,
-		formBuilder: FormBuilder) {
+		formBuilder: UntypedFormBuilder) {
 		this.form = formBuilder.group({
-			name: new FormControl('', [Validators.required]),
-			code: new FormControl('', [Validators.required, Validators.maxLength(2)]), // Probably will be a dropdown for this tbh.
-			description: new FormControl('', [])
+			name: new UntypedFormControl('', [Validators.required]),
+			code: new UntypedFormControl('', [Validators.required, Validators.maxLength(2)]), // Probably will be a dropdown for this tbh.
+			description: new UntypedFormControl('', [])
 		});
 	}
 
