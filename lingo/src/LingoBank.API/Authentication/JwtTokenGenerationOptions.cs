@@ -1,6 +1,3 @@
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-
 namespace LingoBank.API.Authentication
 {
     public static class JwtTokenGenerationOptions

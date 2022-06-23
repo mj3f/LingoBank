@@ -1,5 +1,5 @@
+using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using LingoBank.API.Authentication;
@@ -36,29 +36,35 @@ namespace LingoBank.API.Controllers
         [Description("Returns a jwt token if the user exists.")]
         public async Task<IActionResult> Login([FromBody] LoginDto userWithPassword)
         {
-
-            UserDto? user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
-                { EmailAddress = userWithPassword.EmailAddress });
-
-            if (user is null)
+            try
             {
-                return BadRequest("No user found.");
-            }
+                UserDto? user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
+                    { EmailAddress = userWithPassword.EmailAddress });
 
-            SignInResult signInResult = await _runtime.ExecuteQueryAsync(new SignInUserQuery
-            {
-                User = user,
-                Password = userWithPassword.Password
-            });
+                if (user is null)
+                {
+                    return BadRequest("No user found.");
+                }
+
+                SignInResult signInResult = await _runtime.ExecuteQueryAsync(new SignInUserQuery
+                {
+                    User = user,
+                    Password = userWithPassword.Password
+                });
             
-            if (!signInResult.Succeeded)
-            {
-                return BadRequest("Login credentials invalid.");
-            }
+                if (!signInResult.Succeeded)
+                {
+                    return BadRequest("Login credentials invalid.");
+                }
             
-            string token = await _jwtTokenGenerator.BuildToken(user.EmailAddress);
+                string token = await _jwtTokenGenerator.BuildToken(user.EmailAddress);
 
-            return Ok(token);
+                return Ok(token);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         
 
@@ -69,23 +75,30 @@ namespace LingoBank.API.Controllers
         [Description("Returns the current logged in users details.")]
         public async Task<IActionResult> GetCurrentUserAsync()
         {
-            string? email = User.FindFirst(ClaimTypes.Email)?.Value;
-
-            if (email is null)
+            try
             {
-                return BadRequest("No email in the jwt token found.");
+                string? email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+                if (email is null)
+                {
+                    return BadRequest("No email in the jwt token found.");
+                }
+
+                var user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery { EmailAddress = email });
+
+                // Don't assume the user exists despite a jwt token being provided -
+                // what if the user is deleted and the token is still somehow valid at this point?
+                if (user is null)
+                {
+                    return BadRequest("No user found in the database with the email address provided.");
+                }
+
+                return Ok(user);
             }
-
-            var user = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery { EmailAddress = email });
-
-            // Don't assume the user exists despite a jwt token being provided -
-            // what if the user is deleted and the token is still somehow valid at this point?
-            if (user is null)
+            catch (Exception ex)
             {
-                return BadRequest("No user found in the database with the email address provided.");
+                return BadRequest(ex.Message);
             }
-
-            return Ok(user);
         }
         
         
@@ -95,15 +108,23 @@ namespace LingoBank.API.Controllers
         [Description("Returns a refreshed jwt token (without the user needing to login again) if the user exists.")]
         public async Task<IActionResult> GetRefreshTokenAsync()
         {
-            string? email = User.FindFirst(ClaimTypes.Email)?.Value;
             
-            if (!string.IsNullOrEmpty(email))
+            try
             {
-                string token = await _jwtTokenGenerator.BuildToken(email);
-                return Ok(token);
-            }
+                string? email = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+                if (!string.IsNullOrEmpty(email))
+                {
+                    string token = await _jwtTokenGenerator.BuildToken(email);
+                    return Ok(token);
+                }
 
-            return BadRequest("Could not generate a refreshed JWT token.");
+                return BadRequest("Could not generate a refreshed JWT token.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

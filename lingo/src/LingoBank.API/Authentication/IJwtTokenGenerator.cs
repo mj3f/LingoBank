@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using LingoBank.Core.Dtos;
 
 namespace LingoBank.API.Authentication
 {
