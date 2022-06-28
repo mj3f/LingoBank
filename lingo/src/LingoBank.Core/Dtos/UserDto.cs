@@ -2,31 +2,31 @@ using System.Collections.Generic;
 
 namespace LingoBank.Core.Dtos
 {
-    public class UserDto
+    public sealed record UserDto
     {
         /// <summary>
         /// Users unique identifier
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; init; } = default!;
         
         /// <summary>
         /// The users username.
         /// </summary>
-        public string UserName { get; set; }
+        public string UserName { get; init; } = default!;
         
         /// <summary>
         /// The users email address.
         /// </summary>
-        public string EmailAddress { get; set; }
+        public string EmailAddress { get; init; } = default!;
         
         /// <summary>
         /// The users system role.
         /// </summary>
-        public string Role { get; set; }
+        public string Role { get; init; } = default!;
         
         /// <summary>
         /// The users list of created languages.
         /// </summary>
-        public List<LanguageDto> Languages { get; set; }
+        public List<LanguageDto> Languages { get; init; } = default!;
     }
 }

@@ -88,5 +88,24 @@ namespace LingoBank.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Description("Attempts to delete a phrase given a supplied Id.")]
+        public async Task<IActionResult> DeletePhraseAsync(string id)
+        {
+            try
+            {
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new DeletePhraseCommand { Id = id });
+
+                return isSuccessful ? Ok("Phrase deleted") : BadRequest(message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

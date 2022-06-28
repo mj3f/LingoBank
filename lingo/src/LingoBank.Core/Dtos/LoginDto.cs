@@ -1,3 +1,3 @@
 namespace LingoBank.Core.Dtos;
 
-public record LoginDto(string EmailAddress, string Password);
+public sealed record LoginDto(string EmailAddress, string Password);

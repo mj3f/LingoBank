@@ -29,7 +29,7 @@ namespace LingoBank.Core
         /// </summary>
         /// <param name="runtimeQuery"></param>
         /// <typeparam name="TResult"></typeparam>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception">Throws an exception if an error occurs in the query handler - usually db related.</exception>
         public async Task<TResult> ExecuteQueryAsync<TResult>(IRuntimeQuery<TResult> runtimeQuery)
         {
             // Check if query has been provided.
@@ -69,7 +69,7 @@ namespace LingoBank.Core
         /// <param name="command"></param>
         /// <typeparam name="TCommand"></typeparam>
         /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception">Throws an exception if an error occurs in the command handler - usually db related.</exception>
         public async Task<RuntimeCommandResult> ExecuteCommandAsync<TCommand>(TCommand command) where TCommand : class, IRuntimeCommand
         {
             // Check if query has been provided.
