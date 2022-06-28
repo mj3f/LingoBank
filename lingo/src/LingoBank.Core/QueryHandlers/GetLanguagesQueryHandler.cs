@@ -19,6 +19,7 @@ public class GetLanguagesQueryHandler : IRuntimeQueryHandler<GetLanguagesQuery, 
         public async Task<Paged<LanguageDto>> ExecuteAsync(GetLanguagesQuery query)
         {
             List<LanguageEntity>? languageEntities = await _context.Languages
+                .AsNoTracking()
                 .Skip((query.Page - 1) * CoreConstants.PagedNumberOfItemsPerPage)
                 .Take(CoreConstants.PagedNumberOfItemsPerPage)
                 .ToListAsync();

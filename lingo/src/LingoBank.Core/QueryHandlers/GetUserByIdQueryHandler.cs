@@ -28,7 +28,7 @@ namespace LingoBank.Core.QueryHandlers
             var languages = new List<LanguageDto>();
             if (query.IncludeLanguages)
             {
-                var languageEntities = _context.Languages.Where(l => l.UserId == query.Id).ToList();
+                var languageEntities = _context.Languages.AsNoTracking().Where(l => l.UserId == query.Id).ToList();
                 
                 foreach (var language in languageEntities) // Checks if at least one language is in list.
                 {

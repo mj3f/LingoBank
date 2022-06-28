@@ -22,7 +22,7 @@ public class GetLanguagePhrasesQueryHandler : IRuntimeQueryHandler<GetLanguagePh
     public async Task<Paged<PhraseDto>?> ExecuteAsync(GetLanguagePhrasesQuery query)
     {
         LanguageEntity? languageEntity =
-            await _context.Languages.FirstOrDefaultAsync(x => x.Id == query.LanguageId);
+            await _context.Languages.AsNoTracking().FirstOrDefaultAsync(x => x.Id == query.LanguageId);
 
         if (languageEntity is null)
         {

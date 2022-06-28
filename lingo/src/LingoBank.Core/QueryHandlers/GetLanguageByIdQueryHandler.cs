@@ -17,7 +17,7 @@ namespace LingoBank.Core.QueryHandlers
 
         public async Task<LanguageDto?> ExecuteAsync(GetLanguageByIdQuery query)
         {
-            var languageEntity = await _lingoContext.Languages.FirstOrDefaultAsync(x => x.Id == query.Id);
+            var languageEntity = await _lingoContext.Languages.AsNoTracking().FirstOrDefaultAsync(x => x.Id == query.Id);
 
             if (languageEntity is null)
             {

@@ -17,7 +17,7 @@ namespace LingoBank.Core.QueryHandlers
 
         public async Task<List<UserDto>> ExecuteAsync(GetUsersQuery query)
         {
-            var appUsers = await _context.Users.ToListAsync();
+            var appUsers = await _context.Users.AsNoTracking().ToListAsync();
 
             return appUsers.Select(user => new UserDto
             {

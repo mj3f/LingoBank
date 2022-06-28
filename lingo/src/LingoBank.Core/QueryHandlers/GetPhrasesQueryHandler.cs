@@ -20,6 +20,7 @@ public class GetPhrasesQueryHandler : IRuntimeQueryHandler<GetPhrasesQuery, Page
     public async Task<Paged<PhraseDto>> ExecuteAsync(GetPhrasesQuery query)
     {
         List<PhraseEntity>? phrasesEntities = await _context.Phrases
+            .AsNoTracking()
             .Skip((query.Page - 1) * CoreConstants.PagedNumberOfItemsPerPage)
             .Take(CoreConstants.PagedNumberOfItemsPerPage)
             .ToListAsync();
