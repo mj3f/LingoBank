@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Text;
 using LingoBank.API.Authentication;
+using LingoBank.API.Middleware;
 using LingoBank.API.Services;
 using LingoBank.API.Services.Hosted;
 using LingoBank.Core;
@@ -20,12 +21,12 @@ using Newtonsoft.Json.Serialization;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Serilog;
+using Serilog.Events;
 
 namespace LingoBank.API
 {
     public class Startup
     {
-        private static ILogger _logger = Log.ForContext<Startup>();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -149,6 +150,22 @@ namespace LingoBank.API
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
             }
+            
+            app.UseSerilogRequestLogging(options =>
+            {
+                // Customize the message template
+                options.MessageTemplate = "Handled {RequestPath}";
+    
+                // Emit debug-level events instead of the defaults
+                options.GetLevel = (httpContext, elapsed, ex) => LogEventLevel.Debug;
+    
+                // Attach additional properties to the request completion event
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
+                    diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
+                };
+            });
 
             // app.UseHttpsRedirection();
 
@@ -170,6 +187,8 @@ namespace LingoBank.API
             app.UseStaticFiles();
             app.UseOpenApi();
             app.UseSwaggerUi3();
+
+            app.UseMiddleware<ExceptionMiddleware>();
             
             app.UseEndpoints(endpoints => 
             { 
