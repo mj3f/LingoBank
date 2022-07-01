@@ -188,7 +188,8 @@ namespace LingoBank.API
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
-            app.UseMiddleware<ExceptionMiddleware>();
+            // Custom middleware(s)
+            app.UseExceptionMiddleware();
             
             app.UseEndpoints(endpoints => 
             { 

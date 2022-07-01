@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 
@@ -43,4 +44,10 @@ public sealed class ExceptionMiddleware
             await context.Response.WriteAsync(json);
         }
     }
+}
+
+public static class ExceptionMiddlewareExtensions
+{
+    public static IApplicationBuilder UseExceptionMiddleware(this IApplicationBuilder builder) =>
+        builder.UseMiddleware<ExceptionMiddleware>();
 }
