@@ -139,5 +139,29 @@ namespace LingoBank.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpDelete("{id}")]
+        [AllowAnonymous]
+        [ProducesResponseType( 200)]
+        [ProducesResponseType(400)]
+        [Description("Deletes a language by the id provided")]
+        public async Task<IActionResult> DeleteLanguageByIdAsync(string id)
+        {
+            try
+            {
+                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new DeleteLanguageCommand { Id = id });
+
+                if (isSuccessful)
+                {
+                    return Ok("Language deleted.");
+                }
+
+                return BadRequest("error");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

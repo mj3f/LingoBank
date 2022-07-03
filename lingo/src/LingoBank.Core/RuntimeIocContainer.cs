@@ -42,6 +42,7 @@ namespace LingoBank.Core
             services.AddTransient<IRuntimeCommandHandler<EditUserCommand>, EditUserCommandHandler>();
             services.AddTransient<IRuntimeCommandHandler<DeleteUserCommand>, DeleteUserCommandHandler>();
             services.AddTransient<IRuntimeCommandHandler<DeletePhraseCommand>, DeletePhraseCommandHandler>();
+            services.AddTransient<IRuntimeCommandHandler<DeleteLanguageCommand>, DeleteLanguageCommandHandler>();
             #endregion
         }
     }
