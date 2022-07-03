@@ -46,6 +46,8 @@ namespace LingoBank.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Creates a new phrase for a language")]
         public async Task<IActionResult> CreatePhraseAsync([FromBody] PhraseDto phrase)
         {
@@ -62,8 +64,10 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(PhraseDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Edits an existing phrase")]
         public async Task<IActionResult> EditPhraseAsync(string id, [FromBody] PhraseDto phrase)
         {
@@ -80,9 +84,10 @@ namespace LingoBank.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Attempts to delete a phrase given a supplied Id.")]
         public async Task<IActionResult> DeletePhraseAsync(string id)
         {

@@ -70,7 +70,7 @@ namespace LingoBank.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(UserDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -90,7 +90,7 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(UserDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -110,7 +110,8 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
+        [Authorize(Roles = Roles.Administrator)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using LingoBank.API.Authorization;
@@ -47,6 +46,9 @@ namespace LingoBank.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(LanguageDto), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         [Description("Returns a language created by the user.")]
         public async Task<IActionResult> GetLanguageByIdAsync(string id)
         {
@@ -70,6 +72,7 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(typeof(Paged<PhraseDto>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Returns a paginated list of phrases for a language.")]
         public async Task<IActionResult> GetLanguagePhrasesAsync(string id, [FromQuery] int page)
         {
@@ -95,8 +98,10 @@ namespace LingoBank.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(LanguageDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Creates a new language")]
         public async Task<IActionResult> CreateLanguageAsync([FromBody] LanguageDto language)
         {
@@ -113,8 +118,10 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(LanguageDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Edits an existing language")]
         public async Task<IActionResult> EditLanguageAsync(string id, [FromBody] LanguageDto language)
         {
@@ -131,9 +138,10 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpDelete("{id}")]
-        [AllowAnonymous]
-        [ProducesResponseType( 200)]
+        [ProducesResponseType( typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Deletes a language by the id provided")]
         public async Task<IActionResult> DeleteLanguageByIdAsync(string id)
         {
