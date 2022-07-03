@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
+using LingoBank.Core.Exceptions;
 using LingoBank.Database.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -13,7 +14,7 @@ namespace LingoBank.Core.CommandHandlers
         public CreateUserCommandHandler(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
 
-        public async Task<RuntimeCommandResult> ExecuteAsync(CreateUserCommand command)
+        public async Task ExecuteAsync(CreateUserCommand command)
         {
             var appUser = new ApplicationUser
             {
@@ -24,7 +25,10 @@ namespace LingoBank.Core.CommandHandlers
             };
             IdentityResult result = await _userManager.CreateAsync(appUser, command.CreateUser.Password);
 
-            return new RuntimeCommandResult(result.Succeeded, result.Errors.ToString());
+            if (!result.Succeeded)
+            {
+                throw new RuntimeException("Could not create user due to errors."); // TODO: Unravel result.Errors
+            }
         }
     }
 }

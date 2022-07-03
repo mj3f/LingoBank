@@ -44,21 +44,16 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(PhraseDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [Description("Creates a new phrase for a language")]
         public async Task<IActionResult> CreatePhraseAsync([FromBody] PhraseDto phrase)
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreatePhraseCommand { Phrase = phrase });
-
-                if (isSuccessful)
-                {
-                    return Ok(phrase); // How to return the phrase created, or at least the ID from the command, at this point the id property is still null when returning this.
-                }
-
-                return BadRequest(message);
+                await _runtime.ExecuteCommandAsync(new CreatePhraseCommand { Phrase = phrase });
+                
+                return Ok("Phrase created.");
             }
             catch (Exception ex)
             {
@@ -74,14 +69,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditPhraseCommand { Id = id, Phrase = phrase });
+                await _runtime.ExecuteCommandAsync(new EditPhraseCommand { Id = id, Phrase = phrase });
 
-                if (isSuccessful)
-                {
-                    return Ok(phrase);
-                }
-
-                return BadRequest(message);
+                return Ok("Phrase updated.");
             }
             catch (Exception ex)
             {
@@ -98,9 +88,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new DeletePhraseCommand { Id = id });
+                await _runtime.ExecuteCommandAsync(new DeletePhraseCommand { Id = id });
 
-                return isSuccessful ? Ok("Phrase deleted") : BadRequest(message);
+                return Ok("Phrase deleted.");
             }
             catch (Exception ex)
             {

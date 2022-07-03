@@ -102,14 +102,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreateLanguageCommand { Language = language });
-
-                if (isSuccessful)
-                {
-                    return Ok(language);
-                }
-
-                return BadRequest(message);
+                await _runtime.ExecuteCommandAsync(new CreateLanguageCommand { Language = language });
+                
+                return Ok("Language created.");
             }
             catch (Exception ex)
             {
@@ -125,14 +120,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditLanguageCommand { Id = id, Language = language });
+               await _runtime.ExecuteCommandAsync(new EditLanguageCommand { Id = id, Language = language });
 
-                if (isSuccessful)
-                {
-                    return Ok(language);
-                }
-
-                return BadRequest(message);
+               return Ok("Language updated.");
             }
             catch (Exception ex)
             {
@@ -149,14 +139,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new DeleteLanguageCommand { Id = id });
+                await _runtime.ExecuteCommandAsync(new DeleteLanguageCommand { Id = id });
 
-                if (isSuccessful)
-                {
-                    return Ok("Language deleted.");
-                }
-
-                return BadRequest("error");
+                return Ok("Language deleted.");
             }
             catch (Exception ex)
             {

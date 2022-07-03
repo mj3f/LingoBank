@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
+using LingoBank.Core.Exceptions;
 using LingoBank.Database.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,14 +12,14 @@ namespace LingoBank.Core.CommandHandlers
 
         public EditPhraseCommandHandler(LingoContext lingoContext) => _lingoContext = lingoContext;
 
-        public async Task<RuntimeCommandResult> ExecuteAsync(EditPhraseCommand command)
+        public async Task ExecuteAsync(EditPhraseCommand command)
         {
             var phrase = await _lingoContext.Phrases
                 .FirstOrDefaultAsync(x => x.Id == command.Id);
 
             if (phrase is null)
             {
-                return new RuntimeCommandResult(false, $"No phrases exists with id {command.Id}");
+                throw new RuntimeException($"No phrases exists with id {command.Id}");
             }
             
             phrase.LanguageId = command.Phrase.LanguageId;
@@ -29,8 +30,6 @@ namespace LingoBank.Core.CommandHandlers
             phrase.Description = command.Phrase.Description;
             phrase.Category = (int) command.Phrase.Category;
             await _lingoContext.SaveChangesAsync();
-
-            return new RuntimeCommandResult(true);
         }
     }
 }

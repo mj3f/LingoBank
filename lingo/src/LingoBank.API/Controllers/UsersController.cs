@@ -79,14 +79,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreateUserCommand { CreateUser = createUser, Role = Roles.User });
-
-                if (isSuccessful)
-                {
-                    return Ok("User created.");
-                }
-
-                return BadRequest(message);
+                await _runtime.ExecuteCommandAsync(new CreateUserCommand { CreateUser = createUser, Role = Roles.User });
+                
+                return Ok("User created.");
             }
             catch (Exception ex)
             {
@@ -104,14 +99,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditUserCommand { User = user });
+                await _runtime.ExecuteCommandAsync(new EditUserCommand { User = user });
 
-                if (isSuccessful)
-                {
-                    return Ok(user);
-                }
-
-                return BadRequest(message);
+                return Ok("User updated.");
             }
             catch (Exception ex)
             {
@@ -129,14 +119,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
+                await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
 
-                if (isSuccessful)
-                {
-                    return Ok(id);
-                }
-
-                return BadRequest(message);
+                return Ok("User deleted.");
             }
             catch (Exception ex)
             {

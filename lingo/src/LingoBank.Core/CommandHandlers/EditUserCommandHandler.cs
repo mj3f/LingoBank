@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
+using LingoBank.Core.Exceptions;
 using LingoBank.Database.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -13,7 +14,7 @@ namespace LingoBank.Core.CommandHandlers
         public EditUserCommandHandler(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
 
-        public async Task<RuntimeCommandResult> ExecuteAsync(EditUserCommand command)
+        public async Task ExecuteAsync(EditUserCommand command)
         {
             var appUser = await _userManager.FindByIdAsync(command.User.Id);
            
@@ -22,7 +23,10 @@ namespace LingoBank.Core.CommandHandlers
 
             IdentityResult result = await _userManager.UpdateAsync(appUser);
 
-            return new RuntimeCommandResult(result.Succeeded, result.Errors.ToString());
+            if (!result.Succeeded)
+            {
+                throw new RuntimeException("Error occurred whilst editing a user."); // TODO: Unravel result.Errors (.ToString() - does it work?)
+            }
         }
     }
 }
