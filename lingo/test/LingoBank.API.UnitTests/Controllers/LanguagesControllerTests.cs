@@ -6,9 +6,11 @@ using LingoBank.API.Controllers;
 using LingoBank.Core;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Dtos;
+using LingoBank.Core.Exceptions;
 using LingoBank.Core.Queries;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using Xunit;
 
@@ -56,19 +58,20 @@ namespace LingoBank.API.UnitTests.Controllers
         [Fact]
         public async Task CreateLanguageAsync_WithLanguageObject_ShouldCreateLanguage()
         {
-            _runtime.ExecuteCommandAsync(Arg.Is<CreateLanguageCommand>(command => command.Language == _language))
-                .Returns(new RuntimeCommandResult(true));
+            _runtime.When(x => x.ExecuteCommandAsync(Arg.Is<CreateLanguageCommand>(command => command.Language == _language)))
+                .Do(_ => {});
+            
             var result = (OkObjectResult) await _sut.CreateLanguageAsync(_language);
 
             result.StatusCode.Should().Be(200);
-            result.Value.Should().BeEquivalentTo(_language);
+            result.Value.Should().Be("Language created.");
         }
         
         [Fact]
         public async Task CreateLanguageAsync_WithNullObject_ShouldReturnError()
         {
             _runtime.ExecuteCommandAsync(Arg.Any<CreateLanguageCommand>())
-                .Returns(new RuntimeCommandResult(false));
+                .Throws(new RuntimeException("Error with creating language"));
             var result = (BadRequestObjectResult) await _sut.CreateLanguageAsync(null);
 
             result.StatusCode.Should().Be(400);
@@ -77,12 +80,13 @@ namespace LingoBank.API.UnitTests.Controllers
         [Fact]
         public async Task EditLanguageAsync_WithExistingLanguageObject_ShouldUpdateTheLanguage()
         {
-            _runtime.ExecuteCommandAsync(Arg.Is<EditLanguageCommand>(command => command.Language == _language))
-                .Returns(new RuntimeCommandResult(true));
+            _runtime.When(x => x.ExecuteCommandAsync(Arg.Is<EditLanguageCommand>(command => command.Language == _language)))
+                .Do(_ => { });
+
             var result = (OkObjectResult) await _sut.EditLanguageAsync(_language.Id, _language);
 
             result.StatusCode.Should().Be(200);
-            result.Value.Should().BeEquivalentTo(_language);
+            result.Value.Should().Be("Language updated.");
         }
         
         [Fact]
@@ -94,11 +98,37 @@ namespace LingoBank.API.UnitTests.Controllers
                 Name = "Test"
             };
             _runtime.ExecuteCommandAsync(Arg.Is<EditLanguageCommand>(command => command.Id == id && command.Language == language))
-                .Returns(new RuntimeCommandResult(false));
+                .Throws(new RuntimeException("Error with editing language"));
             var result = (BadRequestObjectResult) await _sut.EditLanguageAsync(id, language);
 
             result.StatusCode.Should().Be(400);
         }
         
+        [Fact]
+        public async Task DeleteLanguageAsync_WithExistingLanguage_ShouldDeleteTheLanguage()
+        {
+            string id = Guid.NewGuid().ToString();
+            _runtime.When(x => x.ExecuteCommandAsync(Arg.Is<DeleteLanguageCommand>(command => command.Id == id)))
+                .Do(_ => { });
+
+            var result = (OkObjectResult) await _sut.DeleteLanguageByIdAsync(id);
+
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().Be("Language deleted.");
+        }
+
+
+        [Fact]
+        public async Task DeleteLanguageAsync_WithExistingLanguage_ShouldThrowExceptionWhenTheLanguageDoesNotExist()
+        {
+            string id = Guid.NewGuid().ToString();
+            _runtime.ExecuteCommandAsync(Arg.Is<DeleteLanguageCommand>(command => command.Id == id))
+                .Throws(new RuntimeException("Language with that id does not exist."));
+
+            var result = (BadRequestObjectResult) await _sut.DeleteLanguageByIdAsync(id);
+
+            result.StatusCode.Should().Be(400);
+        }
+
     }
 }
