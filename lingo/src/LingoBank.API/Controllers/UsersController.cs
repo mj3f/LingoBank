@@ -70,7 +70,7 @@ namespace LingoBank.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(UserDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -79,14 +79,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreateUserCommand { CreateUser = createUser, Role = Roles.User });
-
-                if (isSuccessful)
-                {
-                    return Ok("User created.");
-                }
-
-                return BadRequest(message);
+                await _runtime.ExecuteCommandAsync(new CreateUserCommand { CreateUser = createUser, Role = Roles.User });
+                
+                return Ok("User created.");
             }
             catch (Exception ex)
             {
@@ -95,7 +90,7 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(UserDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -104,14 +99,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditUserCommand { User = user });
+                await _runtime.ExecuteCommandAsync(new EditUserCommand { User = user });
 
-                if (isSuccessful)
-                {
-                    return Ok(user);
-                }
-
-                return BadRequest(message);
+                return Ok("User updated.");
             }
             catch (Exception ex)
             {
@@ -120,7 +110,8 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
+        [Authorize(Roles = Roles.Administrator)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -129,14 +120,9 @@ namespace LingoBank.API.Controllers
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
+                await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
 
-                if (isSuccessful)
-                {
-                    return Ok(id);
-                }
-
-                return BadRequest(message);
+                return Ok("User deleted.");
             }
             catch (Exception ex)
             {

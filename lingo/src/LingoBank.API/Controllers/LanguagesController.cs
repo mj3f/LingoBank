@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using LingoBank.API.Authorization;
@@ -47,6 +46,9 @@ namespace LingoBank.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(LanguageDto), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         [Description("Returns a language created by the user.")]
         public async Task<IActionResult> GetLanguageByIdAsync(string id)
         {
@@ -70,6 +72,7 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(typeof(Paged<PhraseDto>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Returns a paginated list of phrases for a language.")]
         public async Task<IActionResult> GetLanguagePhrasesAsync(string id, [FromQuery] int page)
         {
@@ -95,21 +98,18 @@ namespace LingoBank.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(LanguageDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Creates a new language")]
         public async Task<IActionResult> CreateLanguageAsync([FromBody] LanguageDto language)
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new CreateLanguageCommand { Language = language });
-
-                if (isSuccessful)
-                {
-                    return Ok(language);
-                }
-
-                return BadRequest(message);
+                await _runtime.ExecuteCommandAsync(new CreateLanguageCommand { Language = language });
+                
+                return Ok("Language created.");
             }
             catch (Exception ex)
             {
@@ -118,21 +118,18 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(LanguageDto), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Edits an existing language")]
         public async Task<IActionResult> EditLanguageAsync(string id, [FromBody] LanguageDto language)
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new EditLanguageCommand { Id = id, Language = language });
+               await _runtime.ExecuteCommandAsync(new EditLanguageCommand { Id = id, Language = language });
 
-                if (isSuccessful)
-                {
-                    return Ok(language);
-                }
-
-                return BadRequest(message);
+               return Ok("Language updated.");
             }
             catch (Exception ex)
             {
@@ -141,22 +138,18 @@ namespace LingoBank.API.Controllers
         }
         
         [HttpDelete("{id}")]
-        [AllowAnonymous]
-        [ProducesResponseType( 200)]
+        [ProducesResponseType( typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [Description("Deletes a language by the id provided")]
         public async Task<IActionResult> DeleteLanguageByIdAsync(string id)
         {
             try
             {
-                var (isSuccessful, message) = await _runtime.ExecuteCommandAsync(new DeleteLanguageCommand { Id = id });
+                await _runtime.ExecuteCommandAsync(new DeleteLanguageCommand { Id = id });
 
-                if (isSuccessful)
-                {
-                    return Ok("Language deleted.");
-                }
-
-                return BadRequest("error");
+                return Ok("Language deleted.");
             }
             catch (Exception ex)
             {

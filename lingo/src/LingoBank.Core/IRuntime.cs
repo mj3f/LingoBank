@@ -9,6 +9,6 @@ namespace LingoBank.Core
     {
         Task<TResult> ExecuteQueryAsync<TResult>(IRuntimeQuery<TResult> runtimeQuery);
         
-        Task<RuntimeCommandResult> ExecuteCommandAsync<TCommand>(TCommand command) where TCommand : class, IRuntimeCommand;
+        Task ExecuteCommandAsync<TCommand>(TCommand command) where TCommand : class, IRuntimeCommand;
     }
 }

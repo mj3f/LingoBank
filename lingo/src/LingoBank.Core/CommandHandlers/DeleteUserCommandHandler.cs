@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
+using LingoBank.Core.Exceptions;
+using LingoBank.Core.Utils;
 using LingoBank.Database.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -12,13 +14,17 @@ namespace LingoBank.Core.CommandHandlers
         public DeleteUserCommandHandler(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
 
-        public async Task<RuntimeCommandResult> ExecuteAsync(DeleteUserCommand command)
+        public async Task ExecuteAsync(DeleteUserCommand command)
         {
             var appUser = await _userManager.FindByIdAsync(command.Id);
 
             IdentityResult result = await _userManager.DeleteAsync(appUser);
 
-            return new RuntimeCommandResult(result.Succeeded, result.Errors.ToString());
+            if (!result.Succeeded)
+            {
+                string errorMessage = IdentityResultErrorsFormatter.GetFormattedErrorMessage(result.Errors);
+                throw new RuntimeException(errorMessage);
+            }
         }
     }
 }

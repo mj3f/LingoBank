@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
+using LingoBank.Core.Exceptions;
 using LingoBank.Database.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,18 +12,16 @@ public sealed class DeleteLanguageCommandHandler : IRuntimeCommandHandler<Delete
 
     public DeleteLanguageCommandHandler(LingoContext context) => _context = context;
     
-    public async Task<RuntimeCommandResult> ExecuteAsync(DeleteLanguageCommand command)
+    public async Task ExecuteAsync(DeleteLanguageCommand command)
     {
         var language = await _context.Languages.FirstOrDefaultAsync(l => l.Id == command.Id);
 
         if (language is null)
         {
-            return new RuntimeCommandResult(false, "Language does not exist");
+            throw new RuntimeException($"No language with id {command.Id} exists.");
         }
 
         _context.Languages.Remove(language);
         await _context.SaveChangesAsync();
-
-        return new RuntimeCommandResult(true, string.Empty);
     }
 }

@@ -124,22 +124,12 @@ namespace LingoBank.API.Services.Hosted
                         return;
                     }
                     
-                    RuntimeCommandResult result = await runtime.ExecuteCommandAsync(new CreateUserCommand
+                    await runtime.ExecuteCommandAsync(new CreateUserCommand
                     {
                         CreateUser = new CreateUserDto(username, emailAddress, password),
                         Role = Roles.Administrator
                         
                     });
-
-                    if (result.IsSuccessful)
-                    {
-                        Logger.Information("[DatabaseSetupHostedService] Dev admin account seeded.");
-                    }
-                    else
-                    {
-                        Logger.Error("[DatabaseSetupHostedService] Dev admin account failed to seed. See exception(s) for details" +
-                                           $"{result.Message}");
-                    }
                 }
                 catch (Exception ex)
                 {
