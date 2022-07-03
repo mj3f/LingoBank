@@ -20,8 +20,6 @@ public class GetPhrasesQueryHandler : IRuntimeQueryHandler<GetPhrasesQuery, Page
     
     public async Task<Paged<PhraseDto>> ExecuteAsync(GetPhrasesQuery query)
     {
-        throw new Exception("This is a test, please remove me");
-        
         List<PhraseEntity>? phrasesEntities = await _context.Phrases
             .AsNoTracking()
             .Skip((query.Page - 1) * CoreConstants.PagedNumberOfItemsPerPage)

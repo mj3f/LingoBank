@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Exceptions;
+using LingoBank.Core.Utils;
 using LingoBank.Database.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -27,7 +28,8 @@ namespace LingoBank.Core.CommandHandlers
 
             if (!result.Succeeded)
             {
-                throw new RuntimeException("Could not create user due to errors."); // TODO: Unravel result.Errors
+                string errorMessage = IdentityResultErrorsFormatter.GetFormattedErrorMessage(result.Errors);
+                throw new RuntimeException(errorMessage);
             }
         }
     }

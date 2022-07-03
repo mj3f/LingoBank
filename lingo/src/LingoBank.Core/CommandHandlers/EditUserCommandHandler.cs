@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Exceptions;
+using LingoBank.Core.Utils;
 using LingoBank.Database.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -25,7 +26,8 @@ namespace LingoBank.Core.CommandHandlers
 
             if (!result.Succeeded)
             {
-                throw new RuntimeException("Error occurred whilst editing a user."); // TODO: Unravel result.Errors (.ToString() - does it work?)
+                string errorMessage = IdentityResultErrorsFormatter.GetFormattedErrorMessage(result.Errors);
+                throw new RuntimeException(errorMessage);
             }
         }
     }
