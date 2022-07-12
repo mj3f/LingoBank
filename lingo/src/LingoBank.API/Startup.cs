@@ -150,7 +150,7 @@ namespace LingoBank.API
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
             }
-            
+
             app.UseSerilogRequestLogging(options =>
             {
                 // Customize the message template
@@ -197,7 +197,10 @@ namespace LingoBank.API
                 endpoints.MapHealthChecks("/health");
             });
 
-            app.MapWhen(x => x.Request.Path.Value != null && !x.Request.Path.Value.StartsWith("/swagger"), builder =>
+            app.MapWhen(x => 
+                x.Request.Path.Value != null && 
+                !x.Request.Path.Value.StartsWith("/swagger") &&
+                !x.Request.Path.Value.StartsWith("/api/"), builder =>
             {
                 builder.UseSpa(spa => spa.Options.DefaultPage = "/index.html");
             });

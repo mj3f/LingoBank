@@ -131,7 +131,7 @@ namespace LingoBank.API.Controllers
             }
         }
 
-        [HttpPost("password-reset-token")]
+        [HttpPost("{id}/password-reset-token")]
         [AllowAnonymous]
         [Authorize(Roles = Roles.Administrator)]
         [ProducesResponseType(typeof(string), 200)]
@@ -140,13 +140,13 @@ namespace LingoBank.API.Controllers
         [ProducesResponseType(403)]
         [Description("Returns a password reset token for a given user." +
                      "This endpoint is currently accessible only to Admins")] // TODO: Implement reset token verification for regular users.
-        public async Task<IActionResult> RequestPasswordResetTokenAsync([FromBody] SingleValueDto userId)
+        public async Task<IActionResult> RequestPasswordResetTokenAsync([FromRoute] string id)
         {
             try
             {
                 string token = await _runtime.ExecuteQueryAsync(new GetPasswordResetTokenQuery
                 {
-                    UserId = userId.Value
+                    UserId = id
                 });
 
                 return Ok(token);

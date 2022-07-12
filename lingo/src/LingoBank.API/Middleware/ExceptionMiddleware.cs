@@ -38,9 +38,9 @@ public sealed class ExceptionMiddleware
                 PropertyNamingPolicy =
                     JsonNamingPolicy.CamelCase
             };
-
+            
             string json = JsonSerializer.Serialize(new {Status = context.Response.StatusCode, Message = "Internal server error"}, options);
-
+            
             await context.Response.WriteAsync(json);
         }
     }
