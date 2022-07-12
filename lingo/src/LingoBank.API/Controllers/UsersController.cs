@@ -132,7 +132,6 @@ namespace LingoBank.API.Controllers
         }
 
         [HttpPost("{id}/password-reset-token")]
-        [AllowAnonymous]
         [Authorize(Roles = Roles.Administrator)]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
@@ -158,7 +157,6 @@ namespace LingoBank.API.Controllers
         }
 
         [HttpPut("{id}/reset-password")]
-        [AllowAnonymous]
         [Authorize(Roles = Roles.Administrator)]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]

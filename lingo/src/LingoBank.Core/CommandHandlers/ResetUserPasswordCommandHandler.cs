@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using LingoBank.Core.Commands;
 using LingoBank.Core.Exceptions;
+using LingoBank.Core.Utils;
 using LingoBank.Database.Contexts;
 using LingoBank.Database.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,7 @@ public sealed class ResetUserPasswordCommandHandler : IRuntimeCommandHandler<Res
         _userManager = userManager;
         _context = context;
     }
-    
+
     public async Task ExecuteAsync(ResetUserPasswordCommand command)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == command.UserId);
@@ -30,6 +31,12 @@ public sealed class ResetUserPasswordCommandHandler : IRuntimeCommandHandler<Res
             throw new RuntimeException($"No user exists with id {command.UserId}");
         }
 
-        await _userManager.ResetPasswordAsync(user, command.ResetToken, command.NewPassword);
+        IdentityResult result = await _userManager.ResetPasswordAsync(user, command.ResetToken, command.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            string errorMessage = IdentityResultErrorsFormatter.GetFormattedErrorMessage(result.Errors);
+            throw new RuntimeException(errorMessage);
+        }
     }
 }
