@@ -24,6 +24,7 @@ namespace LingoBank.API.Controllers
         public UsersController(IRuntime runtime) => _runtime = runtime;
 
         [HttpGet]
+        [AllowAnonymous]
         [Authorize(Roles = Roles.Administrator)]
         [ProducesResponseType(typeof(List<UserDto>), 200)]
         [ProducesResponseType(400)]
@@ -123,6 +124,61 @@ namespace LingoBank.API.Controllers
                 await _runtime.ExecuteCommandAsync(new DeleteUserCommand { Id = id });
 
                 return Ok("User deleted.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("password-reset-token")]
+        [AllowAnonymous]
+        [Authorize(Roles = Roles.Administrator)]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Description("Returns a password reset token for a given user." +
+                     "This endpoint is currently accessible only to Admins")] // TODO: Implement reset token verification for regular users.
+        public async Task<IActionResult> RequestPasswordResetTokenAsync([FromBody] SingleValueDto userId)
+        {
+            try
+            {
+                string token = await _runtime.ExecuteQueryAsync(new GetPasswordResetTokenQuery
+                {
+                    UserId = userId.Value
+                });
+
+                return Ok(token);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}/reset-password")]
+        [AllowAnonymous]
+        [Authorize(Roles = Roles.Administrator)]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Description("Resets a users password." +
+                     "This endpoint is currently accessible only to Admins")] // TODO: Implement reset token verification for regular users.
+        public async Task<IActionResult> ResetUserPasswordAsync([FromRoute] string id,
+            [FromBody] ResetUserPasswordDto resetUserPasswordDto)
+        {
+            try
+            {
+                await _runtime.ExecuteCommandAsync(new ResetUserPasswordCommand
+                {
+                    UserId = id,
+                    ResetToken = resetUserPasswordDto.ResetToken,
+                    NewPassword = resetUserPasswordDto.NewPassword
+                });
+
+                return Ok("Password has been reset.");
             }
             catch (Exception ex)
             {

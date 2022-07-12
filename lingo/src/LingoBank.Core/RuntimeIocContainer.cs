@@ -31,6 +31,7 @@ namespace LingoBank.Core
             services.AddTransient<IRuntimeQueryHandler<GetLanguagePhrasesQuery, Paged<PhraseDto>?>, GetLanguagePhrasesQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetLanguagesQuery, Paged<LanguageDto>>, GetLanguagesQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetPhrasesQuery, Paged<PhraseDto>>, GetPhrasesQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetPasswordResetTokenQuery, string>, GetPasswordResetTokenQueryHandler>();
             #endregion
 
             #region Commands
@@ -43,6 +44,7 @@ namespace LingoBank.Core
             services.AddTransient<IRuntimeCommandHandler<DeleteUserCommand>, DeleteUserCommandHandler>();
             services.AddTransient<IRuntimeCommandHandler<DeletePhraseCommand>, DeletePhraseCommandHandler>();
             services.AddTransient<IRuntimeCommandHandler<DeleteLanguageCommand>, DeleteLanguageCommandHandler>();
+            services.AddTransient<IRuntimeCommandHandler<ResetUserPasswordCommand>, ResetUserPasswordCommandHandler>();
             #endregion
         }
     }

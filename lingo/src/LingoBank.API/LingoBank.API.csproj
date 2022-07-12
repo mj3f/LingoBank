@@ -32,9 +32,5 @@
       <ProjectReference Include="..\LingoBank.Database\LingoBank.Database.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Filters" />
-    </ItemGroup>
-
 
 </Project>
