@@ -11,6 +11,7 @@ public class GetLanguagesQuery : IRuntimeQuery<Paged<LanguageDto>>, IPaginatedQu
     /// <summary>
     /// The page to fetch data for.
     /// </summary>
-    public int Page { get; init; }
+    public int Page { get; init; } = 1;
+    
     public bool Validate() => true;
 }

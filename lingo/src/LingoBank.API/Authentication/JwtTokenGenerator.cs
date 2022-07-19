@@ -35,7 +35,7 @@ namespace LingoBank.API.Authentication
             }
 
             UserDto? userDto = await _runtime.ExecuteQueryAsync(new GetUserByIdQuery
-                { EmailAddress = email, IncludeLanguages = false });
+                { EmailAddress = email });
 
             if (userDto is null)
             {

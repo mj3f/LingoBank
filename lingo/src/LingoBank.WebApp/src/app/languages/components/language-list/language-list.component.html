@@ -2,7 +2,7 @@
     <h2 class="text-4xl font-black">Your Languages</h2>
     <button class="w-64 mt-4 mb-4 p-2 bg-blue-500 hover:bg-blue-600 font-black text-white rounded" (click)="addLanguage()">Add a new language</button>
     <ng-container *ngIf="languages$ | async as languages; else loading">
-        <div *ngFor="let language of languages">
+        <div *ngFor="let language of languages.data">
             <app-language-card [language]="language"></app-language-card>
         </div>
     </ng-container>

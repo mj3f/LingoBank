@@ -61,6 +61,8 @@ namespace LingoBank.API.Controllers
                 {
                     return NotFound("No user found for id provided.");
                 }
+
+                user.Languages = await _runtime.ExecuteQueryAsync(new GetLanguagesByUserIdQuery {UserId = id, Page = 1});
                 
                 return Ok(user);
             }

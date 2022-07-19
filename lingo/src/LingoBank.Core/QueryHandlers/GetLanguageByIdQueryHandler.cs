@@ -29,6 +29,8 @@ namespace LingoBank.Core.QueryHandlers
                 Id = languageEntity.Id,
                 Name = languageEntity.Name,
                 UserId = languageEntity.UserId,
+                Code = languageEntity.Code,
+                Description = languageEntity.Description,
                 Phrases = languageEntity.Phrases?.Select(p => new PhraseDto
                 {
                     Id = p.Id,

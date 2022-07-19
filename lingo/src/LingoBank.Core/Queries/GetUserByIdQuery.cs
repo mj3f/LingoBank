@@ -19,8 +19,6 @@ namespace LingoBank.Core.Queries
         /// </summary>
         public string Username { get; set; }
 
-        public bool IncludeLanguages { get; set; } = true;
-        
         public bool Validate() => !string.IsNullOrEmpty(Id) || !string.IsNullOrEmpty(EmailAddress) || !string.IsNullOrEmpty(Username);
     }
 }

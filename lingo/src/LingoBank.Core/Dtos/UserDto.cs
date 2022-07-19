@@ -27,6 +27,6 @@ namespace LingoBank.Core.Dtos
         /// <summary>
         /// The users list of created languages.
         /// </summary>
-        public List<LanguageDto> Languages { get; init; } = default!;
+        public Paged<LanguageDto> Languages { get; set; } = null!;
     }
 }

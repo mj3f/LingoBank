@@ -7,6 +7,7 @@ import { UserService } from '../../../users/services/user.service';
 import { CurrentUserService } from '../../../users/services/current-user.service';
 import { User } from '../../../users/models/user.model';
 import { map, retry, take } from 'rxjs/operators';
+import {Paged} from '../../../shared/models/paged.model';
 
 @Component({
 	selector: 'app-language-list',
@@ -15,7 +16,7 @@ import { map, retry, take } from 'rxjs/operators';
 export class LanguageListComponent implements OnInit {
 
 	public form: UntypedFormGroup;
-	languages$: Observable<Language[]>;
+	languages$: Observable<Paged<Language>>;
 	showModal = false;
 	currentUser: User;
 
@@ -77,7 +78,7 @@ export class LanguageListComponent implements OnInit {
 		this.showModal = !this.showModal;
 	}
 
-	private getLanguages(userId: string): Observable<Language[]> {
+	private getLanguages(userId: string): Observable<Paged<Language>> {
 		return this.userService.getById(userId)
 			.pipe(
 				map((user: User) => user.languages),

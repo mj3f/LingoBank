@@ -30,6 +30,7 @@ namespace LingoBank.Core
             services.AddTransient<IRuntimeQueryHandler<SignInUserQuery, SignInResult>, SignInUserQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetLanguagePhrasesQuery, Paged<PhraseDto>?>, GetLanguagePhrasesQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetLanguagesQuery, Paged<LanguageDto>>, GetLanguagesQueryHandler>();
+            services.AddTransient<IRuntimeQueryHandler<GetLanguagesByUserIdQuery, Paged<LanguageDto>>, GetLanguagesByUserIdQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetPhrasesQuery, Paged<PhraseDto>>, GetPhrasesQueryHandler>();
             services.AddTransient<IRuntimeQueryHandler<GetPasswordResetTokenQuery, string>, GetPasswordResetTokenQueryHandler>();
             #endregion
